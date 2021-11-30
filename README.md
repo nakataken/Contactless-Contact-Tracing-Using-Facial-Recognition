@@ -1,2 +1,2 @@
-# Web-Based-Contactless-Contact-Tracing-and-Monitoring-System-Using-Facial-Recognition
+# Web-Based-Contactless-Contact-Tracing-Using-Facial-Recognition
 Capstone Project
