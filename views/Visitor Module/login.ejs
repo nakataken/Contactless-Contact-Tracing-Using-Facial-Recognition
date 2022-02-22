@@ -1,0 +1,17 @@
+<%- include("../partials/header.ejs", {title:"Login"}) %>
+
+<h1>Login</h1>
+<a href="/visitor/register">Don't have account? Register</a>
+<form action="/visitor/login" method="POST">
+    <div>
+        <label for="email">Email: </label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label for="pass">Password</label>
+        <input id="pass" type="password" name="pass" required>
+    </div>
+    <button id="submit" type="submit">Submit</button>
+</form>
+
+<%- include("../partials/footer.ejs") %>

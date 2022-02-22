@@ -1,0 +1,83 @@
+<%- include("../partials/header.ejs", {title:"Register"}) %>
+
+<h1>Contact Information Gathering</h1>
+<a href="/visitor/login">Have account? Login.</a>
+<form action="/visitor/register" method="POST">
+    <div>
+        <label for="fname">First Name: </label>
+        <input type="text" name="fname" required>
+    </div>
+    <div>
+        <label for="mi">Middle Initial: </label>
+        <input type="text" name="mi">
+    </div>
+    <div>
+        <label for="lname">Last Name: </label>
+        <input type="text" name="lname" required>
+    </div>
+    <div>
+        <label for="email">Email: </label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label for="contact">Contact No.: </label>
+        <input type="text" name="contact" required>
+    </div>
+    <div>
+        <label for="bdate">Birthdate</label>
+        <input id="datefield" type="date" name="bdate" max="" required>
+    </div>
+    <!-- Change to drop down -->
+    <div>
+        <label for="barangay">Barangay: </label>
+        <input type="text" name="barangay" required>
+    </div>
+    <div>
+        <label for="city">City/Municipality: </label>
+        <input type="text" name="city" required>
+    </div>
+    <div>
+        <label for="province">Province: </label>
+        <input type="text" name="province" required>
+    </div>
+    <!--  -->
+    <div>
+        <label for="pass">Password</label>
+        <input id="pass" type="password" name="pass" required>
+    </div>
+    <div>
+        <label for="cpass">Confirm Password</label>
+        <input id="cpass" type="password" name="cpass" required>
+        <span id="message"></span>
+    </div>
+    <button id="submit" type="submit">Submit</button>
+</form>
+
+<script>
+    // Script for max bdate 
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+
+    if (dd < 10)
+        dd = '0' + dd;
+
+    if (mm < 10)
+        mm = '0' + mm;
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("datefield").setAttribute("max", today);
+
+    // Script for matching password
+    // Add script for checking password
+    // Change error message here
+    $('#pass, #cpass').on('keyup', function () {
+        if ($('#pass').val() == $('#cpass').val()) {
+            $('#message').html('Matching').css('color', 'green');
+        } else
+            $('#message').html('Not Matching').css('color', 'red');
+    });
+</script>
+
+<%- include("../partials/footer.ejs") %>
