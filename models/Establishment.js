@@ -4,7 +4,7 @@ const establishmentSchema = new mongoose.Schema({
     establishment_name : { type: String },
     establishment_owner: { type: String },
     establishment_address : { type: String },
-    email: { type: Date }, 
+    email: { type: String }, 
     contact: { type: String },
     password: { type: String }
 }, {

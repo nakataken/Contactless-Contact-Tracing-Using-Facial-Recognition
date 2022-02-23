@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Establishment - Home</title>
+</head>
+<body>
+    <% if(typeof(establishment) != "undefined") { %>
+    <ul>
+        <li>Welcome to <%=establishment.establishment_name%></li>
+        <li><a href="/establishment/dashboard">Dashboard</a></li>
+        <li><a href="/establishment/record">Log Visitors</a></li>
+        <li><a href="/establishment/logout">Logout</a></li>
+    </ul>
+    <% } %>
+</body>
+</html>

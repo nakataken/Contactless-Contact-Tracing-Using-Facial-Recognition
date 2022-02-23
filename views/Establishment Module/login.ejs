@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Establishment Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <a href="/establishment/">Don't have account? Request here</a>
+    <form action="/establishment/login" method="POST">
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label for="pass">Password</label>
+            <input id="pass" type="password" name="pass" required>
+        </div>
+        <% if(typeof(error) !="undefined" ) {%>
+            <p class="text-danger">
+                <%=error%>
+            </p>
+            <% } %>
+        <button id="submit" type="submit">Submit</button>
+    </form>
+</body>
+</html>

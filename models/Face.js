@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const faceSchema = new mongoose.Schema({
-    visitor: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Visitor'
-    }],
+    // visitor: [{
+    //     type: Schema.Types.ObjectId, 
+    //     ref: 'Visitor'
+    // }],
     descriptions: {
         type: Array,
         required: true

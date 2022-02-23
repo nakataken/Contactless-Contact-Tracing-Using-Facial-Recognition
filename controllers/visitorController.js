@@ -33,7 +33,7 @@ const profile_get = (req, res) => {
 }
 
 const logout_get = (req, res) => {
-    res.cookie('jwt', '', {maxAge: 1});
+    res.cookie('jwtVisitor', '', {maxAge: 1});
     res.redirect('/visitor/login');
 }
 
@@ -76,7 +76,7 @@ const register_post = async (req, res) => {
                     res.redirect('/visitor/register');
                 } else {
                     const token = createToken(data.id);
-                    res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
                     res.redirect("/visitor/login");
                 }
             })
@@ -104,7 +104,7 @@ const login_post = (req, res) => {
 
             if(auth) {
                 const token = createToken(data.id);
-                res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
+                res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect('/visitor/profile');
             } else {
                 login_error(res, "Wrong email or password", email);

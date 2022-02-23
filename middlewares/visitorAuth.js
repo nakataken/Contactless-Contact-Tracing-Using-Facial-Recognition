@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Visitor from "../models/Visitor.js";
 
 const requireAuth = (req, res, next) => {
-    const token = req.cookies.jwt;
+    const token = req.cookies.jwtVisitor;
 
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
@@ -20,7 +20,7 @@ const requireAuth = (req, res, next) => {
 }
 
 const checkVisitor = (req, res, next) => {
-    const token = req.cookies.jwt;
+    const token = req.cookies.jwtVisitor;
 
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
