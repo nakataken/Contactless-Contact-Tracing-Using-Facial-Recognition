@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Validate entries on controller and frontend
 const visitorSchema = new mongoose.Schema({
     fname : { type: String },
     mi: { type: String },
@@ -12,7 +11,9 @@ const visitorSchema = new mongoose.Schema({
     contact: { type: String },
     email: { type: String },
     password: { type: String }
-})
+}, {
+    timestamps: true
+});
 
 const Visitor = mongoose.model("Visitor", visitorSchema);
 
