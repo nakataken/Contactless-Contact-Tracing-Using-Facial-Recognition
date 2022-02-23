@@ -1,7 +1,6 @@
 import Visitor from "../models/Visitor.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import e from "express";
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -15,6 +14,18 @@ const createToken = (id) => {
 
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
+}
+
+const detect_get = (req, res) => {
+    res.render('./Visitor Module/face_detect');
+}
+
+const login_get = (req, res) => {
+    res.render('./Visitor Module/login');
+}
+
+const profile_get = (req, res) => {
+    res.render('./Visitor Module/profile');
 }
 
 const register_post = async (req, res) => { 
@@ -49,43 +60,58 @@ const register_post = async (req, res) => {
                 passContact = contact;
             }
         });
-
-        visitor.save((err, data) => {
-            if(err || emailError || contactError) {
-                res.render('./Visitor Module/register', {fname, mi, lname, bdate, email: passEmail, contact:passContact, emailError, contactError});
-            } else {
-                const token = createToken(data.id);
-                res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect("/visitor/login");
-            }
-        })
+        if(emailError == "" && contactError== "") {
+            visitor.save((err, data) => {
+                if(err) {
+                    console.log(err);
+                    res.redirect('/visitor/register');
+                } else {
+                    const token = createToken(data.id);
+                    res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.redirect("/visitor/login");
+                }
+            })
+        } else {
+            res.render('./Visitor Module/register', {fname, mi, lname, bdate, email: passEmail, contact:passContact, emailError, contactError});
+        }
+        
     } catch (error) {
         console.log(error);
     }
-}
-
-const detect_get = (req, res) => {
-    res.render('./Visitor Module/face_detect');
 }
 
 const detect_post = (req, res) => {
     res.send("DETECT POST");
 }   
 
-const login_get = (req, res) => {
-    res.render('./Visitor Module/login');
-}
 
 const login_post = (req, res) => {
+    const {email, pass} = req.body;
+    // let error = "";
 
+    Visitor.findOne({email:email}, async (err,data) => { 
+        if(data){
+            const auth = await bcrypt.compare(pass,data.password);
+
+            if(auth) {
+                const token = createToken(data.id);
+                res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
+                res.redirect('/visitor/profile');
+            } else {
+                login_error(res, "Wrong email or password", email);
+            }
+        } else {
+            login_error(res, "Wrong email or password", email);
+        }
+    }); 
+}
+
+const login_error = (res, error, email) => {
+    res.render('./Visitor Module/login', {error,email});
 }
 
 const logout_post = (req, res) => {
     res.send("LOGOUT POST");
-}
-
-const profile_get = (req, res) => {
-    res.render('./Visitor Module/profile');
 }
 
 export default {

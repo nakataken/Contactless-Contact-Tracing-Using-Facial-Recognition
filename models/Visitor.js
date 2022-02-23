@@ -14,13 +14,6 @@ const visitorSchema = new mongoose.Schema({
     password: { type: String }
 })
 
-// Mongoose hooks
-// visitorSchema.pre('save', async (next) => {
-// })
-
-// visitorSchema.post('save', (doc, next) => {
-// }
-
 const Visitor = mongoose.model("Visitor", visitorSchema);
 
 export default Visitor;
