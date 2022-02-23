@@ -24,8 +24,17 @@ const login_get = (req, res) => {
     res.render('./Visitor Module/login');
 }
 
+const login_error = (res, error, email) => {
+    res.render('./Visitor Module/login', {error,email});
+}
+
 const profile_get = (req, res) => {
     res.render('./Visitor Module/profile');
+}
+
+const logout_get = (req, res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.redirect('/visitor/login');
 }
 
 const register_post = async (req, res) => { 
@@ -106,14 +115,6 @@ const login_post = (req, res) => {
     }); 
 }
 
-const login_error = (res, error, email) => {
-    res.render('./Visitor Module/login', {error,email});
-}
-
-const logout_post = (req, res) => {
-    res.send("LOGOUT POST");
-}
-
 export default {
     register_get,
     register_post,
@@ -121,6 +122,6 @@ export default {
     detect_post,
     login_get,
     login_post,
-    logout_post,
+    logout_get,
     profile_get
 }

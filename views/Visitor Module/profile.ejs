@@ -7,6 +7,11 @@
     <title>Profile</title>
 </head>
 <body>
-    <a href="/visitors/logout"></a>
+    <% if(typeof(visitor) != "undefined") { %>
+    <ul>
+        <li>Welcome, <%= visitor.fname %> <%= visitor.lname %></li>
+        <li><a href="/visitor/logout">Logout</a></li>
+    </ul>
+    <% } %>
 </body>
 </html>
