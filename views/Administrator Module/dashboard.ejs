@@ -7,6 +7,13 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-    
+    <% if(typeof(admin) != "undefined") { %>
+    <ul>
+        <li><a href="/admin/logout">Logout</a></li>
+        <li><a href="#">Create New Admin</a></li>
+        <li><a href="#">Create New Establishment Account</a></li>
+        <li><a href="#">Monitor Record</a></li>
+    </ul>
+    <% } %>
 </body>
 </html>

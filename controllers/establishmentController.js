@@ -40,7 +40,6 @@ const logout_get = (req, res) => {
 
 const login_post = (req, res) => {
     const {email, pass} = req.body;
-    // let error = "";
 
     Establishment.findOne({email:email}, async (err,data) => { 
         if(data){
