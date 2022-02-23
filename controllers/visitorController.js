@@ -1,7 +1,16 @@
 import Visitor from "../models/Visitor.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const saltRounds = 10;
+const maxAge = 3 * 24 * 60 * 60;
+
+// create jwt
+const createToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: maxAge
+    })
+}
 
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
@@ -15,15 +24,35 @@ const register_get = (req, res) => {
 const register_post = async (req, res) => { 
     const { fname, mi, lname, bdate, barangay, city, province, contact, email, pass} = req.body;
 
+    let emailError = "";
+    let contactError = "";
+
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
         const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword });
         
-        visitor.save((err) => {
-            if(err) {
-                // Redirect to login with error messages 
-                console.log(err);
+        // Unique Email
+        Visitor.countDocuments({email:visitor.email}, (err, count) => { 
+            if(count>0){
+                emailError = "Email already exists";
+                console.log(emailError);  
+            }
+        }); 
+
+        // Unique Contact
+        Visitor.countDocuments({contact:visitor.contact}, (err, count) => { 
+            if(count>0){
+                contactError = "Contact already exists";
+                console.log(contactError);  
+            }
+        });
+
+        visitor.save((err, data) => {
+            if(err || emailError || contactError) {
+                res.render('./Visitor Module/register', {emailError, contactError});
             } else {
+                const token = createToken(data.id);
+                res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect("/visitor/login");
             }
         })

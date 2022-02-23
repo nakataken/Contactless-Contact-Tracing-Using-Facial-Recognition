@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import homeRoute from "./routes/homeRoute.js";
 import visitorRoute from "./routes/visitorRoutes.js";
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 
@@ -32,3 +34,16 @@ app.use(homeRoute);
 app.use(visitorRoute);
 app.use(establishmentRoute);
 app.use(adminRoute);
+
+// app.get('/set-cookies', (req, res) => {
+//     // res.setHeader('Set-Cookie', 'newUser=true');
+//     res.cookie('newUser', false);
+//     // res.cookie('isLogged', true, {maxAge: 1000 * 60 * 60 * 24});
+//     res.send('you got the cookies!');
+// })
+
+// app.get('/read-cookies', (req, res) => {
+//     const cookies = req.cookies;
+//     console.log(cookies);
+//     res.json(cookies);
+// })
