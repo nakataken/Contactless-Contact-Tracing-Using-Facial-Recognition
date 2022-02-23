@@ -4,21 +4,21 @@
 <a href="/visitor/login">Have account? Login.</a>
 
 <form action="/visitor/register" method="POST">
-    <!-- <div> -->
+    <div>
         <label for="fname">First Name: </label>
-        <input type="text" name="fname" required>
-    <!-- </div> -->
+        <input type="text" name="fname" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
+    </div>
     <div>
         <label for="mi">Middle Initial: </label>
-        <input type="text" name="mi">
+        <input type="text" name="mi" <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
     </div>
     <div>
         <label for="lname">Last Name: </label>
-        <input type="text" name="lname" required>
+        <input type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
     </div>
     <div>
         <label for="email">Email: </label>
-        <input type="email" name="email" required>
+        <input type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
     </div>
     <% if(typeof(emailError) != "undefined") {%>
     <p class="text-danger">
@@ -27,7 +27,7 @@
     <% } %>
     <div>
         <label for="contact">Contact No.: </label>
-        <input type="text" name="contact" required>
+        <p>+63 <input type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required></p>
     </div>
     <% if(typeof(contactError) != "undefined") {%>
         <p class="text-danger">
@@ -36,7 +36,7 @@
     <% } %>
     <div>
         <label for="bdate">Birthdate</label>
-        <input id="datefield" type="date" name="bdate" max="" required>
+        <input id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
     </div>
     <!-- Change to drop down -->
     <div>
@@ -54,7 +54,7 @@
     <!--  -->
     <div>
         <label for="pass">Password</label>
-        <input id="pass" type="password" name="pass" required>
+        <input id="pass" type="password" name="pass" minlength="6" required>
     </div>
     <div>
         <label for="cpass">Confirm Password</label>

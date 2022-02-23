@@ -1,6 +1,7 @@
 import Visitor from "../models/Visitor.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import e from "express";
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -16,11 +17,6 @@ const register_get = (req, res) => {
     res.render('./Visitor Module/register');
 }
 
-// Insert error handling, and checking of data in front-end
-// Unique email & contact # 
-// JQUERY addresses in front-end
-// Password validation
-
 const register_post = async (req, res) => { 
     const { fname, mi, lname, bdate, barangay, city, province, contact, email, pass} = req.body;
 
@@ -30,12 +26,17 @@ const register_post = async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
         const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword });
-        
+
+        let passEmail;
+        let passContact;
+
         // Unique Email
         Visitor.countDocuments({email:visitor.email}, (err, count) => { 
             if(count>0){
                 emailError = "Email already exists";
                 console.log(emailError);  
+            } else {
+                passEmail = email;
             }
         }); 
 
@@ -44,12 +45,14 @@ const register_post = async (req, res) => {
             if(count>0){
                 contactError = "Contact already exists";
                 console.log(contactError);  
+            } else {
+                passContact = contact;
             }
         });
 
         visitor.save((err, data) => {
             if(err || emailError || contactError) {
-                res.render('./Visitor Module/register', {emailError, contactError});
+                res.render('./Visitor Module/register', {fname, mi, lname, bdate, email: passEmail, contact:passContact, emailError, contactError});
             } else {
                 const token = createToken(data.id);
                 res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
