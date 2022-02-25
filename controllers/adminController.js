@@ -63,8 +63,8 @@ const test_get = async (req, res) => {
                 console.log(err);
                 res.redirect('/admin/login');
             } else {
-                const token = createToken(data.id);
-                res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
+                // const token = createToken(data.id);
+                // res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect("/admin/login");
             }
         })

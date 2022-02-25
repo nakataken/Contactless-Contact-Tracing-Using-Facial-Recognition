@@ -31,6 +31,6 @@ mongoose.connect(dbURI,
     })
 
 app.use(homeRoute);
-app.use(visitorRoute);
-app.use(establishmentRoute);
-app.use(adminRoute);
+app.use("/visitor",visitorRoute);
+app.use("/establishment",establishmentRoute);
+app.use("/admin", adminRoute);

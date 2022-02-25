@@ -13,8 +13,16 @@ const createToken = (id) => {
     })
 }
 
+const index_get = (req, res) => {
+    res.redirect('/establishment/login')
+}
+
 const home_get = (req, res) => {
     res.render('./Establishment Module/home');
+}
+
+const request_get = (req, res) => {
+    res.render('./Establishment Module/request');
 }
 
 const login_get = (req, res) => {
@@ -58,6 +66,10 @@ const login_post = (req, res) => {
     }); 
 } 
 
+const request_post = (req, res) => {
+    res.send("Request Post");
+}
+
 const record_post = (req, res) => {
     res.send("Record Post");
 }
@@ -79,8 +91,8 @@ const test_get = async (req, res) => {
                 console.log(err);
                 res.redirect('/establishment/login');
             } else {
-                const token = createToken(data.id);
-                res.cookie('jwtEstabishment', token, {httpOnly: true, maxAge: maxAge * 1000});
+                // const token = createToken(data.id);
+                // res.cookie('jwtEstabishment', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect("/establishment/login");
             }
         })
@@ -90,9 +102,12 @@ const test_get = async (req, res) => {
 }
 
 module.exports = {
+    index_get,
     home_get,
     login_get,
     login_post,
+    request_get,
+    request_post,
     logout_get,
     dashboard_get,
     record_get,

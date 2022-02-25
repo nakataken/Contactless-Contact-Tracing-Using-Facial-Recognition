@@ -12,6 +12,10 @@ const createToken = (id) => {
     })
 }
 
+const index_get = (req, res) => {
+    res.redirect('/visitor/login');
+}
+
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
 }
@@ -75,8 +79,8 @@ const register_post = async (req, res) => {
                     console.log(err);
                     res.redirect('/visitor/register');
                 } else {
-                    const token = createToken(data.id);
-                    res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    // const token = createToken(data.id);
+                    // res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
                     res.redirect("/visitor/login");
                 }
             })
@@ -116,6 +120,7 @@ const login_post = (req, res) => {
 }
 
 module.exports = {
+    index_get,
     register_get,
     register_post,
     detect_get, 
