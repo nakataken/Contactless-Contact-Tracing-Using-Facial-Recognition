@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const faceSchema = new mongoose.Schema({
     // visitor: [{
@@ -15,4 +15,4 @@ const faceSchema = new mongoose.Schema({
 
 const Face = mongoose.model("Face", faceSchema);
 
-export default Face;
+module.exports = Face;

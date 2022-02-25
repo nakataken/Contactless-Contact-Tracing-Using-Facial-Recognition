@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import Administrator from "../models/Admin.js";
+const jwt = require("jsonwebtoken");
+const Administrator = require("../models/Admin.js");
 
 // Usertypes: Super, System, Manager
 const requireAuth = (req, res, next) => {
@@ -40,8 +40,7 @@ const checkAdmin = (req, res, next) => {
         next();
     }
 }
-
-export default {
+module.exports = {
     requireAuth,
     checkAdmin
 };

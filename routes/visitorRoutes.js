@@ -1,6 +1,6 @@
-import { Router } from "express";
-import controller from "../controllers/visitorController.js";
-import visitorAuth from "../middlewares/visitorAuth.js";
+const { Router } = require("express");
+const controller = require("../controllers/visitorController.js");
+const visitorAuth = require("../middlewares/visitorAuth.js");
 
 const router = Router();
 
@@ -13,4 +13,4 @@ router.post('/visitor/login',controller.login_post);
 router.get('/visitor/logout',  controller.logout_get);
 router.get('/visitor/profile', visitorAuth.requireAuth, visitorAuth.checkVisitor, controller.profile_get);
 
-export default router;
+module.exports = router;

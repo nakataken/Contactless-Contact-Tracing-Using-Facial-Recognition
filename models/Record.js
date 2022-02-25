@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const recordSchema = new mongoose.Schema({
     // visitor: [{
@@ -17,4 +17,4 @@ const recordSchema = new mongoose.Schema({
 
 const Record = mongoose.model("Record", recordSchema);
 
-export default Record;
+module.exports = Record;

@@ -1,7 +1,7 @@
-// import Face from "../models/Face.js";
-import Establishment from "../models/Establishment.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+// const Face = require("../models/Face.js";
+const Establishment = require("../models/Establishment.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -89,7 +89,7 @@ const test_get = async (req, res) => {
     }
 }
 
-export default {
+module.exports = {
     home_get,
     login_get,
     login_post,

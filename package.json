@@ -1,11 +1,10 @@
 {
   "name": "web-based-contactless-contact-tracing-and-monitoring-system-using-facial-recognition",
   "version": "1.0.0",
-  "type": "module",
   "description": "Capstone Project",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon app"
+    "start" : "nodemon app"
   },
   "repository": {
     "type": "git",

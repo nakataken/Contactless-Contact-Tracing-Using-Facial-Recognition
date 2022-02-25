@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema({
     fname : { type: String },
@@ -17,4 +17,4 @@ const visitorSchema = new mongoose.Schema({
 
 const Visitor = mongoose.model("Visitor", visitorSchema);
 
-export default Visitor;
+module.exports = Visitor;

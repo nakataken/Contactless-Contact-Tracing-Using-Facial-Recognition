@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import Visitor from "../models/Visitor.js";
+const jwt = require("jsonwebtoken");
+const Visitor = require("../models/Visitor.js");
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtVisitor;
@@ -39,8 +39,7 @@ const checkVisitor = (req, res, next) => {
         next();
     }
 }
-
-export default {
+module.exports = {
     requireAuth,
     checkVisitor
 };

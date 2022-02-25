@@ -1,6 +1,6 @@
-import Visitor from "../models/Visitor.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+const Visitor = require("../models/Visitor.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -115,7 +115,7 @@ const login_post = (req, res) => {
     }); 
 }
 
-export default {
+module.exports = {
     register_get,
     register_post,
     detect_get, 

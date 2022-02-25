@@ -1,6 +1,6 @@
-import { Router } from "express";
-import controller from "../controllers/establishmentController.js";
-import establishmentAuth from "../middlewares/establishmentAuth.js";
+const { Router } = require("express");
+const controller = require("../controllers/establishmentController.js");
+const establishmentAuth = require("../middlewares/establishmentAuth.js");
 
 const router = Router();
 
@@ -13,4 +13,5 @@ router.get('/establishment/record', establishmentAuth.requireAuth, establishment
 router.post('/establishment/record', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, controller.record_post);
 
 router.get('/establishment/test', controller.test_get);
-export default router;
+
+module.exports = router;

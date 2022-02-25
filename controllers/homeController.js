@@ -15,7 +15,7 @@ const about_get = (req, res) => {
     res.render('about');
 }
 
-export default {
+module.exports = {
     index_get,
     establishment_get,
     visitor_get,

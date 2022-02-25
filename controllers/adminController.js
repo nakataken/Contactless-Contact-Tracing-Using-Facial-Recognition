@@ -1,6 +1,6 @@
-import Administrator from "../models/Admin.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+const Administrator = require("../models/Admin.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -73,7 +73,7 @@ const test_get = async (req, res) => {
     }
 }
 
-export default {
+module.exports = {
     index_get,
     login_get,
     login_post,

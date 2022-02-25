@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const establishmentSchema = new mongoose.Schema({
     establishment_name : { type: String },
@@ -13,4 +13,4 @@ const establishmentSchema = new mongoose.Schema({
 
 const Establishment = mongoose.model("Establishment", establishmentSchema);
 
-export default Establishment;
+module.exports = Establishment;

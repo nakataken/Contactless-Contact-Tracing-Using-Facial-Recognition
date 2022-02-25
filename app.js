@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
-import express from "express";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import mongoose from "mongoose";
-import homeRoute from "./routes/homeRoute.js";
-import visitorRoute from "./routes/visitorRoutes.js";
-import establishmentRoute from "./routes/establishmentRoutes.js";
-import adminRoute from "./routes/adminRoutes.js";
+const dotenv = require("dotenv").config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const mongoose = require("mongoose");
+const homeRoute = require("./routes/homeRoute.js");
+const visitorRoute = require("./routes/visitorRoutes.js");
+const establishmentRoute = require("./routes/establishmentRoutes.js");
+const adminRoute = require("./routes/adminRoutes.js");
 
-const env = dotenv.config();
+
 const app = express();
 
 app.use(express.static('public'));

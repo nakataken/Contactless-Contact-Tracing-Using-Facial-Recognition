@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import Establishment from "../models/Establishment.js";
+const jwt = require("jsonwebtoken");
+const Establishment = require("../models/Establishment.js");
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtEstablishment;
@@ -40,7 +40,7 @@ const checkEstablishment = (req, res, next) => {
     }
 }
 
-export default {
+module.exports = {
     requireAuth,
     checkEstablishment
 };
