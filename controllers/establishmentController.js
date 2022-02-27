@@ -84,7 +84,7 @@ const test_get = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const establishment = new Establishment({ establishment_name:name, estbalishment_owner:owner, establishment_address: address, email, contact, password: hashedPassword});
+        const establishment = new Establishment({ establishment_name:name, establishment_owner:owner, establishment_address: address, email, contact, password: hashedPassword});
 
         establishment.save((err, data) => {
             if(err) {
@@ -92,7 +92,7 @@ const test_get = async (req, res) => {
                 res.redirect('/establishment/login');
             } else {
                 // const token = createToken(data.id);
-                // res.cookie('jwtEstabishment', token, {httpOnly: true, maxAge: maxAge * 1000});
+                // res.cookie('jwtEstablishment', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect("/establishment/login");
             }
         })
