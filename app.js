@@ -8,7 +8,6 @@ const visitorRoute = require("./routes/visitorRoutes.js");
 const establishmentRoute = require("./routes/establishmentRoutes.js");
 const adminRoute = require("./routes/adminRoutes.js");
 
-
 const app = express();
 
 app.use(express.static('public'));

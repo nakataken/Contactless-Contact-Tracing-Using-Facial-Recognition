@@ -10,6 +10,42 @@
     <h1>Establishment</h1>
     <a href="/establishment/login"> Have already account? Login</a>
 
-    <p>Request account creation to system admin Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum laboriosam nihil debitis voluptatum voluptatem ullam soluta, sint molestiae autem? Consequatur unde, nobis quasi inventore odit animi aliquid quaerat ullam voluptatibus tenetur quam! Impedit, nostrum. Omnis in harum nisi alias placeat aspernatur ad voluptatibus veritatis, eum obcaecati deleniti beatae quis, facere quae molestiae officia voluptates maxime a! Eum, eaque saepe. Aut consectetur alias minima temporibus. Dolorem corrupti, delectus quia illum harum similique modi reprehenderit eos labore magni quas ea sint! Repellendus adipisci, officiis cum optio nam cupiditate modi molestias! Earum nihil hic aliquam assumenda in, veritatis at architecto iure dicta mollitia.</p>
+    <p>Request account creation here. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe optio, dolor tempore porro, soluta molestias totam quibusdam corrupti molestiae voluptates minus amet corporis culpa tempora similique! Fuga ipsa eveniet provident.</p>
+    
+    <form action="/establishment/request">
+        <div>
+            <label for="name">Establishment Name: </label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label for="owner">Owner Name: </label>
+            <input type="text" name="owner" required>
+        </div>
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label for="address">Address: </label>
+            <textarea id="address" name="address" rows="4" cols="50">
+        </div>
+        <div>
+            <label for="contact">Contact no: </label>
+            <input type="number" name="contact" required>
+        </div>
+        <div>
+            <label for="message">Message: </label>
+            <textarea id="message" name="message" rows="4" cols="50">
+        </div>
+        <div>
+            <label for="permit">Business Permit: </label>
+            <input type="file" id="permit" name="permit" accept="image/png, image/jpeg">
+        </div>
+        <div>
+            <label for="validID">Valid ID: </label>
+            <input type="file" id="validID" name="validID" accept="image/png, image/jpeg">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
