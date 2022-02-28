@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+$color-primary: #3285FF;
+$color-secondary: #00CCF8;
+$color-black: #11171F;
+$color-white: #ffffff;
+
+$font-regular: 'Montserrat', sans-serif;
+
+$font-size:(
+        "title":3rem,
+        
+        "h1":2rem,
+        "h2":1.5rem,
+        "h3":1.3rem,
+
+        "p":0.9rem, //16px
+        "lbl":1.2rem,
+        "btn":1.2rem, //19px
+);
+
+$font-weight:(
+    "thin":400,
+    "normal":500,
+    "bold": 600,
+    "heavy ": 800,
+);
+
+@function weight($weight-name){
+    @return map-get($font-weight, $weight-name);
+}
+@function fontsize($fontsize-name){
+    @return map-get($font-size, $fontsize-name);
+}
+
+@mixin btn-primary ($weight-name,$fontsize-name){
+    color: $color-white;
+    background-color:  $color-primary;
+
+    font-family: $font-regular, Arial, Helvetica, sans-serif;
+    font-weight: weight($weight-name);
+    font-size: fontsize(btn);
+    border-radius: 20px;
+    box-shadow: none !important;
+}
+
+@mixin btn-secondary ($weight-name,$fontsize-name){
+    color: $color-white;
+    background-color:  $color-secondary;
+
+    font-family: $font-regular, Arial, Helvetica, sans-serif;
+    font-weight: weight($weight-name);
+    font-size: fontsize(btn);
+    border-radius: 20px;
+    box-shadow: none !important;
+}
