@@ -1,5 +1,3 @@
-const Administrator = require("../models/Admin.js");
-
 const index_get = (req, res) => {
     res.redirect('/admin/dashboard');
 }

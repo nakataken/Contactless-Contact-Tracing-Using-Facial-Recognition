@@ -2,10 +2,10 @@ const video = document.getElementById('video')
 const image = document.getElementById('image')
 
 Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
-    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
-    faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+    faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('/models')
 ]).then(startVideo)
 
 function startVideo() {
@@ -31,8 +31,8 @@ video.addEventListener('play', () => {
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             var img_data = canvas.toDataURL('image/jpg');
-            // video.pause();
-            downloadImage(img_data)
+            video.pause();
+            // downloadImage(img_data)
         }
         
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)

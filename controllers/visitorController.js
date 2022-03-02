@@ -13,15 +13,22 @@ const createToken = (id) => {
 }
 
 const index_get = (req, res) => {
-    res.redirect('/visitor/login');
+    res.redirect('/visitor/profile');
 }
 
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
 }
 
-const detect_get = (req, res) => {
-    res.render('./Visitor Module/face_detect');
+const detect1_get = (req, res) => {
+    res.render('./Visitor Module/Face Recognition/1');
+}
+
+const detect2_get = (req, res) => {
+    res.render('./Visitor Module/Face Recognition/2');
+}
+const detect3_get = (req, res) => {
+    res.render('./Visitor Module/Face Recognition/3');
 }
 
 const login_get = (req, res) => {
@@ -90,11 +97,6 @@ const register_post = async (req, res) => {
     }
 }
 
-const detect_post = (req, res) => {
-    res.send("DETECT POST");
-}   
-
-
 const login_post = (req, res) => {
     const {email, pass} = req.body;
     // let error = "";
@@ -121,14 +123,30 @@ const login_post = (req, res) => {
     }); 
 }
 
+const detect1_post = (req, res) => {
+    res.send("DETECT 1 POST");
+}   
+
+const detect2_post = (req, res) => {
+    res.send("DETECT 2 POST");
+}   
+
+const detect3_post = (req, res) => {
+    res.send("DETECT 3 POST");
+}   
+
 module.exports = {
     index_get,
     register_get,
     register_post,
-    detect_get, 
-    detect_post,
     login_get,
     login_post,
     logout_get,
-    profile_get
+    profile_get,
+    detect1_get, 
+    detect1_post,
+    detect2_get, 
+    detect2_post,
+    detect3_get, 
+    detect3_post
 }
