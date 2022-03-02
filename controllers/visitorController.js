@@ -49,8 +49,7 @@ const register_post = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
-        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword });
-
+        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword});
         let passEmail;
         let passContact;
 
@@ -79,8 +78,6 @@ const register_post = async (req, res) => {
                     console.log(err);
                     res.redirect('/visitor/register');
                 } else {
-                    // const token = createToken(data.id);
-                    // res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
                     res.redirect("/visitor/login");
                 }
             })
@@ -105,11 +102,16 @@ const login_post = (req, res) => {
     Visitor.findOne({email:email}, async (err,data) => { 
         if(data){
             const auth = await bcrypt.compare(pass,data.password);
-
             if(auth) {
-                const token = createToken(data.id);
-                res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect('/visitor/profile');
+                if(data.usertype === "sysadmin") {
+                    const token = createToken(data.id);
+                    res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.redirect('/admin/dashboard');
+                } else {
+                    const token = createToken(data.id);
+                    res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.redirect('/visitor/profile');
+                }
             } else {
                 login_error(res, "Wrong email or password", email);
             }
