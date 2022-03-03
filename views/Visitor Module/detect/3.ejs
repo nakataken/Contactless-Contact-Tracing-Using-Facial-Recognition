@@ -17,21 +17,17 @@
             justify-content: center;
             align-items: center;
         }
-
         canvas {
             position: absolute;
         }
-        screenshot {
-            position: relative;
-        }
     </style>
 </head>
+    <div>
+        <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+    <div>
+        <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    </div>
+</body>
+</html>
 
-<div>
-    <video id="video" width="720" height="560" autoplay muted></video>
-</div>
-<div>
-    <canvas id="canvas" width="640" height="480"></canvas>
-</div>
-
-<%- include("./partials/footer.ejs") %>

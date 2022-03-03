@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
-
 // create jwt
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -21,14 +20,14 @@ const register_get = (req, res) => {
 }
 
 const detect1_get = (req, res) => {
-    res.render('./Visitor Module/Face Recognition/1');
+    res.render('./Visitor Module/detect/1');
 }
 
 const detect2_get = (req, res) => {
-    res.render('./Visitor Module/Face Recognition/2');
+    res.render('./Visitor Module/detect/2');
 }
 const detect3_get = (req, res) => {
-    res.render('./Visitor Module/Face Recognition/3');
+    res.render('./Visitor Module/detect/3');
 }
 
 const login_get = (req, res) => {
@@ -99,7 +98,6 @@ const register_post = async (req, res) => {
 
 const login_post = (req, res) => {
     const {email, pass} = req.body;
-    // let error = "";
 
     Visitor.findOne({email:email}, async (err,data) => { 
         if(data){
@@ -123,8 +121,9 @@ const login_post = (req, res) => {
     }); 
 }
 
-const detect1_post = (req, res) => {
-    res.send("DETECT 1 POST");
+const detect1_post = async (req, res) => {
+    res.json({ redirectRoute: "/visitor/login" });
+    // res.redirect('/visitor/login');
 }   
 
 const detect2_post = (req, res) => {

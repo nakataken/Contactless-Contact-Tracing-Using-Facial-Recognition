@@ -9,9 +9,8 @@ router.route('/register')
     .get(controller.register_get)
     .post(controller.register_post);
 
-router.route('/detect/1')
-    .get(controller.detect1_get)
-    .post(controller.detect1_post);
+router.get('/detect/1',controller.detect1_get);
+router.post('/detect/1', controller.detect1_post);
 
 router.route('/detect/2')
     .get(controller.detect2_get)

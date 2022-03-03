@@ -21,36 +21,25 @@ video.addEventListener('play', () => {
     document.body.append(canvas)
     const displaySize = { width: video.width, height: video.height }
     faceapi.matchDimensions(canvas, displaySize)
-    setInterval(async () => {
+    
+    const interval = setInterval(async () => {
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+        faceapi.draw.drawDetections(canvas, resizedDetections)
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
 
-        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.6) {
+        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
             let canvas=document.querySelector('canvas');
             let context=canvas.getContext('2d');
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             var img_data = canvas.toDataURL('image/jpg');
-            video.pause();
-            // downloadImage(img_data)
+            clearInterval(interval);
+
+            window.localStorage.setItem('img1', JSON.stringify({img_data}))
+
+            window.location.replace("/visitor/detect/2");
         }
-        
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        faceapi.draw.drawDetections(canvas, resizedDetections)
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
-    }, 10000)
+    }, 100);
 })
-
-async function downloadImage(imageSrc) {
-    const image = await fetch(imageSrc)
-    const imageBlog = await image.blob()
-    const imageURL = URL.createObjectURL(imageBlog)
-
-    const link = document.createElement('a')
-    link.href = imageURL
-    link.download = 'image file name here'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-}
