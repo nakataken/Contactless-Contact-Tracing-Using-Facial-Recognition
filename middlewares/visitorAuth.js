@@ -39,7 +39,30 @@ const checkVisitor = (req, res, next) => {
         next();
     }
 }
+
+const checkAdmin = (req, res, next) => {
+    const token = req.cookies.jwtAdmin;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            if(err) {
+                console.log(err.message);
+                res.locals.admin = null;
+                next();
+            } else {
+                let admin = await Administrator.findById(decodedToken.id);
+                res.locals.admin = admin;
+                next();
+            }
+        });
+    } else {
+        res.locals.admin = null;
+        next();
+    }
+}
+
 module.exports = {
     requireAuth,
-    checkVisitor
+    checkVisitor,
+    checkAdmin
 };

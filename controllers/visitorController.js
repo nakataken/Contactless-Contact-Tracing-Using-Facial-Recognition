@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
-
 // create jwt
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -13,15 +12,22 @@ const createToken = (id) => {
 }
 
 const index_get = (req, res) => {
-    res.redirect('/visitor/login');
+    res.redirect('/visitor/profile');
 }
 
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
 }
 
-const detect_get = (req, res) => {
-    res.render('./Visitor Module/face_detect');
+const detect1_get = (req, res) => {
+    res.render('./Visitor Module/detect/1');
+}
+
+const detect2_get = (req, res) => {
+    res.render('./Visitor Module/detect/2');
+}
+const detect3_get = (req, res) => {
+    res.render('./Visitor Module/detect/3');
 }
 
 const login_get = (req, res) => {
@@ -49,8 +55,7 @@ const register_post = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
-        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword });
-
+        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword});
         let passEmail;
         let passContact;
 
@@ -79,8 +84,6 @@ const register_post = async (req, res) => {
                     console.log(err);
                     res.redirect('/visitor/register');
                 } else {
-                    // const token = createToken(data.id);
-                    // res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
                     res.redirect("/visitor/login");
                 }
             })
@@ -93,23 +96,22 @@ const register_post = async (req, res) => {
     }
 }
 
-const detect_post = (req, res) => {
-    res.send("DETECT POST");
-}   
-
-
 const login_post = (req, res) => {
     const {email, pass} = req.body;
-    // let error = "";
 
     Visitor.findOne({email:email}, async (err,data) => { 
         if(data){
             const auth = await bcrypt.compare(pass,data.password);
-
             if(auth) {
-                const token = createToken(data.id);
-                res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect('/visitor/profile');
+                if(data.usertype === "sysadmin") {
+                    const token = createToken(data.id);
+                    res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.redirect('/admin/dashboard');
+                } else {
+                    const token = createToken(data.id);
+                    res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
+                    res.redirect('/visitor/profile');
+                }
             } else {
                 login_error(res, "Wrong email or password", email);
             }
@@ -119,14 +121,31 @@ const login_post = (req, res) => {
     }); 
 }
 
+const detect1_post = async (req, res) => {
+    res.json({ redirectRoute: "/visitor/login" });
+    // res.redirect('/visitor/login');
+}   
+
+const detect2_post = (req, res) => {
+    res.send("DETECT 2 POST");
+}   
+
+const detect3_post = (req, res) => {
+    res.send("DETECT 3 POST");
+}   
+
 module.exports = {
     index_get,
     register_get,
     register_post,
-    detect_get, 
-    detect_post,
     login_get,
     login_post,
     logout_get,
-    profile_get
+    profile_get,
+    detect1_get, 
+    detect1_post,
+    detect2_get, 
+    detect2_post,
+    detect3_get, 
+    detect3_post
 }

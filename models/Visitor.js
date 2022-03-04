@@ -10,7 +10,11 @@ const visitorSchema = new mongoose.Schema({
     province: { type: String },
     contact: { type: String },
     email: { type: String },
-    password: { type: String }
+    password: { type: String },
+    usertype: {
+        type: String,
+        default: "visitor"
+    }
 }, {
     timestamps: true
 });
