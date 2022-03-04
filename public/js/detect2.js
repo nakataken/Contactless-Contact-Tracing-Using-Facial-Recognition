@@ -37,9 +37,9 @@ video.addEventListener('play', () => {
             var img_data = canvas.toDataURL('image/jpg');
             clearInterval(interval);
 
-            window.localStorage.setItem('img2', JSON.stringify({img_data}))
+            localStorage.setItem('img2', JSON.stringify({img_data}))
 
-            window.location.replace("/visitor/detect/3");
+            location.replace("/visitor/detect/3");
         }
     }, 100);
 })
