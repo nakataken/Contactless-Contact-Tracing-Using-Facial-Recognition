@@ -4,5 +4,46 @@
 
 
 .main{ 
-    background-color: white ;
+    background-color: $color-primary ;
 }
+
+.navbar{
+    .nav-link{
+        @include text-primary(bold,reg); 
+    } 
+    button{
+        @include btn-primary(bold,btn);
+    }
+}
+.head{
+    background-image: url("../assets/images/pexels-photo-3962294.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: right top;
+    background-attachment: fixed;
+    min-height: 70vh;
+
+    .l-div{
+        h1{
+            @include text-primary(bold,tle); 
+        }
+        h5{
+            @include text-white(thin,h3); 
+        }
+
+        button{
+            @include btn-primary(bold,btn);
+        }
+    }
+}
+
+.second-sec{
+
+    .c-div{
+        height: 100% !important;
+        h5{
+            @include text-primary(bold,reg); 
+        }
+    }
+}
+

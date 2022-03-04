@@ -4,7 +4,7 @@
   "description": "Capstone Project",
   "main": "app.js",
   "scripts": {
-    "start" : "nodemon app"
+    "start": "nodemon app"
   },
   "repository": {
     "type": "git",
