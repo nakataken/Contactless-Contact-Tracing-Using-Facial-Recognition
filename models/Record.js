@@ -9,8 +9,7 @@ const recordSchema = new mongoose.Schema({
     //     type: Schema.Types.ObjectId, 
     //     ref: 'Establishment'
     // }],
-    date: { type: date },
-    temperature : { type: number },
+    date: { type: date }
 }, {
     timestamps: true
 });
