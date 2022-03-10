@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-$color-primary: #3285FF;
+$color-primary: #4164E3;
 $color-secondary: #00CCF8;
+$color-sub:#3354CC;
 $color-black: #11171F;
 $color-white: #ffffff;
 
@@ -16,7 +17,7 @@ $font-size:(
 
         "p":0.9rem, //16px
         "reg":1rem,
-        "lbl":1.2rem,
+        "lbl":0.9rem,
         "btn":1rem, //19px
 );
 
@@ -24,7 +25,7 @@ $font-weight:(
     "thin":400,
     "normal":500,
     "bold": 600,
-    "heavy": 800,
+    "heavy": 700,
 );
 
 @function weight($weight-name){
@@ -37,11 +38,18 @@ $font-weight:(
 
 @mixin btn-primary ($weight-name,$fontsize-name){
     color: $color-white;
-    background-color:  $color-primary;
+    background-image: linear-gradient(to right, $color-primary -4%, $color-secondary  51%, $color-primary  99%);
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
 
     font-family: $font-regular, Arial, Helvetica, sans-serif;
     font-weight: weight($weight-name);
     font-size: fontsize(btn);
+  
     border-radius: 5px;
     box-shadow: none !important;
 }
@@ -64,6 +72,13 @@ $font-weight:(
  
 }
 
+@mixin text-black ($weight-name,$fontsize-name){
+    color: $color-black !important;
+    font-family: $font-regular, Arial, Helvetica, sans-serif !important;
+    font-weight: weight($weight-name) !important;
+    font-size: fontsize($fontsize-name) !important;
+ 
+}
 @mixin text-white ($weight-name,$fontsize-name){
     color: $color-white !important;
     font-family: $font-regular, Arial, Helvetica, sans-serif !important;

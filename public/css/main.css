@@ -1,17 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
 .main {
-  background-color: #3285FF;
+  background-color: #4164E3;
 }
 
 .navbar .nav-link {
-  color: #3285FF !important;
+  color: #4164E3 !important;
   font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
 }
 .navbar button {
   color: #ffffff;
-  background-color: #3285FF;
+  background-image: linear-gradient(to right, #4164E3 -4%, #00CCF8 51%, #4164E3 99%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
   font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -28,7 +34,7 @@
   min-height: 70vh;
 }
 .head .l-div h1 {
-  color: #3285FF !important;
+  color: #4164E3 !important;
   font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 600 !important;
   font-size: !important;
@@ -41,7 +47,13 @@
 }
 .head .l-div button {
   color: #ffffff;
-  background-color: #3285FF;
+  background-image: linear-gradient(to right, #4164E3 -4%, #00CCF8 51%, #4164E3 99%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
   font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -53,8 +65,94 @@
   height: 100% !important;
 }
 .second-sec .c-div h5 {
-  color: #3285FF !important;
+  color: #4164E3 !important;
   font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
+}
+
+.login {
+  min-height: 100vh;
+  background-image: url("../assets/images/Frame_1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right bottom;
+  background-attachment: fixed;
+}
+.login #r-form-parent {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.login #r-form {
+  height: 100%;
+}
+.login .login-subcon .c-div {
+  background-color: #ffffff;
+  box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+}
+.login .login-subcon .c-div h1 {
+  text-align: center;
+  color: #4164E3 !important;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+  background: linear-gradient(98.32deg, #3285FF 15.35%, #00CCF8 83.49%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.login .login-subcon .c-div p {
+  text-align: center;
+  color: #11171F !important;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+}
+.login .login-subcon .c-div label {
+  color: #11171F !important;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+}
+.login .login-subcon .c-div input {
+  border: 0;
+  border-radius: 0px;
+  outline: 0;
+  background: transparent;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(141, 137, 137, 0.5);
+}
+.login .login-subcon .c-div .btn-grad {
+  color: #ffffff;
+  background-image: linear-gradient(to right, #4164E3 -4%, #00CCF8 51%, #4164E3 99%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 5px;
+  box-shadow: none !important;
+}
+.login .login-subcon .c-div .btn-grad:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+.login .login-subcon .c-div .btn-grad:active {
+  background-color: #00CCF8 !important;
+}
+.login .login-subcon .c-div a {
+  text-decoration: none;
+}
+
+._1 {
+  background-color: #4164E3;
+}
+
+._2 {
+  background-color: #00CCF8;
 }/*# sourceMappingURL=main.css.map */
