@@ -1,5 +1,6 @@
 // const Face = require("../models/Face.js";
 const Establishment = require("../models/Establishment.js");
+const Record = require("../models/Record.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -67,11 +68,21 @@ const login_post = (req, res) => {
 } 
 
 const request_post = (req, res) => {
-    res.send("Request Post");
+    res.send("Record Post");
 }
 
 const record_post = (req, res) => {
-    res.send("Record Post");
+    const {visitorID, establishmentID, date} = req.body;
+
+    const record = new Record({visitor: visitorID, establishment: establishmentID, date});
+
+    record.save((err, data) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.send("Record Post");
+        }
+    })    
 }
 
 const test_get = async (req, res) => {
@@ -91,8 +102,6 @@ const test_get = async (req, res) => {
                 console.log(err);
                 res.redirect('/establishment/login');
             } else {
-                // const token = createToken(data.id);
-                // res.cookie('jwtEstablishment', token, {httpOnly: true, maxAge: maxAge * 1000});
                 res.redirect("/establishment/login");
             }
         })

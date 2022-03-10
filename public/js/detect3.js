@@ -37,9 +37,12 @@ video.addEventListener('play', () => {
             var img_data = canvas.toDataURL('image/jpg');
             clearInterval(interval);
 
-            window.localStorage.setItem('img3', JSON.stringify({img_data}));
 
-            window.location.replace("/visitor/login");
+            let img1 = localStorage.getItem("img1");
+            let img2 = localStorage.getItem("img2");
+            let img3 = JSON.stringify({img_data});
+
+            await fetch('visitor/detect/3', { method: 'POST', headers: { "content-type": "application/json"}, body: {img1, img2, img3} });
         }
     }, 100);
 })

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
+
 // create jwt
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -17,17 +18,6 @@ const index_get = (req, res) => {
 
 const register_get = (req, res) => {
     res.render('./Visitor Module/register');
-}
-
-const detect1_get = (req, res) => {
-    res.render('./Visitor Module/detect/1');
-}
-
-const detect2_get = (req, res) => {
-    res.render('./Visitor Module/detect/2');
-}
-const detect3_get = (req, res) => {
-    res.render('./Visitor Module/detect/3');
 }
 
 const login_get = (req, res) => {
@@ -121,19 +111,6 @@ const login_post = (req, res) => {
     }); 
 }
 
-const detect1_post = async (req, res) => {
-    res.json({ redirectRoute: "/visitor/login" });
-    // res.redirect('/visitor/login');
-}   
-
-const detect2_post = (req, res) => {
-    res.send("DETECT 2 POST");
-}   
-
-const detect3_post = (req, res) => {
-    res.send("DETECT 3 POST");
-}   
-
 module.exports = {
     index_get,
     register_get,
@@ -142,10 +119,4 @@ module.exports = {
     login_post,
     logout_get,
     profile_get,
-    detect1_get, 
-    detect1_post,
-    detect2_get, 
-    detect2_post,
-    detect3_get, 
-    detect3_post
 }
