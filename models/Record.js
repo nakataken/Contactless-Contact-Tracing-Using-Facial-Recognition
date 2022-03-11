@@ -9,7 +9,7 @@ const recordSchema = new mongoose.Schema({
     //     type: Schema.Types.ObjectId, 
     //     ref: 'Establishment'
     // }],
-    date: { type: date }
+    date: { type: Date }
 }, {
     timestamps: true
 });
