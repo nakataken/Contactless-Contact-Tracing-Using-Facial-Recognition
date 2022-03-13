@@ -12,8 +12,7 @@ const detect3_get = (req, res) => {
 }
 
 const detect1_post = async (req, res) => {
-    res.json({ redirectRoute: "/visitor/login" });
-    // res.redirect('/visitor/login');
+    res.redirect('/visitor/login');
 }   
 
 const detect2_post = (req, res) => {

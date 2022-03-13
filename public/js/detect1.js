@@ -37,9 +37,28 @@ video.addEventListener('play', () => {
             var img_data = canvas.toDataURL('image/jpg');
             clearInterval(interval);
 
-            localStorage.setItem('img1', JSON.stringify({img_data}))
-
-            location.replace("/visitor/detect/2");
+            // localStorage.setItem('img1', JSON.stringify({img_data}))
+            // location.replace("/visitor/detect/2");
+            // canvas.toBlob((blob) => {
+            //     var form = new FormData(),
+            //     request = new XMLHttpRequest();
+            //     form.append(img_data, blob, "filename.png");
+            //     request.open("POST", "visitor/detect/1", true);
+            //     request.send(form);     
+            // })
+            
+            await fetch('/visitor/detect/1', { 
+                method: 'POST', 
+                headers: {
+                    "content-type": "application/json"
+                }, 
+                body: JSON.stringify({ img1: img_data }) 
+            })
+            .then((response)=> {
+                if(response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
         }
     }, 100);
 })
