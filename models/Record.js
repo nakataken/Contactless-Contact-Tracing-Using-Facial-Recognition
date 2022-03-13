@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const recordSchema = new mongoose.Schema({
-    // visitor: [{
-    //     type: Schema.Types.ObjectId, 
-    //     ref: 'Visitor'
-    // }],
-    // establishment: [{
-    //     type: Schema.Types.ObjectId, 
-    //     ref: 'Establishment'
-    // }],
+    visitor_id: {
+        type: String,
+        required: true
+    },
+    establishment: {
+        type: String, 
+        required: true
+    },
     date: { type: Date }
 }, {
     timestamps: true

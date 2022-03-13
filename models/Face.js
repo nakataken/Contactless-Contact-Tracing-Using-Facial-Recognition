@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const faceSchema = new mongoose.Schema({
-    // visitor: [{
-    //     type: Schema.Types.ObjectId, 
-    //     ref: 'Visitor'
-    // }],
+    visitor_id: {
+        type: String,
+        required:true
+    },
     descriptions: {
         type: Array,
         required: true
