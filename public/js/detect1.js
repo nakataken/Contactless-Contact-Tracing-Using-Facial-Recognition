@@ -5,7 +5,8 @@ Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
     faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
     faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-    faceapi.nets.faceExpressionNet.loadFromUri('/models')
+    faceapi.nets.faceExpressionNet.loadFromUri('/models'),
+    faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
 ]).then(startVideo)
 
 function startVideo() {
@@ -17,6 +18,7 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+    let fetched = false;
     const canvas = faceapi.createCanvasFromMedia(video)
     document.body.append(canvas)
     const displaySize = { width: video.width, height: video.height }
@@ -28,37 +30,37 @@ video.addEventListener('play', () => {
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
         faceapi.draw.drawDetections(canvas, resizedDetections)
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-
         if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
+            clearInterval(interval);
             let canvas=document.querySelector('canvas');
             let context=canvas.getContext('2d');
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
-            var img_data = canvas.toDataURL('image/jpg');
-            clearInterval(interval);
-
-            // localStorage.setItem('img1', JSON.stringify({img_data}))
-            // location.replace("/visitor/detect/2");
-            // canvas.toBlob((blob) => {
-            //     var form = new FormData(),
-            //     request = new XMLHttpRequest();
-            //     form.append(img_data, blob, "filename.png");
-            //     request.open("POST", "visitor/detect/1", true);
-            //     request.send(form);     
-            // })
             
-            await fetch('/visitor/detect/1', { 
-                method: 'POST', 
-                headers: {
-                    "content-type": "application/json"
-                }, 
-                body: JSON.stringify({ img1: img_data }) 
-            })
-            .then((response)=> {
-                if(response.redirected) {
-                    window.location.href = response.url;
-                }
-            });
+            var img_data = canvas.toDataURL('image/jpg');
+
+            $("#face").attr("src",img_data);
+            const input = await $('#face')[0];
+
+            const detection = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
+            
+            const description = await detection.descriptor
+
+            if(!fetched) {
+                fetched = true;
+                await fetch('/visitor/detect/1', { 
+                    method: 'POST', 
+                    headers: {
+                        "content-type": "application/json"
+                    }, 
+                    body:  JSON.stringify({ description }) 
+                })
+                .then((response)=> {
+                    if(response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
+            }
         }
     }, 100);
 })
