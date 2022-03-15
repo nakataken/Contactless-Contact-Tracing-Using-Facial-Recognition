@@ -50,7 +50,7 @@ const checkAdmin = (req, res, next) => {
                 res.locals.admin = null;
                 next();
             } else {
-                let admin = await Administrator.findById(decodedToken.id);
+                let admin = await Visitor.findById(decodedToken.id);
                 res.locals.admin = admin;
                 next();
             }

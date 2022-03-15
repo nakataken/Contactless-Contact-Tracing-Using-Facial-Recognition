@@ -1,4 +1,5 @@
-const Face = require("../models/Face.js");
+const jwt = require("jsonwebtoken");
+const Visitor = require("../models/Visitor.js");
 const {Canvas, Image} = require("canvas");
 const faceapi = require("face-api.js");
 faceapi.env.monkeyPatch({ Canvas, Image });
@@ -16,19 +17,18 @@ const detect3_get = (req, res) => {
 
 const detect1_post = async (req, res) => {
     try {
-        const description = req.body.description;
+        const token = req.cookies.jwtVisitor;
 
-        const face = new Face({
-            visitor_id: "testID",
-            descriptions: [description],
-        });
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            const description = req.body.description;
 
-        await face.save((error) => {
-            if(error) {
-                console.log(error)
-            } else {
-                res.redirect('/visitor/detect/2'); 
-            }
+            Visitor.updateOne({ _id: decodedToken.id },{$push: { descriptions: description }}, (error) => {
+                if(error) {
+                    console.log(error);
+                } else {
+                    res.redirect('/visitor/detect/2'); 
+                }
+            })
         });
     } catch (error) {
         console.log(error);
@@ -37,15 +37,19 @@ const detect1_post = async (req, res) => {
 
 const detect2_post = (req, res) => {
     try{
-        const description = req.body.description;
+        const token = req.cookies.jwtVisitor;
 
-        Face.updateOne({ visitor_id: "testID" },{$push: { descriptions: description }}, (error) => {
-            if(error) {
-                console.log(error);
-            } else {
-                res.redirect('/visitor/detect/3'); 
-            }
-        })
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            const description = req.body.description;
+
+            Visitor.updateOne({ _id: decodedToken.id },{$push: { descriptions: description }}, (error) => {
+                if(error) {
+                    console.log(error);
+                } else {
+                    res.redirect('/visitor/detect/3'); 
+                }
+            })
+        });
     } catch (error) {
         console.log(error);
     }
@@ -53,15 +57,19 @@ const detect2_post = (req, res) => {
 
 const detect3_post = (req, res) => {
     try{
-        const description = req.body.description;
+        const token = req.cookies.jwtVisitor;
 
-        Face.updateOne({ visitor_id: "testID" },{$push: { descriptions: description }}, (error) => {
-            if(error) {
-                console.log(error);
-            } else {
-                res.redirect('/visitor/login'); 
-            }
-        })
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            const description = req.body.description;
+
+            Visitor.updateOne({ _id: decodedToken.id },{$push: { descriptions: description }}, (error) => {
+                if(error) {
+                    console.log(error);
+                } else {
+                    res.redirect('/visitor/login'); 
+                }
+            })
+        });
     } catch (error) {
         console.log(error);
     }

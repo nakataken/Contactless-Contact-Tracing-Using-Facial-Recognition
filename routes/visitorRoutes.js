@@ -7,20 +7,22 @@ const visitorAuth = require("../middlewares/visitorAuth.js");
 const router = Router();
 
 router.get('/', controller.index_get);
+
 router.route('/register')
     .get(controller.register_get)
     .post(controller.register_post);
 
-router.get('/detect/1',faceController.detect1_get);
-router.post('/detect/1', faceController.detect1_post);
+router.route('/detect/1')
+    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect1_get)
+    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect1_post);
 
 router.route('/detect/2')
-    .get(faceController.detect2_get)
-    .post(faceController.detect2_post);
+    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect2_get)
+    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect2_post);
 
 router.route('/detect/3')
-    .get(faceController.detect3_get)
-    .post(faceController.detect3_post);
+    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect3_get)
+    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect3_post);
 
 router.route('/login')
     .get(controller.login_get)

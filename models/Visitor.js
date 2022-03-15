@@ -11,6 +11,10 @@ const visitorSchema = new mongoose.Schema({
     contact: { type: String },
     email: { type: String },
     password: { type: String },
+    descriptions: {
+        type: Array,
+        required: true
+    },
     usertype: {
         type: String,
         default: "visitor"
