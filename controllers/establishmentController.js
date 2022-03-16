@@ -3,7 +3,6 @@ const Establishment = require("../models/Establishment.js");
 const Record = require("../models/Record.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -71,19 +70,19 @@ const request_post = (req, res) => {
     res.send("Record Post");
 }
 
-const record_post = (req, res) => {
-    const {visitorID, establishmentID, date} = req.body;
+// const record_post = (req, res) => {
+//     const {visitorID, establishmentID, date} = req.body;
 
-    const record = new Record({visitor: visitorID, establishment: establishmentID, date});
+//     const record = new Record({visitor: visitorID, establishment: establishmentID, date});
 
-    record.save((err, data) => {
-        if(err) {
-            console.log(err);
-        } else {
-            res.send("Record Post");
-        }
-    })    
-}
+//     record.save((err, data) => {
+//         if(err) {
+//             console.log(err);
+//         } else {
+//             res.send("Record Post");
+//         }
+//     })    
+// }
 
 const test_get = async (req, res) => {
     const name = "Test Establishment";
@@ -120,6 +119,6 @@ module.exports = {
     logout_get,
     dashboard_get,
     record_get,
-    record_post,
+    // record_post,
     test_get
 }

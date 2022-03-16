@@ -2,11 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Record</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Face Verification</title>
+    <script defer src="/js/face-api.min.js"></script>
+    <script defer src="/js/verification.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
-    
+    <div>
+        <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+    <div>
+        <canvas id="canvas" width="720" height="560" style="display: none;"></canvas>
+        <img id="face" src="" alt="">
+    </div>
 </body>
 </html>
+

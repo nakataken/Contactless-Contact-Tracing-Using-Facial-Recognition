@@ -11,6 +11,7 @@ const visitorSchema = new mongoose.Schema({
     contact: { type: String },
     email: { type: String },
     password: { type: String },
+    label: { type: String },
     descriptions: {
         type: Array,
         required: true
