@@ -72,8 +72,7 @@ const register_post = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
-        const label = `${fname} ${lname}`;
-        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword, label});
+        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword});
         let passEmail;
         let passContact;
 

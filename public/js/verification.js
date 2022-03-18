@@ -27,10 +27,12 @@ video.addEventListener('play', () => {
     const interval = setInterval(async () => {
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
+
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
         faceapi.draw.drawDetections(canvas, resizedDetections)
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
+
+        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.6) {
             clearInterval(interval);
             let canvas=document.querySelector('canvas');
             let context=canvas.getContext('2d');
@@ -42,22 +44,25 @@ video.addEventListener('play', () => {
             $("#face").attr("src",img_data);
             const input = await $('#face')[0];
 
-            const detection = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
-            const descriptor = detection.descriptor;
+            const detection = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors();
+            const resized = await faceapi.resizeResults(detection, displaySize);
 
-            if(!fetched) {
+            if(!fetched && resized) {
                 fetched = true;
+
                 await fetch('/establishment/verify', { 
                     method: 'POST', 
                     headers: {
                         "content-type": "application/json"
                     }, 
-                    body:  JSON.stringify({ descriptor }) 
+                    body:  JSON.stringify({ resized }) 
+                    // descriptor
                 })
                 .then((response)=> {
                     // if(response.redirected) {
                     //     window.location.href = response.url;
                     // }
+                    console.log(response);
                 });
             }
         }

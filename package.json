@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nakataken/Web-Based-Contactless-Contact-Tracing-and-Monitoring-System-Using-Facial-Recognition.git"
+    "url": "git+https://github.com/nakataken/Contactless-Contact-Tracing-Using-Facial-Recognition.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nakataken/Web-Based-Contactless-Contact-Tracing-and-Monitoring-System-Using-Facial-Recognition/issues"
+    "url": "https://github.com/nakataken/Contactless-Contact-Tracing-Using-Facial-Recognition/issues"
   },
-  "homepage": "https://github.com/nakataken/Web-Based-Contactless-Contact-Tracing-and-Monitoring-System-Using-Facial-Recognition#readme",
+  "homepage": "https://github.com/nakataken/Contactless-Contact-Tracing-Using-Facial-Recognition#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",

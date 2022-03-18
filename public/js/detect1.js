@@ -59,6 +59,7 @@ video.addEventListener('play', () => {
                     if(response.redirected) {
                         window.location.href = response.url;
                     }
+                    console.log(response);
                 });
             }
         }
