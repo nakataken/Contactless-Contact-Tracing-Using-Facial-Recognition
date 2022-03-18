@@ -2,43 +2,73 @@
 @import './variables';
 
 
-
 .main{ 
     background-color: $color-primary ;
 }
 
-.navbar{
-    .nav-link{
-        @include text-primary(bold,reg); 
-    } 
-    button{
-        @include btn-primary(bold,btn);
-    }
-}
-.head{
-    background-image: url("../assets/images/pexels-photo-3962294.jpeg");
+.home{
+    
+    background: url("../assets/images/frame_5.svg") ;
     background-repeat: no-repeat;
     background-size: cover; 
-    background-position: right top;
-    background-attachment: fixed;
-    min-height: 70vh;
+    background-position: right bottom;
 
+}
+
+nav{
+    background-color: transparent !important;
+}
+
+.navbar{
+    .nav-link{
+        @include text-white(normal,reg); 
+    } 
+    button{
+        @include btn-white(normal,btn);
+       
+    }
+   
+}
+
+.head{
+    min-height:90vh;
     .l-div{
+        
         h1{
             @include text-primary(bold,tle); 
+            background: linear-gradient(98.32deg, $color-primary 15.35%, $color-secondary 83.49%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h5{
-            @include text-white(thin,h3); 
+            @include text-black(thin,h3); 
         }
-
-        button{
-            @include btn-primary(bold,btn);
+        @media screen and (min-width: 991px){
+            button{
+                @include btn-primary(normal,btn);
+                color: white !important;
+            }
+            button:hover{
+                background-position: right center;
+                color: #fff;
+                text-decoration: none;
+            }
+            button:active{
+                background-color: $color-secondary !important;
+            }
         }
+        @media screen and (min-width: 0px){
+            button{
+                @include btn-white(normal,btn);
+            }
+        }
+        
+        
     }
 }
 
 .second-sec{
-
     .c-div{
         height: 100% !important;
         h5{
@@ -64,15 +94,14 @@
         height: 100%;
     }
     .login-subcon{
-        
-       
+         
         .c-div{
             background-color: $color-white;
             box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
             h1{
                 text-align: center;
                 @include text-primary(heavy,h1);
-                background: linear-gradient(98.32deg, #3285FF 15.35%, #00CCF8 83.49%);
+                background: linear-gradient(98.32deg, $color-primary 15.35%, $color-secondary 83.49%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
@@ -104,7 +133,6 @@
             }
             .btn-grad:active{
                 background-color: $color-secondary !important;
-
             }
             a{
                 text-decoration: none;

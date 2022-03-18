@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-$color-primary: #4164E3;
-$color-secondary: #00CCF8;
+$color-primary: #65DF95;
+$color-secondary: #0FB3A8;
 $color-sub:#3354CC;
 $color-black: #11171F;
 $color-white: #ffffff;
@@ -64,6 +64,16 @@ $font-weight:(
     box-shadow: none !important;
 }
 
+@mixin btn-white ($weight-name,$fontsize-name){
+    color: $color-secondary;
+    background-color:  $color-white;
+    font-family: $font-regular, Arial, Helvetica, sans-serif;
+    font-weight: weight($weight-name);
+    font-size: fontsize(btn);
+    border-radius: 5px;
+    box-shadow: none !important;
+}
+ 
 @mixin text-primary ($weight-name,$fontsize-name){
     color: $color-primary !important;
     font-family: $font-regular, Arial, Helvetica, sans-serif !important;
@@ -72,6 +82,13 @@ $font-weight:(
  
 }
 
+@mixin text-secondary ($weight-name,$fontsize-name){
+    color: $color-secondary !important;
+    font-family: $font-regular, Arial, Helvetica, sans-serif !important;
+    font-weight: weight($weight-name) !important;
+    font-size: fontsize($fontsize-name) !important;
+ 
+}
 @mixin text-black ($weight-name,$fontsize-name){
     color: $color-black !important;
     font-family: $font-regular, Arial, Helvetica, sans-serif !important;
