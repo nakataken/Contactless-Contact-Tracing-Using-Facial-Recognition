@@ -25,43 +25,40 @@ video.addEventListener('play', () => {
     faceapi.matchDimensions(canvas, displaySize)
     
     const interval = setInterval(async () => {
+        // Detect and draw 
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
+
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
         faceapi.draw.drawDetections(canvas, resizedDetections)
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+
         if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
+            // Stop and get image data
+            video.pause();
             clearInterval(interval);
-            let canvas=document.querySelector('canvas');
-            let context=canvas.getContext('2d');
+            let screenshot = document.getElementById('canvas');
+            let context  = screenshot.getContext('2d');
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             
-            var img_data = canvas.toDataURL('image/jpg');
-
-            $("#face").attr("src",img_data);
-            const input = await $('#face')[0];
-
-            const detection = await faceapi.detectSingleFace(input).withFaceLandmarks().withFaceDescriptor();
-            
-            const description = await detection.descriptor
-
-            if(!fetched) {
-                fetched = true;
-                await fetch('/visitor/detect/1', { 
-                    method: 'POST', 
-                    headers: {
-                        "content-type": "application/json"
-                    }, 
-                    body:  JSON.stringify({ description }) 
-                })
-                .then((response)=> {
-                    if(response.redirected) {
-                        window.location.href = response.url;
-                    }
-                    console.log(response);
-                });
-            }
+            screenshot.toBlob( async function(blob){
+                var form = new FormData();
+                form.append("image", blob, "detect1.png");
+                if(!fetched) {
+                    fetched = true;
+                    await fetch('/visitor/detect/1', { 
+                        method: 'POST', 
+                        body: form
+                    })
+                    .then((response)=> {
+                        console.log(response);
+                        if(response.redirected) {
+                            window.location.href = response.url;
+                        }
+                    });
+                }
+            }, "image/png");
         }
     }, 100);
 })

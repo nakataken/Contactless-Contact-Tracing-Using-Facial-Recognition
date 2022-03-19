@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const Visitor = require("../models/Visitor.js");
-// const {Canvas, Image} = require("canvas");
+const {Canvas, Image} = require("canvas");
+const canvas = require("canvas");
 const faceapi = require("face-api.js");
-// faceapi.env.monkeyPatch({ Canvas, Image });
+faceapi.env.monkeyPatch({ Canvas, Image });
 
 async function LoadModels() {
     await faceapi.nets.faceRecognitionNet.loadFromDisk("./models");
@@ -28,15 +29,11 @@ const detect1_post = async (req, res) => {
         const token = req.cookies.jwtVisitor;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            const description = req.body.description;
+            const img = await canvas.loadImage(req.file.path);
+            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            const description = detections.descriptor;
 
-            Visitor.updateOne({
-                _id: decodedToken.id
-            }, {
-                $push: {
-                    descriptions: description
-                }
-            }, (error) => {
+            Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
                 if (error) {
                     console.log(error);
                 } else {
@@ -44,8 +41,8 @@ const detect1_post = async (req, res) => {
                 }
             })
         });
-    } catch (error) {
-        console.log(error);
+    } catch(error) {
+        console.log(error)
     }
 }
 
@@ -54,15 +51,11 @@ const detect2_post = (req, res) => {
         const token = req.cookies.jwtVisitor;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            const description = req.body.description;
+            const img = await canvas.loadImage(req.file.path);
+            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            const description = detections.descriptor;
 
-            Visitor.updateOne({
-                _id: decodedToken.id
-            }, {
-                $push: {
-                    descriptions: description
-                }
-            }, (error) => {
+            Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
                 if (error) {
                     console.log(error);
                 } else {
@@ -80,15 +73,11 @@ const detect3_post = (req, res) => {
         const token = req.cookies.jwtVisitor;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            const description = req.body.description;
+            const img = await canvas.loadImage(req.file.path);
+            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            const description = detections.descriptor;
 
-            Visitor.updateOne({
-                _id: decodedToken.id
-            }, {
-                $push: {
-                    descriptions: description
-                }
-            }, (error) => {
+            Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
                 if (error) {
                     console.log(error);
                 } else {
@@ -103,29 +92,40 @@ const detect3_post = (req, res) => {
 
 const verification_post = async (req, res) => {
     try {
-        const resizedDetections = req.body.resized;
-
         let visitors = await Visitor.find();
-
         for (i = 0; i < visitors.length; i++) {
+            // Change the face data descriptors from Objects to Float32Array type
             for (j = 0; j < visitors[i].descriptions.length; j++) {
                 visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
             }
+            // Turn the DB face docs to
             visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
         }
-
+        // Load face matcher to find the matching face
         const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
+
+        // Read the image using canvas or other method
+        const img = await canvas.loadImage(req.file.path);
+        let temp = faceapi.createCanvasFromMedia(img);
+
+          // Process the image for the model
+        const displaySize = { width: img.width, height: img.height };
+        faceapi.matchDimensions(temp, displaySize);
+
+        // Find matching faces
+        const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
         const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
 
-        console.log("Faces: ", visitors);
-        console.log("Resized Detections: ", resizedDetections[0].descriptor);
-
-        // const results = faceMatcher.findBestMatch(resizedDetections[0].descriptor);
-        // console.log("Result: ", results);
-        // console.log("Test ", test);
+        if(results) {
+            console.log(results[0]._label);
+            // Insert log post here
+        } else {
+            console.log("No face matched.");
+        }
     } catch (error) {
         console.log(error);
-        res.status(400).send(error);
     }
 }
 

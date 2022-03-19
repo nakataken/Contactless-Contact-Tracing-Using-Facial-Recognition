@@ -25,7 +25,6 @@ video.addEventListener('play', () => {
     faceapi.matchDimensions(canvas, displaySize)
     
     const interval = setInterval(async () => {
-        // Detect and draw 
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
 
@@ -33,32 +32,39 @@ video.addEventListener('play', () => {
         faceapi.draw.drawDetections(canvas, resizedDetections)
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
 
-        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
-            // Stop and get image data
-            video.pause();
+        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.6) {
             clearInterval(interval);
-            let screenshot = document.getElementById('canvas');
-            let context  = screenshot.getContext('2d');
+            let canvas=document.querySelector('canvas');
+            let context=canvas.getContext('2d');
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             
-            screenshot.toBlob( async function(blob){
-                var form = new FormData();
-                form.append("image", blob, "detect2.png");
-                if(!fetched) {
-                    fetched = true;
-                    await fetch('/visitor/detect/2', { 
-                        method: 'POST', 
-                        body: form
-                    })
-                    .then((response)=> {
-                        console.log(response);
-                        if(response.redirected) {
-                            window.location.href = response.url;
-                        }
-                    });
-                }
-            }, "image/png");
+            var img_data = canvas.toDataURL('image/jpg');
+
+            $("#face").attr("src",img_data);
+            const input = await $('#face')[0];
+
+            const detection = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors();
+            const resized = await faceapi.resizeResults(detection, displaySize);
+
+            if(!fetched && resized) {
+                fetched = true;
+
+                await fetch('/establishment/verify', { 
+                    method: 'POST', 
+                    headers: {
+                        "content-type": "application/json"
+                    }, 
+                    body:  JSON.stringify({ resized }) 
+                    // descriptor
+                })
+                .then((response)=> {
+                    // if(response.redirected) {
+                    //     window.location.href = response.url;
+                    // }
+                    console.log(response);
+                });
+            }
         }
     }, 100);
 })
