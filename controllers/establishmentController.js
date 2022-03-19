@@ -1,6 +1,6 @@
 // const Face = require("../models/Face.js";
 const Establishment = require("../models/Establishment.js");
-const Record = require("../models/Record.js");
+const Request = require("../models/Request.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
@@ -66,8 +66,30 @@ const login_post = (req, res) => {
     }); 
 } 
 
-const request_post = (req, res) => {
-    res.send("Record Post");
+const request_post = async (req, res) => {
+    let request = new Request({
+        name: req.body.name,
+        owner: req.body.owner,
+        email: req.body.email,
+        address: req.body.address,
+        contact: req.body.contact,
+        message: req.body.message,
+        permit: req.files.permit[0].filename,
+        validID: req.files.validID[0].filename
+    })
+
+    try {
+        request.save((err) => {
+            if(err) {
+                console.log(err);
+                res.redirect('/establishment/login');
+            } else {
+                res.redirect("/establishment/login");
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // const record_post = (req, res) => {
@@ -96,7 +118,7 @@ const test_get = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const establishment = new Establishment({ establishment_name:name, establishment_owner:owner, establishment_address: address, email, contact, password: hashedPassword});
 
-        establishment.save((err, data) => {
+        establishment.save((err) => {
             if(err) {
                 console.log(err);
                 res.redirect('/establishment/login');
