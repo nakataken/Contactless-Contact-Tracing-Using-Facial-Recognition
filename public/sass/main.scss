@@ -25,9 +25,7 @@ nav{
     } 
     button{
         @include btn-white(normal,btn);
-       
     }
-   
 }
 
 .head{
@@ -141,6 +139,67 @@ nav{
     }
     
 }
+
+
+.register{
+    min-height: 100vh;
+    background-image: url("../assets/images/Frame_1.svg");
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: right bottom;
+    background-attachment: fixed;
+    #r-form-parent{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    #r-form{
+        height: 100%;
+    }
+    .register-subcon{
+         
+        .c-div{
+            background-color: $color-white;
+            box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+            h1{
+                text-align: center;
+                @include text-primary(heavy,h1);
+                background: linear-gradient(98.32deg, $color-primary 15.35%, $color-secondary 83.49%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            p{
+                @include text-black(normal,p);
+            }
+            input {
+                border: 0;
+                border-radius: 0px;
+                outline: 0;
+                background: transparent;
+                box-shadow: none !important;
+                border: 1px solid rgb(141, 137, 137,0.5) ;
+            }
+            span{
+                text-transform: uppercase;
+                @include text-black(bold,p);
+            }
+            .btn-grad{
+                @include btn-primary(normal, btn);
+            }
+            .btn-grad:hover{
+                background-position: right center;
+                color: #fff;
+                text-decoration: none;
+            }
+            .btn-grad:active{
+                background-color: $color-secondary !important;
+            }
+
+        }
+    }
+    
+}
+
 ._1{
     background-color: $color-primary;
 }
