@@ -3,6 +3,7 @@ const Visitor = require("../models/Visitor.js");
 const {Canvas, Image} = require("canvas");
 const canvas = require("canvas");
 const faceapi = require("face-api.js");
+const fs = require('fs')
 faceapi.env.monkeyPatch({ Canvas, Image });
 
 async function LoadModels() {
@@ -37,6 +38,12 @@ const detect1_post = async (req, res) => {
                 if (error) {
                     console.log(error);
                 } else {
+                    fs.unlink(req.file.path, (error) => {
+                        if (error) {
+                            console.error(error)
+                            return
+                        }
+                    })
                     res.redirect('/visitor/detect/2');
                 }
             })
@@ -59,6 +66,12 @@ const detect2_post = (req, res) => {
                 if (error) {
                     console.log(error);
                 } else {
+                    fs.unlink(req.file.path, (error) => {
+                        if (error) {
+                            console.error(error)
+                            return
+                        }
+                    })
                     res.redirect('/visitor/detect/3');
                 }
             })
@@ -81,6 +94,12 @@ const detect3_post = (req, res) => {
                 if (error) {
                     console.log(error);
                 } else {
+                    fs.unlink(req.file.path, (error) => {
+                        if (error) {
+                            console.error(error)
+                            return
+                        }
+                    })
                     res.redirect('/visitor/login');
                 }
             })
@@ -93,36 +112,50 @@ const detect3_post = (req, res) => {
 const verification_post = async (req, res) => {
     try {
         let visitors = await Visitor.find();
-        for (i = 0; i < visitors.length; i++) {
-            // Change the face data descriptors from Objects to Float32Array type
-            for (j = 0; j < visitors[i].descriptions.length; j++) {
-                visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+
+        if(visitors) {
+            for (i = 0; i < visitors.length; i++) {
+                // Change the face data descriptors from Objects to Float32Array type
+                for (j = 0; j < visitors[i].descriptions.length; j++) {
+                    visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+                }
+                // Turn the DB face docs to
+                visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
             }
-            // Turn the DB face docs to
-            visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
-        }
-        // Load face matcher to find the matching face
-        const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
+            // Load face matcher to find the matching face
+            const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
 
-        // Read the image using canvas or other method
-        const img = await canvas.loadImage(req.file.path);
-        let temp = faceapi.createCanvasFromMedia(img);
+            // Read the image using canvas or other method
+            const img = await canvas.loadImage(req.file.path);
+            let temp = faceapi.createCanvasFromMedia(img);
 
-          // Process the image for the model
-        const displaySize = { width: img.width, height: img.height };
-        faceapi.matchDimensions(temp, displaySize);
+            // Process the image for the model
+            const displaySize = { width: img.width, height: img.height };
+            faceapi.matchDimensions(temp, displaySize);
 
-        // Find matching faces
-        const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+            // Find matching faces
+            const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+            const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+            
+            fs.unlink(req.file.path, (error) => {
+                if (error) {
+                    console.error(error)
+                    return
+                }
+            })
+            
+            const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
 
-        if(results) {
-            console.log(results[0]._label);
-            // Insert log post here
+            if(results) {
+                const user = await Visitor.findById(results[0]._label);
+                console.log(`${user.fname} ${user.mi} ${user.lname}`);
+                // Insert log post here
+            } else {
+                console.log("No face matched.");
+            }
         } else {
-            console.log("No face matched.");
+            console.log("No visitors")
         }
     } catch (error) {
         console.log(error);

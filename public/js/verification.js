@@ -44,7 +44,7 @@ video.addEventListener('play', () => {
             
             screenshot.toBlob( async function(blob){
                 var form = new FormData();
-                form.append("image", blob, "verify.png");
+                form.append("verify", blob, "verify.png");
                 if(!fetched) {
                     fetched = true;
                     await fetch('/establishment/verify', { 
