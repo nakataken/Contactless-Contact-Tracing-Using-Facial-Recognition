@@ -137,6 +137,14 @@ const verification_post = async (req, res) => {
             const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
+            
+            fs.unlink(req.file.path, (error) => {
+                if (error) {
+                    console.error(error)
+                    return
+                }
+            })
+            
             const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
 
             if(results) {
@@ -146,14 +154,6 @@ const verification_post = async (req, res) => {
             } else {
                 console.log("No face matched.");
             }
-
-            fs.unlink(req.file.path, (error) => {
-                if (error) {
-                    console.error(error)
-                    return
-                }
-            })
-
         } else {
             console.log("No visitors")
         }
