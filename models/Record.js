@@ -5,7 +5,7 @@ const recordSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    establishment: {
+    establishment_id: {
         type: String, 
         required: true
     },

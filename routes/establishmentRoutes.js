@@ -1,48 +1,11 @@
-const multer = require("multer");
 const Request = require("../models/Request.js");
 const { Router } = require("express");
 const establishmentController = require("../controllers/establishmentController.js");
 const faceController = require("../controllers/faceController.js");
 const establishmentAuth = require("../middlewares/establishmentAuth.js");
+const upload = require("../middlewares/upload.js");
 
 const router = Router();
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        let dir = './public/uploads/' + file.fieldname;
-        cb(null, dir);
-    },
-
-    filename: (request, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-    },
-});
-
-const upload = multer({
-    storage: storage,
-    limits: {
-        fieldSize: 1024 * 1024 * 5,
-    },
-});
-
-const verificationStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        let dir = './public/uploads/verify/';
-        cb(null, dir);
-    },
-
-    filename: (request, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-    },
-});
-
-const uploadVerify = multer({
-    storage: verificationStorage,
-    limits: {
-        fieldSize: 1024 * 1024 * 5,
-    },
-});
-
 
 router.get('/', establishmentController.index_get);
 router.get('/request', establishmentController.request_get);
@@ -54,7 +17,7 @@ router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstabl
 router.get('/dashboard', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.dashboard_get);
 
 router.get('/record', establishmentController.record_get);
-router.post('/verify', uploadVerify.single('image'),faceController.verification_post);
+router.post('/verify', upload.single('verify'),faceController.verification_post);
 
 // router.get('/test', controller.test_get);
 
