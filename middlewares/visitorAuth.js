@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Visitor = require("../models/Visitor.js");
 
-const requireAuth = (req, res, next) => {
+const visitorAuth = (req, res, next) => {
     const token = req.cookies.jwtVisitor;
 
     if(token) {
@@ -10,7 +10,23 @@ const requireAuth = (req, res, next) => {
                 console.log(err.message);
                 res.redirect('/visitor/login');
             } else {
-                // console.log(decodedToken);
+                next();
+            }
+        });
+    } else {
+        res.redirect('/visitor/login');
+    }
+}
+
+const adminAuth = (req, res, next) => {
+    const token = req.cookies.jwtAdmin;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if(err) {
+                console.log(err.message);
+                res.redirect('/visitor/login');
+            } else {
                 next();
             }
         });
@@ -62,7 +78,8 @@ const checkAdmin = (req, res, next) => {
 }
 
 module.exports = {
-    requireAuth,
+    visitorAuth,
+    adminAuth,
     checkVisitor,
     checkAdmin
 };

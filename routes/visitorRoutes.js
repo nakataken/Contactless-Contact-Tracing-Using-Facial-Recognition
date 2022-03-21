@@ -13,22 +13,22 @@ router.route('/register')
     .post(controller.register_post);
 
 router.route('/detect/1')
-    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect1_get)
-    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect1_post);
+    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect1_get)
+    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect1_post);
 
 router.route('/detect/2')
-    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect2_get)
-    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect2_post);
+    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect2_get)
+    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect2_post);
 
 router.route('/detect/3')
-    .get(visitorAuth.requireAuth, visitorAuth.checkVisitor, faceController.detect3_get)
-    .post(visitorAuth.requireAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect3_post);
+    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect3_get)
+    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect3_post);
 
 router.route('/login')
     .get(controller.login_get)
     .post(controller.login_post);
 
 router.get('/logout',  controller.logout_get);
-router.get('/profile', visitorAuth.requireAuth, visitorAuth.checkVisitor, controller.profile_get);
+router.get('/profile', visitorAuth.visitorAuth, visitorAuth.checkVisitor, controller.profile_get);
 
 module.exports = router;

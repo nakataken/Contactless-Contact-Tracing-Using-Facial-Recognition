@@ -149,7 +149,7 @@ const verification_post = async (req, res) => {
 
             if(results) {
                 const user = await Visitor.findById(results[0]._label);
-                console.log(`${user.fname} ${user.mi} ${user.lname}`);
+                console.log(`${user.name.fname} ${user.name.mi} ${user.name.lname}`);
                 // Insert log post here
             } else {
                 console.log("No face matched.");

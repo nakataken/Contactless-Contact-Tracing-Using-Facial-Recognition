@@ -35,7 +35,7 @@ const login_register = (req, res, url) => {
                 console.log(err.message);
                 res.redirect('/');
             } else {
-                res.redirect('/admin/');
+                res.redirect('/admin/dashboard');
             }
         });
     } else {
