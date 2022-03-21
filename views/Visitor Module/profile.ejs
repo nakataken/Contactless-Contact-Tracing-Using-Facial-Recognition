@@ -9,7 +9,7 @@
 <body>
     <% if(typeof(visitor) != "undefined") { %>
     <ul>
-        <li>Welcome, <%= visitor.fname %> <%= visitor.lname %></li>
+        <li>Welcome, <%= visitor.name.fname %> <%= visitor.name.lname %></li>
         <li><a href="/visitor/logout">Logout</a></li>
     </ul>
     <% } %>

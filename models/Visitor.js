@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema({
-    fname : { type: String },
-    mi: { type: String },
-    lname : { type: String },
+    name: { type:Object },
     bdate: { type: Date }, 
-    barangay: { type: String },
-    city: { type: String },
-    province: { type: String },
-    contact: { type: String },
+    address: { type: Object },
     email: { type: String },
+    contact: {type: String},
     password: { type: String },
     descriptions: {
         type: Array,

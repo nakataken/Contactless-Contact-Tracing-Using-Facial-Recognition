@@ -65,14 +65,27 @@ const logout_get = (req, res) => {
 }
 
 const register_post = async (req, res) => { 
-    const { fname, mi, lname, bdate, barangay, city, province, contact, email, pass} = req.body;
+    const { fname, mi, lname, bdate, contact, email, pass} = req.body;
+
+    const name = {
+        fname,
+        mi,
+        lname
+    }
+
+    const address = {
+        region: req.body.region,
+        province: req.body.province,
+        city: req.body.city,
+        barangay: req.body.barangay
+    }
 
     let emailError = "";
     let contactError = "";
 
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
-        const visitor = new Visitor({ fname, mi, lname, bdate, barangay, city, province, contact, email, password: hashedPassword});
+        const visitor = new Visitor({ name, bdate, address, contact, email, password: hashedPassword});
         let passEmail;
         let passContact;
 
