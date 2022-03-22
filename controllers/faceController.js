@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Visitor = require("../models/Visitor.js");
+const Record = require("../models/Record.js");
 const {Canvas, Image} = require("canvas");
 const canvas = require("canvas");
 const faceapi = require("face-api.js");
@@ -111,56 +112,89 @@ const detect3_post = (req, res) => {
 
 const verification_post = async (req, res) => {
     try {
-        let visitors = await Visitor.find();
+        const token = req.cookies.jwtEstablishment;
 
-        if(visitors) {
-            for (i = 0; i < visitors.length; i++) {
-                // Change the face data descriptors from Objects to Float32Array type
-                for (j = 0; j < visitors[i].descriptions.length; j++) {
-                    visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            let visitors = await Visitor.find();
+
+            if(visitors) {
+                for (i = 0; i < visitors.length; i++) {
+                    // Change the face data descriptors from Objects to Float32Array type
+                    for (j = 0; j < visitors[i].descriptions.length; j++) {
+                        visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+                    }
+                    // Turn the DB face docs to
+                    visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
                 }
-                // Turn the DB face docs to
-                visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
-            }
-            // Load face matcher to find the matching face
-            const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
+                // Load face matcher to find the matching face
+                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
 
-            // Read the image using canvas or other method
-            const img = await canvas.loadImage(req.file.path);
-            let temp = faceapi.createCanvasFromMedia(img);
+                // Read the image using canvas or other method
+                const img = await canvas.loadImage(req.file.path);
+                let temp = faceapi.createCanvasFromMedia(img);
 
-            // Process the image for the model
-            const displaySize = { width: img.width, height: img.height };
-            faceapi.matchDimensions(temp, displaySize);
+                // Process the image for the model
+                const displaySize = { width: img.width, height: img.height };
+                faceapi.matchDimensions(temp, displaySize);
 
-            // Find matching faces
-            const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                // Find matching faces
+                const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+                const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-            
-            fs.unlink(req.file.path, (error) => {
-                if (error) {
-                    console.error(error)
-                    return
+                
+                fs.unlink(req.file.path, (error) => {
+                    if (error) {
+                        console.error(error)
+                        return
+                    }
+                })
+                
+                const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+
+                if(results) {
+                    try {
+                        const user = await Visitor.findById(results[0]._label);
+
+                        // Insert log post here
+                        const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
+
+                        record.save((err, data) => {
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                res.json(user.name);
+                            }
+                        })  
+                    } catch (error) {
+                        console.log(error.message);
+                        res.status(401).json(error.message);
+                    }
+                } else {
+                    console.log("No face matched.");
                 }
-            })
-            
-            const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
-
-            if(results) {
-                const user = await Visitor.findById(results[0]._label);
-                console.log(`${user.name.fname} ${user.name.mi} ${user.name.lname}`);
-                // Insert log post here
             } else {
-                console.log("No face matched.");
+                console.log("No visitors")
             }
-        } else {
-            console.log("No visitors")
-        }
+        });
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
+        res.status(401).json(error.message);
     }
 }
+
+// const record_post = (req, res) => {
+//     const {visitorID, establishmentID, date} = req.body;
+
+//     const record = new Record({visitor: visitorID, establishment: establishmentID, date});
+
+//     record.save((err, data) => {
+//         if(err) {
+//             console.log(err);
+//         } else {
+//             res.send("Record Post");
+//         }
+//     })    
+// }
 
 module.exports = {
     detect1_get,

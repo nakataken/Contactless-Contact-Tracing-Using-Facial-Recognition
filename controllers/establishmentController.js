@@ -1,6 +1,7 @@
-// const Face = require("../models/Face.js";
 const Establishment = require("../models/Establishment.js");
 const Request = require("../models/Request.js");
+const Visitor = require("../models/Visitor.js");
+const Record = require("../models/Record.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
@@ -12,6 +13,7 @@ const createToken = (id) => {
         expiresIn: maxAge
     })
 }
+
 
 const index_get = (req, res) => {
     res.redirect('/establishment/login')
@@ -26,15 +28,59 @@ const request_get = (req, res) => {
 }
 
 const login_get = (req, res) => {
-    res.render('./Establishment Module/login');
+    const token = req.cookies.jwtEstablishment
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if(err) {
+                console.log(err.message);
+                res.redirect('/');
+            } else {
+                res.redirect('/establishment/home');
+            }
+        });
+    } else {
+        res.render('./Establishment Module/login');
+    }
 }
 
 const login_error = (res, error, email) => {
     res.render('./Establishment Module/login', {error,email});
 }
 
-const dashboard_get = (req, res) => {
-    res.render('./Establishment Module/dashboard');
+const dashboard_get = async (req, res) => {
+    const token = req.cookies.jwtEstablishment;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            if(err) {
+                console.log(err.message);
+                res.redirect('/');
+            } else {
+                let logs = [];
+                let records = await Record.find({establishment_id:decodedToken.id});
+                let visitors = await Visitor.find();
+
+                for (const record of records) {
+                    for (const visitor of visitors) {
+                        if(record.visitor_id === visitor._id.toString()) {
+
+                            const log = {
+                                id: record.visitor_id, 
+                                name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
+                                date: record.createdAt
+                            };
+
+                            logs.push(log);
+                        }
+                    }
+                }
+
+                res.render('./Establishment Module/dashboard', {logs});
+            }
+        });
+    } else {
+        res.render('./Establishment Module/login');
+    }
 }
 
 const record_get = (req, res) => {
@@ -43,7 +89,7 @@ const record_get = (req, res) => {
 
 const logout_get = (req, res) => {
     res.cookie('jwtEstablishment', '', {maxAge: 1});
-    res.redirect('/Establishment/login');
+    res.redirect('/establishment/login');
 }
 
 const login_post = (req, res) => {
@@ -92,20 +138,6 @@ const request_post = async (req, res) => {
     }
 }
 
-// const record_post = (req, res) => {
-//     const {visitorID, establishmentID, date} = req.body;
-
-//     const record = new Record({visitor: visitorID, establishment: establishmentID, date});
-
-//     record.save((err, data) => {
-//         if(err) {
-//             console.log(err);
-//         } else {
-//             res.send("Record Post");
-//         }
-//     })    
-// }
-
 const test_get = async (req, res) => {
     const name = "Test Establishment";
     const owner = "Test Owner";
@@ -141,6 +173,5 @@ module.exports = {
     logout_get,
     dashboard_get,
     record_get,
-    // record_post,
     test_get
 }

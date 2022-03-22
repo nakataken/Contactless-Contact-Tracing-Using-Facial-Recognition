@@ -10,7 +10,7 @@ const requireAuth = (req, res, next) => {
                 console.log(err.message);
                 res.redirect('/establishment/login');
             } else {
-                console.log(decodedToken);
+                // console.log(decodedToken);
                 next();
             }
         });

@@ -8,10 +8,10 @@ const recordSchema = new mongoose.Schema({
     establishment_id: {
         type: String, 
         required: true
-    },
-    date: { type: Date }
-}, {
+    }
+}, { 
     timestamps: true
+    // expireAfterSeconds: 60
 });
 
 const Record = mongoose.model("Record", recordSchema);

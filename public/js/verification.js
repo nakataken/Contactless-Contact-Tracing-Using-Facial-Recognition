@@ -52,10 +52,18 @@ video.addEventListener('play', () => {
                         body: form
                     })
                     .then((response)=> {
-                        console.log(response);
-                        if(response.redirected) {
-                            window.location.href = response.url;
-                        }
+                        response.json().then((data) => {
+                            if(response.ok) {
+                                console.log(data)
+                                setTimeout(() => {
+                                    $('#person').text(`${data.fname} ${data.lname}`); 
+                                    window.location.href = "/establishment/record";
+                                }, 5000);
+                            } else {
+                                $('#person').text("Cannot find face."); 
+                                window.location.href = "/establishment/record";
+                            }
+                        })
                     });
                 }
             }, "image/png");

@@ -21,8 +21,8 @@ router.get('/logout', establishmentController.logout_get);
 router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.home_get);
 router.get('/dashboard', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.dashboard_get);
 
-router.get('/record', establishmentController.record_get);
-router.post('/verify', upload.single('verify'),faceController.verification_post);
+router.get('/record', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.record_get);
+router.post('/verify', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, upload.single('verify'),faceController.verification_post);
 
 // router.get('/test', controller.test_get);
 

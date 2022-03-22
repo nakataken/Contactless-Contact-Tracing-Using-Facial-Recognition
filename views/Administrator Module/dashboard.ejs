@@ -14,6 +14,23 @@
         <li><a href="/admin/requests">Establishment Account Requests</a></li>
         <li><a href="#">Monitor Record</a></li>
     </ul>
+
+    <table>
+        <thead>
+            <td>Name</td>
+            <td>Establishment</td>
+            <td>Address</td>
+            <td>Date & Time</td>
+        </thead>
+        <% for(var i=0; i < logs.length; i++) { %>
+        <tr>
+            <td><%= logs[i].name %></td>
+            <td><%= logs[i].establishment %></td>
+            <td><%= logs[i].address %></td>
+            <td><%= logs[i].date %></td>
+        </tr>
+        <% } %>
+    </table>
     <% } %>
 </body>
 </html>
