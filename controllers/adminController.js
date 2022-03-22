@@ -25,7 +25,7 @@ const index_get = (req, res) => {
 const dashboard_get = async (req, res) => {
     let records = await Record.find();
     let visitors = await Visitor.find();
-
+    let recordsCount = records.length;
     let logs = [];
     
     for (const record of records) {
@@ -46,7 +46,7 @@ const dashboard_get = async (req, res) => {
         }
     }
 
-    res.render('./Administrator Module/dashboard', {logs});
+    res.render('./Administrator Module/dashboard', {logs, recordsCount});
 }
 
 const requests_get = async (req, res) => {

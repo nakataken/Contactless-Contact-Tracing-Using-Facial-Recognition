@@ -60,22 +60,22 @@ const dashboard_get = async (req, res) => {
                 let records = await Record.find({establishment_id:decodedToken.id});
                 let visitors = await Visitor.find();
 
+                let recordsCount = records.length;
+
                 for (const record of records) {
                     for (const visitor of visitors) {
                         if(record.visitor_id === visitor._id.toString()) {
-
                             const log = {
                                 id: record.visitor_id, 
                                 name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
                                 date: record.createdAt
                             };
-
                             logs.push(log);
                         }
                     }
                 }
 
-                res.render('./Establishment Module/dashboard', {logs});
+                res.render('./Establishment Module/dashboard', {logs, recordsCount});
             }
         });
     } else {
