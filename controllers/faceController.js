@@ -182,20 +182,6 @@ const verification_post = async (req, res) => {
     }
 }
 
-// const record_post = (req, res) => {
-//     const {visitorID, establishmentID, date} = req.body;
-
-//     const record = new Record({visitor: visitorID, establishment: establishmentID, date});
-
-//     record.save((err, data) => {
-//         if(err) {
-//             console.log(err);
-//         } else {
-//             res.send("Record Post");
-//         }
-//     })    
-// }
-
 module.exports = {
     detect1_get,
     detect1_post,

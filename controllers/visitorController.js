@@ -1,6 +1,7 @@
 const Visitor = require("../models/Visitor.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const qr = require("qrcode");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -56,7 +57,15 @@ const login_error = (res, error, email) => {
 }
 
 const profile_get = (req, res) => {
-    res.render('./Visitor Module/profile');
+    const token = req.cookies.jwtVisitor;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        qr.toDataURL(decodedToken.id, (err, src) => {
+        if (err) {
+            console.log(err)
+        }
+        res.render('./Visitor Module/profile', {src});
+        });
+    });
 }
 
 const logout_get = (req, res) => {

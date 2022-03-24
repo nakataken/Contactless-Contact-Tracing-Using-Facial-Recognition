@@ -138,6 +138,34 @@ const request_post = async (req, res) => {
     }
 }
 
+const qr_get = (req, res) => {
+    res.render('./Establishment Module/qr');
+}
+
+const qr_post = (req, res) => {
+    try {
+        const token = req.cookies.jwtEstablishment;
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            let visitor_id = req.body.decodedText;
+            let establishment_id = decodedToken.id;
+
+            const record = new Record({visitor_id, establishment_id});
+
+            record.save((err) => {
+                if(err) {
+                    console.log(err);
+                }
+            })  
+
+            res.sendStatus(200)  
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.status(401).json(error.message);
+    }
+}
+
 const test_get = async (req, res) => {
     const name = "Test Establishment";
     const owner = "Test Owner";
@@ -173,5 +201,7 @@ module.exports = {
     logout_get,
     dashboard_get,
     record_get,
+    qr_get,
+    qr_post,
     test_get
 }

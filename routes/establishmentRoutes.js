@@ -21,6 +21,10 @@ router.get('/logout', establishmentController.logout_get);
 router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.home_get);
 router.get('/dashboard', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.dashboard_get);
 
+router.route('/qr')
+    .get(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.qr_get)
+    .post(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.qr_post);
+
 router.get('/record', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.record_get);
 router.post('/verify', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, upload.single('verify'),faceController.verification_post);
 
