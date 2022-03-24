@@ -22,33 +22,6 @@ const index_get = (req, res) => {
     res.redirect('/admin/dashboard');
 }
 
-const dashboard_get = async (req, res) => {
-    let records = await Record.find();
-    let visitors = await Visitor.find();
-    let recordsCount = records.length;
-    let logs = [];
-    
-    for (const record of records) {
-        for (const visitor of visitors) {
-            if(record.visitor_id === visitor._id.toString()) {
-                let establishment = await Establishment.findById({_id:record.establishment_id});
-
-                const log = {
-                    id: record.visitor_id, 
-                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
-                    establishment: establishment.name, 
-                    address: establishment.address, 
-                    date: record.createdAt
-                };
-
-                logs.push(log);
-            }
-        }
-    }
-
-    res.render('./Administrator Module/dashboard', {logs, recordsCount});
-}
-
 const requests_get = async (req, res) => {
     let requests = await Request.find();
     res.render('./Administrator Module/request', {requests})
@@ -137,10 +110,41 @@ const logout_get = (req, res) => {
     res.redirect('/');
 }
 
+// Data Visualization
+const dashboard_get = async (req, res) => {
+    let records = await Record.find();
+    let visitors = await Visitor.find();
+    let recordsCount = records.length;
+    let logs = [];
+    
+    for (const record of records) {
+        for (const visitor of visitors) {
+            if(record.visitor_id === visitor._id.toString()) {
+                let establishment = await Establishment.findById({_id:record.establishment_id});
+
+                const log = {
+                    id: record.visitor_id, 
+                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
+                    establishment: establishment.name, 
+                    date: record.createdAt
+                };
+                logs.push(log);
+            }
+        }
+    }
+
+    res.render('./Administrator Module/dashboard', {logs, recordsCount});
+}
+
+const search_get = (req, res) => {
+    
+}
+
 module.exports = {
     index_get,
     logout_get,
     dashboard_get,
     requests_get,
-    request_post
+    request_post,
+    search_get
 }

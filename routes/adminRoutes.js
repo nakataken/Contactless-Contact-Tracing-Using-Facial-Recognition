@@ -9,5 +9,6 @@ router.get('/logout', controller.logout_get);
 router.get('/dashboard', visitorAuth.adminAuth, visitorAuth.checkAdmin, controller.dashboard_get);
 router.get('/requests', visitorAuth.adminAuth, visitorAuth.checkAdmin, controller.requests_get);
 router.post('/requests/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, controller.request_post);
+router.get('/search/:name',  visitorAuth.adminAuth, visitorAuth.checkAdmin, controller.search_get);
 
 module.exports = router;
