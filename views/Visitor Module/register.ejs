@@ -146,9 +146,9 @@
 
     // Get Verification Code from email
     document.querySelector('#getCode').addEventListener('click', (e) => {
-        e.target.disabled = true
         let email = $("#email").val();
         if (validateEmail(email)) {
+            e.target.disabled = true;
             fetch("/visitor/register/code/" + email)
                 .then((response) => {
                     response.json().then((data) => {

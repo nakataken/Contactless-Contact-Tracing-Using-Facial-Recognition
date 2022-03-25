@@ -3,6 +3,7 @@ const Request = require("../models/Request.js");
 const Visitor = require("../models/Visitor.js");
 const Record = require("../models/Record.js");
 const bcrypt = require("bcrypt");
+const mailer = require("../middlewares/mailer.js");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -138,6 +139,30 @@ const request_post = async (req, res) => {
     }
 }
 
+const code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Request Code',
+            text: `Code: ${code}`
+        };
+        
+        mailer.transporter.sendMail(mailData, async function (err, info) {
+            if(err) {
+                console.log(err)
+            } else {
+                res.json(code);
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
+}
+
 const qr_get = (req, res) => {
     res.render('./Establishment Module/qr');
 }
@@ -203,5 +228,6 @@ module.exports = {
     record_get,
     qr_get,
     qr_post,
+    code_get,
     test_get
 }

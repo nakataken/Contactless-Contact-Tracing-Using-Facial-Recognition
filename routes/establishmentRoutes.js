@@ -13,6 +13,8 @@ router.route('/request')
     .get(establishmentController.request_get)
     .post(upload.fields([{name: 'permit', maxCount: 1}, {name: 'validID', maxCount: 1}]), establishmentController.request_post);
 
+router.get('/request/code/:email', establishmentController.code_get);
+
 router.route('/login')
     .get(establishmentController.login_get)
     .post(establishmentController.login_post);
