@@ -3,20 +3,10 @@ const Establishment = require("../models/Establishment.js");
 const Visitor = require("../models/Visitor.js");
 const Record = require("../models/Record.js");
 const fs = require('fs');
-const nodemailer = require('nodemailer');
+const mailer = require("../middlewares/mailer.js");
 const bcrypt = require("bcrypt");
 
 const saltRounds = 10;
-
-const transporter = nodemailer.createTransport({
-    port: 465,               
-    host: "smtp.gmail.com",
-    auth: {
-            user: 'contactrazerist@gmail.com',
-            pass: 'mbzbsooclzxjmnkh',
-        },
-    secure: true,
-});
 
 const index_get = (req, res) => {
     res.redirect('/admin/dashboard');
@@ -70,7 +60,7 @@ const request_post = async (req, res) => {
             text: `Email: ${request.email} Password: ${password}`
         };
 
-        transporter.sendMail(mailData, async function (err, info) {
+        mailer.transporter.sendMail(mailData, async function (err, info) {
             if(err) {
                 console.log(err)
             } else {

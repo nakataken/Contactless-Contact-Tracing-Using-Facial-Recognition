@@ -2,6 +2,7 @@ const Visitor = require("../models/Visitor.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const qr = require("qrcode");
+const mailer = require("../middlewares/mailer.js");
 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
@@ -71,6 +72,30 @@ const profile_get = (req, res) => {
 const logout_get = (req, res) => {
     res.cookie('jwtVisitor', '', {maxAge: 1});
     res.redirect('/visitor/login');
+}
+
+const code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Register Code',
+            text: `Code: ${code}`
+        };
+        
+        mailer.transporter.sendMail(mailData, async function (err, info) {
+            if(err) {
+                console.log(err)
+            } else {
+                res.json(code);
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 const register_post = async (req, res) => { 
@@ -178,6 +203,7 @@ module.exports = {
     index_get,
     register_get,
     register_post,
+    code_get,
     login_get,
     login_post,
     logout_get,
