@@ -33,7 +33,7 @@ video.addEventListener('play', () => {
         faceapi.draw.drawDetections(canvas, resizedDetections)
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
 
-        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
+        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.9) {
             // Stop and get image data
             video.pause();
             clearInterval(interval);

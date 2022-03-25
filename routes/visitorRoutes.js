@@ -14,6 +14,10 @@ router.route('/register')
 
 router.get('/register/code/:email', controller.code_get);
 
+router.route('/check')
+    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.check_get)
+    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('check'), faceController.check_post);
+    
 router.route('/detect/1')
     .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect1_get)
     .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect1_post);

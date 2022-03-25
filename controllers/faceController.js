@@ -110,6 +110,70 @@ const detect3_post = (req, res) => {
     }
 }
 
+const check_get = (req, res) => {
+    res.render('./Visitor Module/detect/check');
+}
+
+const check_post = async (req, res) => {
+    try {
+        const token = req.cookies.jwtVisitor;
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            let visitors = await Visitor.find();
+
+            if(visitors) {
+                for (i = 0; i < visitors.length; i++) {
+                    // Change the face data descriptors from Objects to Float32Array type
+                    for (j = 0; j < visitors[i].descriptions.length; j++) {
+                        visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+                    }
+                    // Turn the DB face docs to
+                    visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
+                }
+                // Load face matcher to find the matching face
+                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
+
+                // Read the image using canvas or other method
+                const img = await canvas.loadImage(req.file.path);
+                let temp = faceapi.createCanvasFromMedia(img);
+
+                // Process the image for the model
+                const displaySize = { width: img.width, height: img.height };
+                faceapi.matchDimensions(temp, displaySize);
+
+                // Find matching faces
+                const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+                fs.unlink(req.file.path, (error) => {
+                    if (error) {
+                        console.error(error)
+                        return
+                    }
+                })
+                
+                const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+
+                res.json({success:true});
+                // if(!results[0]) {
+                //     console.log(results);
+                //     res.json({success:true})
+                // } else {
+                //     console.log(results);
+                //     await Visitor.deleteOne({ _id: decodedToken.id });
+                //     res.json({success:false});
+                // }
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+const verification_get = (req, res) => {
+    res.render('./Establishment Module/verify');
+}
+
 const verification_post = async (req, res) => {
     try {
         const token = req.cookies.jwtEstablishment;
@@ -125,9 +189,9 @@ const verification_post = async (req, res) => {
                     }
                     // Turn the DB face docs to
                     visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
-                }
+                }   
                 // Load face matcher to find the matching face
-                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.6);
+                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
 
                 // Read the image using canvas or other method
                 const img = await canvas.loadImage(req.file.path);
@@ -189,5 +253,8 @@ module.exports = {
     detect2_post,
     detect3_get,
     detect3_post,
-    verification_post
+    verification_get,
+    verification_post,
+    check_get,
+    check_post
 }

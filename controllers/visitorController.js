@@ -151,7 +151,7 @@ const register_post = async (req, res) => {
                 } else {
                     const token = createToken(data.id);
                     res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                    res.redirect("/visitor/detect/1");
+                    res.redirect("/visitor/check");
                 }
             })
         } else {

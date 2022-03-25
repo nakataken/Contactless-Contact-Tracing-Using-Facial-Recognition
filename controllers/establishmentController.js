@@ -84,10 +84,6 @@ const dashboard_get = async (req, res) => {
     }
 }
 
-const record_get = (req, res) => {
-    res.render('./Establishment Module/record');
-}
-
 const logout_get = (req, res) => {
     res.cookie('jwtEstablishment', '', {maxAge: 1});
     res.redirect('/establishment/login');
@@ -129,10 +125,8 @@ const request_post = async (req, res) => {
         request.save((err) => {
             if(err) {
                 console.log(err);
-                res.redirect('/establishment/login');
-            } else {
-                res.redirect("/establishment/login");
-            }
+            } 
+            res.redirect('/establishment/login');
         });
     } catch (error) {
         console.log(error);
@@ -191,31 +185,6 @@ const qr_post = (req, res) => {
     }
 }
 
-const test_get = async (req, res) => {
-    const name = "Test Establishment";
-    const owner = "Test Owner";
-    const address = "Test Address";
-    const email = "test@gmail.com";
-    const contact = "9752991975";
-    const password = "Establishment12345";
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const establishment = new Establishment({ establishment_name:name, establishment_owner:owner, establishment_address: address, email, contact, password: hashedPassword});
-
-        establishment.save((err) => {
-            if(err) {
-                console.log(err);
-                res.redirect('/establishment/login');
-            } else {
-                res.redirect("/establishment/login");
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 module.exports = {
     index_get,
     home_get,
@@ -225,9 +194,7 @@ module.exports = {
     request_post,
     logout_get,
     dashboard_get,
-    record_get,
     qr_get,
     qr_post,
     code_get,
-    test_get
 }

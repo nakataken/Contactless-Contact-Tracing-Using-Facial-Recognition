@@ -27,9 +27,8 @@ router.route('/qr')
     .get(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.qr_get)
     .post(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.qr_post);
 
-router.get('/record', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.record_get);
-router.post('/verify', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, upload.single('verify'),faceController.verification_post);
-
-// router.get('/test', controller.test_get);
+router.get('/verify')
+    .get(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, faceController.verification_get)
+    .post(establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, upload.single('verify'),faceController.verification_post);
 
 module.exports = router;

@@ -44,18 +44,28 @@ video.addEventListener('play', () => {
             
             screenshot.toBlob( async function(blob){
                 var form = new FormData();
-                form.append("faces", blob, "detect1.png");
+                form.append("check", blob, "check.png");
                 if(!fetched) {
                     fetched = true;
-                    await fetch('/visitor/detect/1', { 
+                    await fetch('/visitor/check', { 
                         method: 'POST', 
                         body: form
                     })
                     .then((response)=> {
-                        console.log(response);
-                        if(response.redirected) {
-                            window.location.href = response.url;
-                        }
+                        response.json().then((data) => {
+                            console.log()
+                            if(data.success) {
+                                setTimeout(() => {
+                                    $('#result').text("No face found. Redirecting to detect 1..."); 
+                                    window.location.href = "/visitor/detect/1";
+                                }, 5000);
+                            } else {
+                                setTimeout(() => {
+                                    $('#result').text("Face already existing. Redirecting to login..."); 
+                                    window.location.href = "/visitor/login";
+                                }, 5000);
+                            }
+                        })
                     });
                 }
             }, "image/png");
