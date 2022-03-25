@@ -159,8 +159,8 @@ const verification_post = async (req, res) => {
 
                 if(results) {
                     try {
+                        console.log(results);
                         const user = await Visitor.findById(results[0]._label);
-                        // console.log(results);
                         // console.log(results[0]._distance);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
 
@@ -173,7 +173,7 @@ const verification_post = async (req, res) => {
                         })  
                     } catch (error) {
                         console.log(error.message);
-                        res.status(401).json(error.message);
+                        res.json({data: "No face matched."});
                     }
                 } else {
                     console.log("No face matched.");
