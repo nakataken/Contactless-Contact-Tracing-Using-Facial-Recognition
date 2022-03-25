@@ -27,6 +27,7 @@ video.addEventListener('play', () => {
     const interval = setInterval(async () => {
         // Detect and draw 
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
+        
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
 
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
@@ -57,11 +58,11 @@ video.addEventListener('play', () => {
                                 console.log(data)
                                 setTimeout(() => {
                                     $('#person').text(`${data.fname} ${data.lname}`); 
-                                    window.location.href = "/establishment/record";
+                                    window.location.href = "/establishment/verify";
                                 }, 5000);
                             } else {
                                 $('#person').text("Cannot find face."); 
-                                window.location.href = "/establishment/record";
+                                window.location.href = "/establishment/verify";
                             }
                         })
                     });
