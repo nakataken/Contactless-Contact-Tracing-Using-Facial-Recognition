@@ -18,6 +18,10 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    const process = url.pathname.charAt(url.pathname.length - 1);
+
     let fetched = false;
     const canvas = faceapi.createCanvasFromMedia(video)
     document.body.append(canvas)
@@ -44,10 +48,10 @@ video.addEventListener('play', () => {
             
             screenshot.toBlob( async function(blob){
                 var form = new FormData();
-                form.append("faces", blob, "detect1.png");
+                form.append("faces", blob, `detect${process}.png`);
                 if(!fetched) {
                     fetched = true;
-                    await fetch('/visitor/detect/1', { 
+                    await fetch(`/visitor/detect/${process}`, { 
                         method: 'POST', 
                         body: form
                     })

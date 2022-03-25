@@ -17,18 +17,11 @@ router.get('/register/code/:email', controller.code_get);
 router.route('/check')
     .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.check_get)
     .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('check'), faceController.check_post);
-    
-router.route('/detect/1')
-    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect1_get)
-    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect1_post);
 
-router.route('/detect/2')
-    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect2_get)
-    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect2_post);
+router.route('/detect/:process')
+    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect_get)
+    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect_post);
 
-router.route('/detect/3')
-    .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect3_get)
-    .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect3_post);
 
 router.route('/login')
     .get(controller.login_get)

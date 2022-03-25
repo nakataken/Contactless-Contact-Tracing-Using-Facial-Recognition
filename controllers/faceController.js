@@ -15,25 +15,19 @@ async function LoadModels() {
 
 LoadModels();
 
-const detect1_get = (req, res) => {
-    res.render('./Visitor Module/detect/1');
+const detect_get = (req, res) => {
+    res.render('./Visitor Module/detect', {process: req.params.process});
 }
 
-const detect2_get = (req, res) => {
-    res.render('./Visitor Module/detect/2');
-}
-const detect3_get = (req, res) => {
-    res.render('./Visitor Module/detect/3');
-}
-
-const detect1_post = async (req, res) => {
+const detect_post = async (req, res) => {
     try {
         const token = req.cookies.jwtVisitor;
+        let processFace = req.params.process;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             const img = await canvas.loadImage(req.file.path);
             const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-            const description = detections.descriptor;
+            const description = await detections.descriptor;
 
             Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
                 if (error) {
@@ -45,8 +39,12 @@ const detect1_post = async (req, res) => {
                             return
                         }
                     })
-                    res.redirect('/visitor/detect/2');
-                }
+                    processFace++;
+                    if(processFace < 6)
+                        res.redirect(`/visitor/detect/${processFace}`);
+                    else 
+                        res.redirect('/visitor/login');
+                }   
             })
         });
     } catch(error) {
@@ -54,64 +52,8 @@ const detect1_post = async (req, res) => {
     }
 }
 
-const detect2_post = (req, res) => {
-    try {
-        const token = req.cookies.jwtVisitor;
-
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            const img = await canvas.loadImage(req.file.path);
-            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-            const description = detections.descriptor;
-
-            Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    fs.unlink(req.file.path, (error) => {
-                        if (error) {
-                            console.error(error)
-                            return
-                        }
-                    })
-                    res.redirect('/visitor/detect/3');
-                }
-            })
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const detect3_post = (req, res) => {
-    try {
-        const token = req.cookies.jwtVisitor;
-
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            const img = await canvas.loadImage(req.file.path);
-            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-            const description = detections.descriptor;
-
-            Visitor.updateOne({_id: decodedToken.id}, {$push: {descriptions: description}}, (error) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    fs.unlink(req.file.path, (error) => {
-                        if (error) {
-                            console.error(error)
-                            return
-                        }
-                    })
-                    res.redirect('/visitor/login');
-                }
-            })
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 const check_get = (req, res) => {
-    res.render('./Visitor Module/detect/check');
+    res.render('./Visitor Module/check');
 }
 
 const check_post = async (req, res) => {
@@ -143,7 +85,7 @@ const check_post = async (req, res) => {
 
                 // Find matching faces
                 const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
 
                 fs.unlink(req.file.path, (error) => {
                     if (error) {
@@ -203,7 +145,7 @@ const verification_post = async (req, res) => {
 
                 // Find matching faces
                 const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-                const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
 
                 
                 fs.unlink(req.file.path, (error) => {
@@ -218,8 +160,8 @@ const verification_post = async (req, res) => {
                 if(results) {
                     try {
                         const user = await Visitor.findById(results[0]._label);
-
-                        // Insert log post here
+                        // console.log(results);
+                        // console.log(results[0]._distance);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
 
                         record.save((err, data) => {
@@ -235,6 +177,7 @@ const verification_post = async (req, res) => {
                     }
                 } else {
                     console.log("No face matched.");
+                    res.json({data: "No face matched."});
                 }
             } else {
                 console.log("No visitors")
@@ -247,12 +190,8 @@ const verification_post = async (req, res) => {
 }
 
 module.exports = {
-    detect1_get,
-    detect1_post,
-    detect2_get,
-    detect2_post,
-    detect3_get,
-    detect3_post,
+    detect_get,
+    detect_post,
     verification_get,
     verification_post,
     check_get,

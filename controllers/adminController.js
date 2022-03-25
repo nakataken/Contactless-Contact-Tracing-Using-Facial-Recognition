@@ -3,6 +3,7 @@ const Establishment = require("../models/Establishment.js");
 const Visitor = require("../models/Visitor.js");
 const Record = require("../models/Record.js");
 const fs = require('fs');
+const _ = require('lodash');
 const mailer = require("../middlewares/mailer.js");
 const bcrypt = require("bcrypt");
 
@@ -65,8 +66,8 @@ const request_post = async (req, res) => {
                 console.log(err)
             } else {
                 const establishment = new Establishment({
-                    name: request.name,
-                    owner: request.owner,
+                    name: _.lowerCase(request.name),
+                    owner: _.lowerCase(request.owner),
                     address: request.address,
                     email: request.email,
                     contact: request.contact,

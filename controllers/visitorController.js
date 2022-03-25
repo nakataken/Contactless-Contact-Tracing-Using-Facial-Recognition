@@ -2,6 +2,7 @@ const Visitor = require("../models/Visitor.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const qr = require("qrcode");
+const _ = require('lodash'); 
 const mailer = require("../middlewares/mailer.js");
 
 const saltRounds = 10;
@@ -99,8 +100,12 @@ const code_get = (req, res) => {
 }
 
 const register_post = async (req, res) => { 
-    const { fname, mi, lname, bdate, contact, email, pass} = req.body;
+    let { fname, mi, lname, bdate, contact, email, pass} = req.body;
 
+    fname = _.lowerCase(fname);
+    mi = _.lowerCase(mi);
+    lname = _.lowerCase(lname);
+    
     const name = {
         fname,
         mi,
@@ -119,7 +124,7 @@ const register_post = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(pass, saltRounds);
-        const visitor = new Visitor({ name, bdate, address, contact, email, password: hashedPassword});
+        const visitor = new Visitor({name, bdate, address, contact, email, password: hashedPassword});
         let passEmail;
         let passContact;
 
