@@ -102,9 +102,9 @@ const code_get = (req, res) => {
 const register_post = async (req, res) => { 
     let { fname, mi, lname, bdate, contact, email, pass} = req.body;
 
-    fname = _.lowerCase(fname);
-    mi = _.lowerCase(mi);
-    lname = _.lowerCase(lname);
+    fname = _.upperCase(fname);
+    mi = _.upperCase(mi);
+    lname = _.upperCase(lname);
     
     const name = {
         fname,
@@ -175,7 +175,7 @@ const login_post = (req, res) => {
         if(data){
             const auth = await bcrypt.compare(pass,data.password);
             if(auth) {
-                if(data.descriptions.length === 3) {
+                if(data.descriptions.length === 5) {
                     if(data.usertype === "sysadmin") {
                         const token = createToken(data.id);
                         res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
@@ -186,14 +186,15 @@ const login_post = (req, res) => {
                         res.redirect('/visitor/profile');
                     }
                 } else {
-                    Visitor.updateOne({_id:data._id}, { $pull: { descriptions } }, (err, data) => {
-                        if(err) {
-                            console.log(err);
-                            res.redirect('/');
-                        } else {
-                            res.redirect('/visitor/detect/1');
-                        }
-                    })
+                    // Make action if descriptions is not clear
+                    // Visitor.updateOne({_id:data._id}, { $pull: { descriptions } }, (err, data) => {
+                    //     if(err) {
+                    //         console.log(err);
+                    //         res.redirect('/');
+                    //     } else {
+                    //         res.redirect('/visitor/detect/1');
+                    //     }
+                    // })
                 }
             } else {
                 login_error(res, "Wrong email or password", email);
