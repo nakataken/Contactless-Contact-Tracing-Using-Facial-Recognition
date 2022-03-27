@@ -18,6 +18,7 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+    $('#loading').hide();
     let fetched = false;
     const canvas = faceapi.createCanvasFromMedia(video)
     document.body.append(canvas)
@@ -44,6 +45,7 @@ video.addEventListener('play', () => {
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             
             screenshot.toBlob( async function(blob){
+                $('#loading').show();
                 var form = new FormData();
                 form.append("verify", blob, "verify.png");
                 if(!fetched) {
@@ -66,6 +68,7 @@ video.addEventListener('play', () => {
                                         $('#person').text(`${data.fname} ${data.lname}`); 
                                         window.location.href = "/establishment/verify";
                                     }, 5000);
+
                                 }
                             } else {
                                 $('#person').text("Cannot find face."); 

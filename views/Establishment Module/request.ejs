@@ -33,11 +33,19 @@
                         <input class="form-control" id="email" type="email" name="email" required>
                         <p id="emailError" class="text text-danger"></p>
                     </div>
-                    <div class="form-group col-5">
+                    <div class="form-group col-12 p-0">
                         <label for="code">Email verification code: </label>
-                        <input class="form-control" type="number" name="code" id="code" required>
-                        <p id="codeError" class="text-danger"></p>
-                        <input type='button' id="getCode" class="btn" value="Get Code"/>
+                        <div class="col-12 row p-0">
+                            <div class="col-8">
+                                <input class="form-control" type="number" name="code" id="code" required>
+                                <p id="codeError" class="text-danger"></p>
+                            </div>
+                            <div class="col-4 p-0">
+                                <input type='button' id="getCode" class="btn col-12 " value="Get Code"/>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="address">Address: </label>

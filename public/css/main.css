@@ -184,7 +184,7 @@ nav {
   background-attachment: fixed;
 }
 .register #r-form-parent {
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
 }
 .register #r-form {
@@ -219,6 +219,9 @@ nav {
   box-shadow: none !important;
   border: 1px solid rgba(141, 137, 137, 0.5);
 }
+.register .register-subcon .c-div input.name {
+  text-transform: uppercase !important;
+}
 .register .register-subcon .c-div span {
   text-transform: uppercase;
   color: #11171F !important;
@@ -249,11 +252,75 @@ nav {
 .register .register-subcon .c-div .btn-grad:active {
   background-color: #0FB3A8 !important;
 }
+.register .register-subcon .reg-btn {
+  color: #ffffff;
+  background-image: linear-gradient(to right, #65DF95 -4%, #0FB3A8 51%, #65DF95 99%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 5px;
+  box-shadow: none !important;
+}
+.register .register-subcon .reg-btn:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+.register .register-subcon .reg-btn:active {
+  background-color: #0FB3A8 !important;
+}
 
+.text-danger {
+  color: red !important;
+}
+
+#loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  content: url("../assets/images/spinner.svg");
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
 ._1 {
   background-color: #65DF95;
 }
 
 ._2 {
   background-color: #0FB3A8;
+}
+
+.cam_module {
+  min-height: 100vh;
+  background-image: url("../assets/images/Frame_1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right bottom;
+  background-attachment: fixed;
+}
+.cam_module .container video {
+  position: relative;
+}
+.cam_module .container #loading {
+  position: absolute;
+  display: inline-block;
+  bottom: 45%;
+  z-index: 1;
 }/*# sourceMappingURL=main.css.map */

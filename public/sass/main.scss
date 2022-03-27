@@ -149,7 +149,7 @@ nav{
     background-position: right bottom;
     background-attachment: fixed;
     #r-form-parent{
-        max-height: 80vh;
+        max-height: 85vh;
         overflow-y: auto;
     }
     #r-form{
@@ -178,7 +178,12 @@ nav{
                 background: transparent;
                 box-shadow: none !important;
                 border: 1px solid rgb(141, 137, 137,0.5) ;
+
+                &.name{
+                    text-transform: uppercase !important;
+                }
             }
+            
             span{
                 text-transform: uppercase;
                 @include text-black(bold,p);
@@ -196,8 +201,38 @@ nav{
             }
 
         }
+        .reg-btn{
+            @include btn-primary(normal, btn);
+        }
+        .reg-btn:hover{
+            background-position: right center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .reg-btn:active{
+            background-color: $color-secondary !important;
+        }
     }
     
+}
+.text-danger{
+    color: red !important;
+}
+
+#loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    content: url('../assets/images/spinner.svg');
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+  }
+  
+@keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
 }
 
 ._1{
@@ -207,5 +242,28 @@ nav{
     background-color: $color-secondary;
 }
 
-
+.cam_module{
+    min-height: 100vh;
+    background-image: url("../assets/images/Frame_1.svg");
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: right bottom;
+    background-attachment: fixed;
+    .container{
+  
+        video{
+            position: relative;
+        }
+        #loading{
+            position: absolute;
+            display: inline-block;
+            bottom:45%;
+            z-index: 1;
+        }
+        h1{
+            
+        }
+    }
+    
+}
 

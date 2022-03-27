@@ -2,87 +2,108 @@
 
 <div class="register container-fluid d-flex flex-row align-items-center justify-content-center p-0">
     <div class="register-subcon col-xl-8 col-lg-10 col-md-11 col-10 row">
-        <div class="c-div col-lg-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
-            <h1>Contact Information Gathering</h1>
-            <a href="/visitor/login">Have account? Login.</a>
+        <div id="r-form-parent"class="c-div col-lg-10 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
+            <div id="r-form" class="col-12 px-0 ">
+                <h1>Contact Information Gathering</h1>
+            
         
-            <form>
-                <div class="row">   
-                    <div class="form-group col-5">
-                        <label for="fname">First Name: </label>
-                        <input class="form-control" type="text" name="fname" placeholder="First Name" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
-                    </div>
-                    <div class="form-group col-2">
-                        <label for="mi">Middle Initial: </label>
-                        <input class="form-control" type="text" name="mi" <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
-                    </div>
-                    <div class="form-group col-5"">
-                        <label for="lname">Last Name: </label>
-                        <input class="form-control" type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <label for="email">Email: </label>
-                        <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
-                        <% if(typeof(emailError) != "undefined") {%>
-                            <p class="text-danger">
-                                <%=emailError%>
-                            </p>
-                        <% } %>
-                        <p id="emailError" class="text-danger"></p>
+                <form class="mt-5">
+                    <div class="row">   
                         <div class="form-group col-5">
-                            <label for="code">Email verification code: </label>
-                            <input class="form-control" type="number" name="code" id="code" required>
-                            <p id="codeError" class="text-danger"></p>
-                            <input type='button' id="getCode" class="btn" value="Get Code"/>
+                            <label for="fname">First Name: </label>
+                            <input class="form-control name" type="text" name="fname" placeholder="First Name" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
+                        </div>
+                        <div class="form-group col-2">
+                            <label for="mi">M.I.: </label>
+                            <input class="form-control name" type="text" name="mi" <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
+                        </div>
+                        <div class="form-group col-5"">
+                            <label for="lname">Last Name: </label>
+                            <input class="form-control name" type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
                     </div>
-                    <div class="col-6 row">
-                        <label class="col-12" for="contact">Contact No.: </label>
-                        <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
-                        <% if(typeof(contactError) != "undefined") {%>
-                            <p class="text-danger">
-                                <%=contactError%>
-                            </p>
-                        <% } %>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="bdate">Birthdate</label>
+                            <input class="form-control" id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-12" for="contact">Contact No.: </label>
+                            <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
+                            
+                            <% if(typeof(contactError) != "undefined") {%>
+                                <p class="text-danger">
+                                    <%=contactError%>
+                                </p>
+                            <% } %>
+                        </div>
+                        
                     </div>
-                </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="email">Email: </label>
+                            <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
+                            <% if(typeof(emailError) != "undefined") {%>
+                                <p class="text-danger">
+                                    <%=emailError%>
+                                </p>
+                            <% } %>
+                            <p id="emailError" class="text-danger"> </p>
+                        </div>
+                        <div class=" col-6 row">
+                            <div class="col-8">
+                                <label for="code">Email verification code: </label>
+                                <input class="form-control" type="number" name="code" id="code" required>
+                                <p id="codeError" class="text-danger"></p>
+                            </div>
+                            <div class="col-4">
+                                <input type='button' id="getCode" class="btn my-bottom _1" value="Get Code"/>
+                            </div>
+                        </div>
+                    </div>
 
-                <div>
-                    <label for="bdate">Birthdate</label>
-                    <input class="form-control" id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
-                </div>
-                
-                <div>
-                    <label for="region">Region: </label>
-                    <input type="text" name="region" required>
-                </div>
-                <div>
-                    <label for="province">Province: </label>
-                    <input type="text" name="province" required>
-                </div>
-                <div>
-                    <label for="city">City: </label>
-                    <input type="text" name="city" required>
-                </div>
-                <div>
-                    <label for="barangay">Barangay: </label>
-                    <input type="text" name="barangay" required>
-                </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="region">Region: </label>
+                            <input class="form-control" type="text" name="region" required>
+                        </div>
+                        <div  class="col-6">
+                            <label for="province">Province: </label>
+                            <input class="form-control" type="text" name="province" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="city">City: </label>
+                            <input class="form-control" type="text" name="city" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="barangay">Barangay: </label>
+                            <input class="form-control" type="text" name="barangay" required>
+                        </div>
+                    </div>
+                    
 
-                <!--  -->
-                <div>
-                    <label for="pass">Password</label>
-                    <input id="pass" type="password" name="pass" minlength="6" required>
-                </div>
-                <div>
-                    <label for="cpass">Confirm Password</label>
-                    <input id="cpass" type="password" name="cpass" required>
-                    <span id="message"></span>
-                </div>
-                <button type="submit">Register</button>
-            </form>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="pass">Password</label>
+                            <input class="form-control" id="pass" type="password" name="pass" minlength="6" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="cpass">Confirm Password</label>
+                            <input class="form-control" id="cpass" type="password" name="cpass" required>
+                            <p id="message" class="text-danger"></p>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn col-12 reg-btn mt-5">Register</button>
+                    <div class="d-flex justify-content center mt-3">
+                        <a href="/visitor/login" class="mx-auto">Have account? Login.</a>
+                        <div class="pb-5"></div>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>
