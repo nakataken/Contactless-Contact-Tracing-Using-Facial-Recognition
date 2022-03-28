@@ -30,6 +30,7 @@ const request_get = (req, res) => {
 
 const login_get = (req, res) => {
     const token = req.cookies.jwtEstablishment
+    
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
             if(err) {

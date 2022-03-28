@@ -30,8 +30,7 @@ mongoose.connect(dbURI,
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         // Change server 
-        // check ip with ipconfig in cmd. Then pareplace nalang ip 
-        https.createServer(httpsOptions, app).listen(3000, '192.168.0.108', () => {
+        https.createServer(httpsOptions, app).listen(3000, '0.0.0.0', () => {
             console.log("Server started on port 3000 and connected to Database");
         })
     })
