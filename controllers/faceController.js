@@ -197,6 +197,6 @@ module.exports = {
     detect_post,
     verification_get,
     verification_post,
-    check_get,
-    check_post
+    // check_get,
+    // check_post
 }

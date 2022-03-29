@@ -28,14 +28,9 @@
                             <input class="form-control" id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
                         </div>
                         <div class="col-6">
-                            <label class="col-12" for="contact">Contact No.: </label>
+                            <label class="col-12" for="contact">Contact No. (+63): </label>
                             <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
-                            
-                            <% if(typeof(contactError) != "undefined") {%>
-                                <p class="text-danger">
-                                    <%=contactError%>
-                                </p>
-                            <% } %>
+                            <p class="text-danger" id="contactError"></p>
                         </div>
                         
                     </div>
@@ -43,12 +38,7 @@
                         <div class="col-6">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
-                            <% if(typeof(emailError) != "undefined") {%>
-                                <p class="text-danger">
-                                    <%=emailError%>
-                                </p>
-                            <% } %>
-                            <p id="emailError" class="text-danger"> </p>
+                            <p class="text-danger" id="emailError"></p>
                         </div>
                         <div class=" col-6 row">
                             <div class="col-8">
@@ -88,13 +78,13 @@
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="pass">Password</label>
-                            <input class="form-control" id="pass" type="password" name="pass" minlength="6" required>
+                            <input class="form-control" id="pass" type="password" name="pass" minlength="8" required>
                         </div>
                         <div class="col-6">
                             <label for="cpass">Confirm Password</label>
-                            <input class="form-control" id="cpass" type="password" name="cpass" required>
-                            <p id="message" class="text-danger"></p>
+                            <input class="form-control" id="cpass" type="password" name="cpass" minlength="8" required>
                         </div>
+                        <div id="message" class="text-danger"></div>
                     </div>
                     
                     <button type="submit" class="btn col-12 reg-btn mt-5">Register</button>
@@ -112,7 +102,7 @@
 
 <script>
     var emailVerify = 0;
-    var passIsSame = false;
+    // var passIsSame = false;
 
     const form = document.querySelector('form');
 
@@ -133,29 +123,51 @@
         const cpass = form.cpass.value;
 
         let code = form.code.value;
-
-        if(passIsSame) {
-            if(emailVerify == code) {
-                try {
-                    await fetch('/visitor/register', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            fname, mi, lname, contact, bdate, region, province, city, barangay, email, pass
-                        }),
-                        headers: {'Content-Type': 'application/json'}
-                    }).then((response)=> {
-                        console.log(response);
-                        if(response.redirected) {
-                            window.location.href = response.url;
-                        }
-                    });
-                } catch (error) {
-                    console.log(error);
+                
+        if(pass == cpass) {
+            $('.passError').remove();
+            let errors = [];
+            if (pass.length < 8) {
+                errors.push("Your password must be at least 8 characters."); 
+            }
+            if (pass.search(/[a-z]/i) < 0) {
+                errors.push("Your password must contain at least one letter.");
+            }
+            if (pass.search(/[0-9]/) < 0) {
+                errors.push("Your password must contain at least one digit."); 
+            }
+            if(!errors.length) {
+                if(emailVerify == code) {
+                    try {
+                        await fetch('/visitor/register', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                fname, mi, lname, contact, bdate, region, province, city, barangay, email, pass
+                            }),
+                            headers: {'Content-Type': 'application/json'}
+                        }).then((response)=> {
+                            if(response.redirected) {
+                                window.location.href = response.url;
+                            } else {
+                                response.json().then((data) => {
+                                    if(data.emailError) $("#emailError").text("Email already exists.");
+                                })
+                            }
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    $("#codeError").text("Wrong code.");
                 }
             } else {
-                $("#codeError").text("Wrong code.");
+                for(i in errors) {
+                    $("#message").append(`<p class="passError">${errors[i]}</p>`);
+                }
             }
-        } 
+        } else {
+            $("#message").append(`<p class="passError">Password didn't match.</p>`);
+        }
     });
 
     // Validate email
@@ -187,16 +199,16 @@
         }
     })
 
-    // Script for matching password
-    $('#pass, #cpass').on('keyup', function () {
-        if ($('#pass').val() == $('#cpass').val()) {
-            passIsSame = true;
-            $('#message').html('Matching').css('color', 'green');
-        } else {
-            passIsSame = false;
-            $('#message').html('Not Matching').css('color', 'red');
-        }
-    });
+    // // Script for matching password
+    // $('#pass, #cpass').on('keyup', function () {
+    //     if ($('#pass').val() == $('#cpass').val()) {
+    //         passIsSame = true;
+    //         $('#message').html('Matching').css('color', 'green');
+    //     } else {
+    //         passIsSame = false;
+    //         $('#message').html('Not Matching').css('color', 'red');
+    //     }
+    // });
 
     // Script for max bdate 
     var today = new Date();

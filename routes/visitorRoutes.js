@@ -28,6 +28,11 @@ router.route('/login')
     .post(controller.login_post);
 
 router.get('/logout',  controller.logout_get);
+
 router.get('/profile', visitorAuth.visitorAuth, visitorAuth.checkVisitor, controller.profile_get);
+router.get('/details', visitorAuth.visitorAuth, visitorAuth.checkVisitor, controller.details_get);
+router.post('/details/change/password/old', visitorAuth.visitorAuth, visitorAuth.checkVisitor, controller.oldPassword_post);
+router.put('/details/change/password/new', visitorAuth.visitorAuth, visitorAuth.checkVisitor, controller.newPassword_put);
+
 
 module.exports = router;

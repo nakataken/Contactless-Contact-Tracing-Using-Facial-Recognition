@@ -33,6 +33,9 @@ mongoose.connect(dbURI,
         https.createServer(httpsOptions, app).listen(3000, '0.0.0.0', () => {
             console.log("Server started on port 3000 and connected to Database");
         })
+        // app.listen(3000, () => {
+        //     console.log("Server started on port 3000 and connected to Database");
+        // })
     })
     .catch((error) => {
         console.log(error);

@@ -10,12 +10,13 @@
     <% if(typeof(visitor) != "undefined") { %>
     <ul>
         <li>Welcome, <%= visitor.name.fname %> <%= visitor.name.lname %></li>
+        <li><a href="/visitor/details">Details</a></li>
         <li><a href="/visitor/logout">Logout</a></li>
     </ul>
     <img src=<%=src%> alt="QR Code Image">
     <button onclick="downloadQR()">Download</button>
-    <% } %>
 
+    <% } %>
     <script>
         let img = document.querySelector("img").src;
         const downloadQR = () => {
