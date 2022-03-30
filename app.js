@@ -29,13 +29,10 @@ const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@clust
 mongoose.connect(dbURI, 
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
-        // Change server 
         https.createServer(httpsOptions, app).listen(3000, '0.0.0.0', () => {
-            console.log("Server started on port 3000 and connected to Database");
+            console.log("Server started on port https://localhosts:3000...");
+            console.log("Connected to the database...");
         })
-        // app.listen(3000, () => {
-        //     console.log("Server started on port 3000 and connected to Database");
-        // })
     })
     .catch((error) => {
         console.log(error);

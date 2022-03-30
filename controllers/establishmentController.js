@@ -145,12 +145,16 @@ const code_get = (req, res) => {
             subject: 'Request Code',
             text: `Code: ${code}`
         };
-        
-        mailer.transporter.sendMail(mailData, async function (err, info) {
-            if(err) {
-                console.log(err)
+
+        Visitor.countDocuments({email}, (error, count) => { 
+            if(error) return
+            if(count==0 || !count) {
+                mailer.transporter.sendMail(mailData, async function (err, info) {
+                    if(err) return
+                    res.json(code);
+                });
             } else {
-                res.json(code);
+                res.json({emailError:true});
             }
         });
     } catch(error) {

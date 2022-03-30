@@ -148,10 +148,6 @@
                         }).then((response)=> {
                             if(response.redirected) {
                                 window.location.href = response.url;
-                            } else {
-                                response.json().then((data) => {
-                                    if(data.emailError) $("#emailError").text("Email already exists.");
-                                })
                             }
                         });
                     } catch (error) {
@@ -185,13 +181,18 @@
             fetch("/visitor/register/code/" + email)
                 .then((response) => {
                     response.json().then((data) => {
-                        emailVerify = data;
-                        // Remove after testing
-                        console.log(emailVerify);
-                        $("#codeError").text("");
-                        setTimeout(function(){
-                            e.target.disabled = false
-                        }, 60*1000);
+                        if(data.emailError) {
+                            e.target.disabled = false;
+                            $("#emailError").text("Email already exists.");
+                        } else {
+                            emailVerify = data;
+                            // Remove after testing
+                            console.log(emailVerify);
+                            $("#codeError").text("");
+                            setTimeout(function(){
+                                e.target.disabled = false
+                            }, 60*1000);
+                        }
                     });
                 });
         } else {

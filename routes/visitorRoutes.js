@@ -12,8 +12,13 @@ router.route('/register')
     .get(controller.register_get)
     .post(controller.register_post);
 
-router.get('/register/code/:email', controller.code_get);
+router.get('/register/code/:email', controller.register_code_get);
 
+router.route('/forgot')
+    .get(controller.forgot_get)
+    .put(controller.forgot_post);
+
+router.get('/forgot/code/:email', controller.forgot_code_get);
 // router.route('/check')
     // .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.check_get)
     // .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('check'), faceController.check_post);

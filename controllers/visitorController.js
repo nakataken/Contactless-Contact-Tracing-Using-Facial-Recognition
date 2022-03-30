@@ -79,7 +79,11 @@ const logout_get = (req, res) => {
     res.redirect('/visitor/login');
 }
 
-const code_get = (req, res) => {
+const forgot_get = (req, res) => {
+    res.render('./Visitor Module/forgot-pass');
+}
+
+const register_code_get = (req, res) => {
     try {
         let email = req.params.email;
         let code = Math.floor(100000 + Math.random() * 900000);
@@ -90,18 +94,63 @@ const code_get = (req, res) => {
             subject: 'Register Code',
             text: `Code: ${code}`
         };
-        
-        mailer.transporter.sendMail(mailData, async function (err, info) {
-            if(err) {
-                console.log(err)
+
+        Visitor.countDocuments({email}, (err, count) => { 
+            if(count==0 || !count) {
+                mailer.transporter.sendMail(mailData, async function (error, info) {
+                    if(error) return
+                    res.json(code);
+                });
             } else {
-                res.json(code);
+                res.json({emailError:true})
             }
-        });
+        })
     } catch(error) {
         console.log(error.message);
         res.redirect('/');
     }
+}
+
+const forgot_code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Forgot password',
+            text: `Code: ${code}`
+        };
+
+        Visitor.countDocuments({email}, (err, count) => { 
+            if(count>0) {
+                mailer.transporter.sendMail(mailData, async function (error, info) {
+                    if(error) return
+                    res.json(code);
+                });
+            } else {
+                res.json({emailError:true})
+            }
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.redirect('/');
+    }
+}
+
+const forgot_post = async (req, res) => {
+    const {newPass, emailConfirm} = req.body;
+    Visitor.findOne({email:emailConfirm}, async (error, visitor) => {
+        if(error) return
+        if(visitor) {
+            const hashedPassword = await bcrypt.hash(newPass, saltRounds);
+            Visitor.updateOne({_id:visitor._id}, { $set: { password:hashedPassword }}, (error, visitor) => {
+                if(error) return
+                if(visitor) res.redirect('/visitor/login');
+            });
+        }
+    })
 }
 
 const register_post = async (req, res) => { 
@@ -123,32 +172,19 @@ const register_post = async (req, res) => {
     }
 
     try {
-        Visitor.countDocuments({email}, (err, emailCount) => { 
-            Visitor.countDocuments({contact}, async (err, contactCount) => { 
-                let emailError = false;
-                let contactError = false;
-                if(emailCount>0) emailError = true;
-                if(contactCount>0) contactError = true;
+        const hashedPassword = await bcrypt.hash(req.body.pass, saltRounds);
+        const visitor = new Visitor({name, bdate, address, contact, email, password: hashedPassword});
 
-                if(!emailError & !contactError) {
-                    const hashedPassword = await bcrypt.hash(req.body.pass, saltRounds);
-                    const visitor = new Visitor({name, bdate, address, contact, email:req.body.email, password: hashedPassword});
-
-                    visitor.save((err, data) => {
-                        if(err) {
-                            console.log(err);
-                            res.redirect('/visitor/register');
-                        } else {
-                            const token = createToken(data.id);
-                            res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                            res.redirect("/visitor/detect/1");
-                        }
-                    })
-                } else {
-                    res.json({emailError, contactError})
-                }
-            });
-        });
+        visitor.save((err, data) => {
+            if(err) {
+                console.log(err);
+                res.redirect('/visitor/register');
+            } else {
+                const token = createToken(data.id);
+                res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
+                res.redirect("/visitor/detect/1");
+            }
+        })
     } catch (error) {
         console.log(error.message);
         res.redirect('/');
@@ -173,15 +209,10 @@ const login_post = (req, res) => {
                         res.redirect('/visitor/profile');
                     }
                 } else {
-                    // Make action if descriptions is not clear
-                    // Visitor.updateOne({_id:data._id}, { $pull: { descriptions } }, (err, data) => {
-                    //     if(err) {
-                    //         console.log(err);
-                    //         res.redirect('/');
-                    //     } else {
-                    //         res.redirect('/visitor/detect/1');
-                    //     }
-                    // })
+                    Visitor.updateOne({_id:visitor._id}, { $set: { descriptions:[] }}, (error, visitor) => {
+                        if(error) return
+                        if(visitor) res.redirect('/visitor/detect/1');
+                    });
                 }
             } else {
                 login_error(res, "Wrong email or password", email);
@@ -210,8 +241,10 @@ const newPassword_put = (req, res) => {
     const token = req.cookies.jwtVisitor;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
         const hashedPassword = await bcrypt.hash(req.body.newPass, saltRounds);
-        await Visitor.updateOne({_id:decodedToken.id}, { $set: { password:hashedPassword }});
-        res.redirect('/visitor/details');
+        Visitor.updateOne({_id:decodedToken.id}, { $set: { password:hashedPassword }}, (error, visitor) => {
+            if(error) return
+            if(visitor) res.redirect('/visitor/details');
+        });
     })
 }
 
@@ -219,7 +252,10 @@ module.exports = {
     index_get,
     register_get,
     register_post,
-    code_get,
+    forgot_get,
+    forgot_post,
+    register_code_get,
+    forgot_code_get,
     login_get,
     login_post,
     logout_get,

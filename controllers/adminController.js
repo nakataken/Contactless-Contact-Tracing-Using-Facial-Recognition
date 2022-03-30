@@ -58,7 +58,8 @@ const request_post = async (req, res) => {
             from: 'contactrazerist@gmail.com',  // sender address
             to: request.email,   // list of receivers
             subject: 'Establishment account creation',
-            text: `Email: ${request.email} Password: ${password}`
+            // text: `Please change your account information immediately. Email: ${request.email} Password: ${password}`,
+            html: `<div><h1>Please change your account password immediately.</h1></br><p><strong>Email: ${request.email}</strong></p></br><p><strong>Password: ${password}<strong></p></div>`
         };
 
         mailer.transporter.sendMail(mailData, async function (err, info) {
@@ -88,11 +89,22 @@ const request_post = async (req, res) => {
             }
         });
     } else {
-        // Delete data on db and files
-        await Request.deleteOne({_id:req.params.id})
-        unlinkPermit(request.permit);
-        unlinkValidID(request.validID);
-        res.redirect('/admin/requests');
+        // Manage email options
+        const mailData = {
+            from: 'contactrazerist@gmail.com',  // sender address
+            to: request.email,   // list of receivers
+            subject: 'Establishment account creation',
+            html: `<div><h1>Your account creation request is rejected.</h1><ul><li>Establishment information is not valid.</li><li>Business Permit image not clear or valid.</li><li>Valid ID image not clear or valid.</li></ul></div>`
+        };
+
+        mailer.transporter.sendMail(mailData, async function (err, info) {
+            if(err) return
+            // Delete data on db and files
+            await Request.deleteOne({_id:req.params.id})
+            unlinkPermit(request.permit);
+            unlinkValidID(request.validID);
+            res.redirect('/admin/requests');
+        })
     }
 }
 
