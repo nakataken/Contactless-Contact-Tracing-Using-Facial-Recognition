@@ -164,14 +164,14 @@ const verification_post = async (req, res) => {
                 if(results) {
                     try {
                         console.log(results);
-                        const user = await Visitor.findById(results[0]._label);
+                        const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
 
                         record.save((err, data) => {
                             if(err) {
                                 console.log(err);
                             } else {
-                                res.json(user.name);
+                                res.json(visitor.name);
                             }
                         })  
                     } catch (error) {

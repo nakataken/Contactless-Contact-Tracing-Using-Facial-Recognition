@@ -10,7 +10,9 @@
 </head>
 <body>
     <div style="width: 500px" id="reader"></div>
-    
+    <div>
+        <h1 id="person"></h1>
+    </div>
     <script>
         var fetched = false;
         const onScanSuccess = async (decodedText, decodedResult) => {
@@ -25,10 +27,14 @@
                     body:  JSON.stringify({ decodedText }) 
                 })
                 .then((response)=> {
-                    fetched = false;
-                    console.log(response);
+                    response.json().then((data) => {
+                        fetched = false;
+                        $('#person').text(`${data.fname} ${data.lname}`); 
+                        setTimeout(() => {
+                            $('#person').text(""); 
+                        }, 5000);
+                    })
                 });
-                console.log(`Scan result: ${decodedText}`, decodedResult);
             }
         }
 

@@ -175,14 +175,11 @@ const qr_post = (req, res) => {
             let establishment_id = decodedToken.id;
 
             const record = new Record({visitor_id, establishment_id});
+            const visitor = await Visitor.findById(visitor_id);
 
-            record.save((err) => {
-                if(err) {
-                    console.log(err);
-                }
-            })  
+            await record.save()  
 
-            res.sendStatus(200)  
+            res.json(visitor.name);
         });
     } catch (error) {
         console.log(error.message);

@@ -64,11 +64,11 @@ video.addEventListener('play', () => {
                                         window.location.href = "/establishment/verify";
                                     }, 5000);
                                 } else {
+                                    $('#person').text(`${data.fname} ${data.lname}`); 
                                     setTimeout(() => {
-                                        $('#person').text(`${data.fname} ${data.lname}`); 
+                                        $('#person').text(""); 
                                         window.location.href = "/establishment/verify";
                                     }, 5000);
-
                                 }
                             } else {
                                 $('#person').text("Cannot find face."); 
