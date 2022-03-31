@@ -15,10 +15,12 @@ const createToken = (id) => {
     })
 }
 
+// HOME
 const index_get = (req, res) => {
     res.redirect('/visitor/profile');
 }
 
+// VALIDATE LOGIN OR REGISTER
 const login_register = (req, res, url) => {
     const visitorToken = req.cookies.jwtVisitor;
     const adminToken = req.cookies.jwtAdmin;
@@ -46,111 +48,9 @@ const login_register = (req, res, url) => {
     }
 } 
 
+// REGISTER
 const register_get = (req, res) => {
     login_register(req, res, "./Visitor Module/register");
-}
-
-const login_get = (req, res) => {
-    login_register(req, res, "./Visitor Module/login");
-}
-
-const login_error = (res, error, email) => {
-    res.render('./Visitor Module/login', {error,email});
-}
-
-const profile_get = (req, res) => {
-    const token = req.cookies.jwtVisitor;
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-        qr.toDataURL(decodedToken.id, (err, src) => {
-        if (err) {
-            console.log(err)
-        }
-        res.render('./Visitor Module/profile', {src});
-        });
-    });
-}
-
-const details_get = (req, res) => {
-    res.render('./Visitor Module/details');
-}
-
-const logout_get = (req, res) => {
-    res.cookie('jwtVisitor', '', {maxAge: 1});
-    res.redirect('/visitor/login');
-}
-
-const forgot_get = (req, res) => {
-    res.render('./Visitor Module/forgot-pass');
-}
-
-const register_code_get = (req, res) => {
-    try {
-        let email = req.params.email;
-        let code = Math.floor(100000 + Math.random() * 900000);
-
-        const mailData = {
-            from: 'contactrazerist@gmail.com', 
-            to: email, 
-            subject: 'Register Code',
-            text: `Code: ${code}`
-        };
-
-        Visitor.countDocuments({email}, (err, count) => { 
-            if(count==0 || !count) {
-                mailer.transporter.sendMail(mailData, async function (error, info) {
-                    if(error) return
-                    res.json(code);
-                });
-            } else {
-                res.json({emailError:true})
-            }
-        })
-    } catch(error) {
-        console.log(error.message);
-        res.redirect('/');
-    }
-}
-
-const forgot_code_get = (req, res) => {
-    try {
-        let email = req.params.email;
-        let code = Math.floor(100000 + Math.random() * 900000);
-
-        const mailData = {
-            from: 'contactrazerist@gmail.com', 
-            to: email, 
-            subject: 'Forgot password',
-            text: `Code: ${code}`
-        };
-
-        Visitor.countDocuments({email}, (err, count) => { 
-            if(count>0) {
-                mailer.transporter.sendMail(mailData, async function (error, info) {
-                    if(error) return
-                    res.json(code);
-                });
-            } else {
-                res.json({emailError:true})
-            }
-        })
-    } catch(error) {
-        console.log(error.message);
-        res.redirect('/');
-    }
-}
-
-const forgot_post = async (req, res) => {
-    const {newPass, emailConfirm} = req.body;
-    Visitor.findOne({email:emailConfirm}, async (error, visitor) => {
-        if(error) return
-        if(visitor) {
-            const hashedPassword = await bcrypt.hash(newPass, saltRounds);
-            Visitor.updateOne({_id:visitor._id}, { $set: { password:hashedPassword }}, (error, visitor) => {
-                if(error) return
-                if(visitor) res.redirect('/visitor/login');
-            });
-        }
-    })
 }
 
 const register_post = async (req, res) => { 
@@ -191,6 +91,39 @@ const register_post = async (req, res) => {
     }
 }
 
+const register_code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Register Code',
+            text: `Code: ${code}`
+        };
+
+        Visitor.countDocuments({email}, (err, count) => { 
+            if(count==0 || !count) {
+                mailer.transporter.sendMail(mailData, async function (error, info) {
+                    if(error) return
+                    res.json(code);
+                });
+            } else {
+                res.json({emailError:true})
+            }
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.redirect('/');
+    }
+}
+
+// LOGIN
+const login_get = (req, res) => {
+    login_register(req, res, "./Visitor Module/login");
+}
+
 const login_post = (req, res) => {
     const {email, pass} = req.body;
 
@@ -223,6 +156,81 @@ const login_post = (req, res) => {
     }); 
 }
 
+const login_error = (res, error, email) => {
+    res.render('./Visitor Module/login', {error,email});
+}
+
+const logout_get = (req, res) => {
+    res.cookie('jwtVisitor', '', {maxAge: 1});
+    res.redirect('/visitor/login');
+}
+
+// FORGOT PASSWORD
+const forgot_get = (req, res) => {
+    res.render('./Visitor Module/forgot-pass');
+}
+
+const forgot_post = async (req, res) => {
+    const {newPass, emailConfirm} = req.body;
+    Visitor.findOne({email:emailConfirm}, async (error, visitor) => {
+        if(error) return
+        if(visitor) {
+            const hashedPassword = await bcrypt.hash(newPass, saltRounds);
+            Visitor.updateOne({_id:visitor._id}, { $set: { password:hashedPassword }}, (error, visitor) => {
+                if(error) return
+                if(visitor) res.redirect('/visitor/login');
+            });
+        }
+    })
+}
+
+const forgot_code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Forgot password',
+            text: `Code: ${code}`
+        };
+
+        Visitor.countDocuments({email}, (err, count) => { 
+            if(count>0) {
+                mailer.transporter.sendMail(mailData, async function (error, info) {
+                    if(error) return
+                    res.json(code);
+                });
+            } else {
+                res.json({emailError:true})
+            }
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.redirect('/');
+    }
+}
+
+// PROFILE
+const profile_get = (req, res) => {
+    const token = req.cookies.jwtVisitor;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        qr.toDataURL(decodedToken.id, (err, src) => {
+        if (err) {
+            console.log(err)
+        }
+        res.render('./Visitor Module/profile', {src});
+        });
+    });
+}
+
+// DETAILS
+const details_get = (req, res) => {
+    res.render('./Visitor Module/details');
+}
+
+// CHANGE PASSWORD
 const oldPassword_post = (req, res) => {
     const token = req.cookies.jwtVisitor;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -252,13 +260,13 @@ module.exports = {
     index_get,
     register_get,
     register_post,
-    forgot_get,
-    forgot_post,
     register_code_get,
-    forgot_code_get,
     login_get,
     login_post,
     logout_get,
+    forgot_get,
+    forgot_post,
+    forgot_code_get,
     profile_get,
     details_get,
     oldPassword_post,

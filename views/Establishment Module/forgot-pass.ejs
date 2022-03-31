@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot</title>
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <div>
+            <div>
+                <label for="email">Email: </label>
+                <input id="email" type="email" name="email" required>
+                <p id="emailError"></p>
+            </div>
+            <div>
+                <div>
+                    <label for="code">Email verification code: </label>
+                    <input type="number" name="code" id="code" required>
+                    <p id="codeError"></p>
+                </div>
+                <div>
+                    <input type='button' id="getCode" value="Get Code"/>
+                </div>
+            </div>
+            <div>
+                <input type='button' id="submitCode" value="Submit"/>
+            </div>
+        </div>
+        <div id="newPassword">
+            <label>Enter new password: </label>
+            <input type="password" id="newPass">
+            <label>Enter new password: </label>
+            <input type="password" id="confPass">
+            <input type="button" id="confirm" value="Submit">
+            <div id="newPassError"></div>
+        </div>
+    </div>
+
+    <script>
+        $('#newPassword').hide();
+        $("#submitCode").attr("disabled", true);
+
+        var emailConfirm = "";
+        var emailVerify = 0;
+        // Validate email
+        const validateEmail = (email) => {
+            return email.match(
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        };
+
+        // Get Verification Code from email
+        document.querySelector('#getCode').addEventListener('click', (e) => {
+            let email = $("#email").val();
+            if (validateEmail(email)) {
+                e.target.disabled = true;
+                fetch("/establishment/forgot/code/" + email)
+                    .then((response) => {
+                        response.json().then((data) => {
+                            if(data.emailError) {
+                                e.target.disabled = false;
+                                $("#emailError").text("Email not found.");
+                            } else {
+                                emailVerify = data;
+                                $("#submitCode").attr("disabled", false);
+                                emailConfirm = email;
+                                // Remove after testing
+                                console.log(emailVerify);
+                                $("#codeError").text("");
+                                setTimeout(function(){
+                                    e.target.disabled = false
+                                }, 60*1000);
+                            }
+                        });
+                    });
+            } else {
+                $("#emailError").text("Input correct email.");
+            }
+        })
+
+        document.querySelector('#submitCode').addEventListener('click', (e) => {
+            let code = $("#code").val();
+            if(code==emailVerify) {
+                $("#codeError").text("");
+                $("#emailError").text("");
+                $('#newPassword').show();
+            } else {
+                $("#codeError").text("Code didn't match.");
+            }
+        })
+
+        document.querySelector('#confirm').addEventListener('click', async (e) => {
+            let newPass = $("#newPass").val();
+            let confPass = $("#confPass").val();
+            if(newPass!="" && confPass!="") {
+                if(newPass == confPass) {
+                    $('.errorMsg').remove();
+                    let errors = [];
+                    if (newPass.length < 8) {
+                        errors.push("Your password must be at least 8 characters."); 
+                    }
+                    if (newPass.search(/[a-z]/i) < 0) {
+                        errors.push("Your password must contain at least one letter.");
+                    }
+                    if (newPass.search(/[0-9]/) < 0) {
+                        errors.push("Your password must contain at least one digit."); 
+                    }
+
+                    if(!errors.length) {
+                        await fetch('/establishment/forgot', {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({newPass, emailConfirm})
+                        }).then((response)=> {
+                            console.log(response);
+                            if(response.redirected) {
+                                window.location.href = response.url;
+                            }
+                        });
+                    } else {
+                        for(i in errors) {
+                            $("#newPassError").append(`<p class="errorMsg">${errors[i]}</p>`);
+                        }
+                    } 
+                } else {
+                    $("#newPassError").text("Password didn't match.");
+                }
+            } else {
+                $("#newPassError").text("Fill up fields.");
+            }
+        })
+    </script>
+
+</body>
+</html>

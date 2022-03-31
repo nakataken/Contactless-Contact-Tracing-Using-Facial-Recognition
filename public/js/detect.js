@@ -1,6 +1,12 @@
 const video = document.getElementById('video')
 const image = document.getElementById('image')
 
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event)
+{
+    history.pushState(null, document.title, location.href);
+});
+
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
     faceapi.nets.faceLandmark68Net.loadFromUri('/models'),

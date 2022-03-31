@@ -15,19 +15,69 @@ const createToken = (id) => {
     })
 }
 
-
+// INDEX
 const index_get = (req, res) => {
     res.redirect('/establishment/login')
 }
 
-const home_get = (req, res) => {
-    res.render('./Establishment Module/home');
-}
-
+// REQUEST
 const request_get = (req, res) => {
     res.render('./Establishment Module/request');
 }
 
+const request_post = async (req, res) => {
+    let request = new Request({
+        name: req.body.name,
+        owner: req.body.owner,
+        email: req.body.email,
+        address: req.body.address,
+        contact: req.body.contact,
+        message: req.body.message,
+        permit: req.files.permit[0].filename,
+        validID: req.files.validID[0].filename
+    })
+
+    try {
+        request.save((err) => {
+            if(err) {
+                console.log(err);
+            } 
+            res.redirect('/establishment/login');
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const request_code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Request Code',
+            text: `Code: ${code}`
+        };
+
+        Visitor.countDocuments({email}, (error, count) => { 
+            if(error) return
+            if(count==0 || !count) {
+                mailer.transporter.sendMail(mailData, async function (err, info) {
+                    if(err) return
+                    res.json(code);
+                });
+            } else {
+                res.json({emailError:true});
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+// LOGIN
 const login_get = (req, res) => {
     const token = req.cookies.jwtEstablishment
     
@@ -45,10 +95,121 @@ const login_get = (req, res) => {
     }
 }
 
+const login_post = (req, res) => {
+    const {email, pass} = req.body;
+
+    Establishment.findOne({email:email}, async (err,data) => { 
+        if(data){
+            const auth = await bcrypt.compare(pass,data.password);
+
+            if(auth) {
+                const token = createToken(data.id);
+                res.cookie('jwtEstablishment', token, {httpOnly: true, maxAge: maxAge * 1000});
+                res.redirect('/establishment/home');
+            } else {
+                login_error(res, "Wrong email or password", email);
+            }
+        } else {
+            login_error(res, "Wrong email or password", email);
+        }
+    }); 
+} 
+
 const login_error = (res, error, email) => {
     res.render('./Establishment Module/login', {error,email});
 }
 
+// FORGOT PASSWORD
+const forgot_get = (req, res) => {
+    res.render('./Establishment Module/forgot-pass');
+}
+
+const forgot_post = (req, res) => {
+    const {newPass, emailConfirm} = req.body;
+    Establishment.findOne({email:emailConfirm}, async (error, establishment) => {
+        if(error) return
+        if(establishment) {
+            const hashedPassword = await bcrypt.hash(newPass, saltRounds);
+            Establishment.updateOne({_id:establishment._id}, { $set: { password:hashedPassword }}, (error, establishment) => {
+                if(error) return
+                if(establishment) res.redirect('/establishment/login');
+            });
+        }
+    })
+}
+
+const forgot_code_get = (req, res) => {
+    try {
+        let email = req.params.email;
+        let code = Math.floor(100000 + Math.random() * 900000);
+
+        const mailData = {
+            from: 'contactrazerist@gmail.com', 
+            to: email, 
+            subject: 'Forgot password',
+            text: `Code: ${code}`
+        };
+
+        Establishment.countDocuments({email}, (err, count) => { 
+            if(count>0) {
+                mailer.transporter.sendMail(mailData, async function (error, info) {
+                    if(error) return
+                    res.json(code);
+                });
+            } else {
+                res.json({emailError:true})
+            }
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.redirect('/');
+    }
+}
+
+// LOGOUT
+const logout_get = (req, res) => {
+    res.cookie('jwtEstablishment', '', {maxAge: 1});
+    res.redirect('/establishment/login');
+}
+
+// HOME
+const home_get = (req, res) => {
+    res.render('./Establishment Module/home');
+}
+
+// DETAILS
+const details_get = (req, res) => {
+    res.render('./Establishment Module/details');
+}
+
+// CHANGE PASSWORD
+const oldPassword_post = (req, res) => {
+    const token = req.cookies.jwtEstablishment;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        Establishment.findById({_id:decodedToken.id}, async (err,data) => { 
+            const auth = await bcrypt.compare(req.body.oldPass,data.password);
+            if(auth) {
+                res.json({success:true});
+            } else {
+                res.json({success:false});
+            }
+        })
+    })
+}
+
+const newPassword_put = (req, res) => {
+    const token = req.cookies.jwtEstablishment;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        const hashedPassword = await bcrypt.hash(req.body.newPass, saltRounds);
+        Establishment.updateOne({_id:decodedToken.id}, { $set: { password:hashedPassword }}, (error, establishment) => {
+            if(error) return
+            if(establishment) res.redirect('/establishment/details');
+        });
+    })
+}
+
+
+// DASHBOARD
 const dashboard_get = async (req, res) => {
     const token = req.cookies.jwtEstablishment;
 
@@ -85,83 +246,6 @@ const dashboard_get = async (req, res) => {
     }
 }
 
-const logout_get = (req, res) => {
-    res.cookie('jwtEstablishment', '', {maxAge: 1});
-    res.redirect('/establishment/login');
-}
-
-const login_post = (req, res) => {
-    const {email, pass} = req.body;
-
-    Establishment.findOne({email:email}, async (err,data) => { 
-        if(data){
-            const auth = await bcrypt.compare(pass,data.password);
-
-            if(auth) {
-                const token = createToken(data.id);
-                res.cookie('jwtEstablishment', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect('/establishment/home');
-            } else {
-                login_error(res, "Wrong email or password", email);
-            }
-        } else {
-            login_error(res, "Wrong email or password", email);
-        }
-    }); 
-} 
-
-const request_post = async (req, res) => {
-    let request = new Request({
-        name: req.body.name,
-        owner: req.body.owner,
-        email: req.body.email,
-        address: req.body.address,
-        contact: req.body.contact,
-        message: req.body.message,
-        permit: req.files.permit[0].filename,
-        validID: req.files.validID[0].filename
-    })
-
-    try {
-        request.save((err) => {
-            if(err) {
-                console.log(err);
-            } 
-            res.redirect('/establishment/login');
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const code_get = (req, res) => {
-    try {
-        let email = req.params.email;
-        let code = Math.floor(100000 + Math.random() * 900000);
-
-        const mailData = {
-            from: 'contactrazerist@gmail.com', 
-            to: email, 
-            subject: 'Request Code',
-            text: `Code: ${code}`
-        };
-
-        Visitor.countDocuments({email}, (error, count) => { 
-            if(error) return
-            if(count==0 || !count) {
-                mailer.transporter.sendMail(mailData, async function (err, info) {
-                    if(err) return
-                    res.json(code);
-                });
-            } else {
-                res.json({emailError:true});
-            }
-        });
-    } catch(error) {
-        console.log(error);
-    }
-}
-
 const qr_get = (req, res) => {
     res.render('./Establishment Module/qr');
 }
@@ -189,14 +273,20 @@ const qr_post = (req, res) => {
 
 module.exports = {
     index_get,
-    home_get,
-    login_get,
-    login_post,
     request_get,
     request_post,
+    request_code_get,
+    login_get,
+    login_post,
+    forgot_get,
+    forgot_post,
+    forgot_code_get,
     logout_get,
+    home_get,
+    details_get,
+    oldPassword_post,
+    newPassword_put,
     dashboard_get,
     qr_get,
-    qr_post,
-    code_get,
+    qr_post
 }
