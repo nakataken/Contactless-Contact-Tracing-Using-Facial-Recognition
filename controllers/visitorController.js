@@ -17,8 +17,23 @@ const createToken = (id) => {
 
 // HOME
 const index_get = (req, res) => {
-    res.redirect('/visitor/profile');
-}
+    const token = req.cookies.jwtVisitor;
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
+            if(error) return
+            Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
+                if(error) return
+                if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
+                    res.redirect('/visitor/detect/1');
+                } else {
+                    res.redirect('/visitor/profile');
+                }
+            })
+        });
+    } else {
+        res.redirect('/visitor/login');
+    }
+}   
 
 // VALIDATE LOGIN OR REGISTER
 const login_register = (req, res, url) => {
@@ -31,7 +46,14 @@ const login_register = (req, res, url) => {
                 console.log(err.message);
                 res.redirect('/');
             } else {
-                res.redirect('/visitor/profile');
+                Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
+                    if(error) return
+                    if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
+                        res.redirect('/visitor/detect/1');
+                    } else {
+                        res.redirect('/visitor/profile');
+                    }
+                })
             }
         });
     } else if (adminToken) {
@@ -142,9 +164,14 @@ const login_post = (req, res) => {
                         res.redirect('/visitor/profile');
                     }
                 } else {
-                    Visitor.updateOne({_id:visitor._id}, { $set: { descriptions:[] }}, (error, visitor) => {
+                    Visitor.findOneAndUpdate({email:email}, { $set: { descriptions:[] }}, (error, visitor) => {
                         if(error) return
-                        if(visitor) res.redirect('/visitor/detect/1');
+                        if(visitor) {
+                            const token = createToken(visitor._id);
+                            console.log(visitor._id);
+                            res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
+                            res.redirect('/visitor/detect/1');
+                        }
                     });
                 }
             } else {
