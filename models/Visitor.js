@@ -7,13 +7,21 @@ const visitorSchema = new mongoose.Schema({
     email: { type: String },
     contact: {type: String},
     password: { type: String },
+    vaccine_card: { 
+        type: String,
+        default: null
+    },
+    isVaccinated: { 
+        type: Boolean,
+        default: false
+    },
     descriptions: {
         type: Array,
         required: true
     },
-    usertype: {
-        type: String,
-        default: "visitor"
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

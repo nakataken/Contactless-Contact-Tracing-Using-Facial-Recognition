@@ -154,7 +154,7 @@ const login_post = (req, res) => {
             const auth = await bcrypt.compare(pass,data.password);
             if(auth) {
                 if(data.descriptions.length === 5) {
-                    if(data.usertype === "sysadmin") {
+                    if(data.isAdmin) {
                         const token = createToken(data.id);
                         res.cookie('jwtAdmin', token, {httpOnly: true, maxAge: maxAge * 1000});
                         res.redirect('/admin/dashboard');

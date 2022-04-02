@@ -6,7 +6,11 @@ const establishmentSchema = new mongoose.Schema({
     address : { type: String },
     email: { type: String }, 
     contact: { type: String },
-    password: { type: String }
+    password: { type: String },
+    limitVaccinated: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

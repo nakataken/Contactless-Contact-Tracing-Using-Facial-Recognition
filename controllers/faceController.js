@@ -163,7 +163,7 @@ const verification_post = async (req, res) => {
 
                 if(results) {
                     try {
-                        console.log(results);
+                        // console.log(results);
                         const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
 
