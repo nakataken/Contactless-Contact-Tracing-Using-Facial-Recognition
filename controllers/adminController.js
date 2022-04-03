@@ -13,9 +13,55 @@ const index_get = (req, res) => {
     res.redirect('/admin/dashboard');
 }
 
-const requests_get = async (req, res) => {
+const logout_get = (req, res) => {
+    res.cookie('jwtAdmin', '', {maxAge: 1});
+    res.redirect('/');
+}
+
+const dashboard_get = async (req, res) => {
+    let visitorsCount = await Visitor.count();
+    let establishmentsCount = await Establishment.count();
+
+    res.render('./Administrator Module/dashboard', {visitorsCount, establishmentsCount});
+}
+
+// VISITORS
+const visitors_records_get = async (req, res) => {
+    let records = await Record.find();
+    let visitors = await Visitor.find();
+    let logs = [];
+
+    for (const record of records) {
+        for (const visitor of visitors) {
+            if(record.visitor_id === visitor._id.toString()) {
+                let establishment = await Establishment.findById({_id:record.establishment_id});
+
+                const log = {
+                    id: record.visitor_id, 
+                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
+                    establishment: establishment.name, 
+                    date: record.createdAt
+                };
+                logs.push(log);
+            }
+        }
+    }
+
+    res.render('./Administrator Module/Visitors/records', {logs});
+}
+
+const visitors_trace_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/trace');
+}
+
+const visitors_list_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/list');
+}
+
+// ESTABLISHMENTS
+const establishments_requests_get = async (req, res) => {
     let requests = await Request.find();
-    res.render('./Administrator Module/request', {requests})
+    res.render('./Administrator Module/Establishments/request', {requests})
 }
 
 const unlinkPermit = (filename) => {
@@ -36,7 +82,7 @@ const unlinkValidID = (filename) => {
     })
 }
 
-const request_post = async (req, res) => {
+const establishments_request_post = async (req, res) => {
     const request = await Request.findById(req.params.id);
     const status = req.body.status;
 
@@ -108,46 +154,18 @@ const request_post = async (req, res) => {
     }
 }
 
-const logout_get = (req, res) => {
-    res.cookie('jwtAdmin', '', {maxAge: 1});
-    res.redirect('/');
-}
-
-// Data Visualization
-const dashboard_get = async (req, res) => {
-    let records = await Record.find();
-    let visitors = await Visitor.find();
-    let recordsCount = records.length;
-    let logs = [];
-    
-    for (const record of records) {
-        for (const visitor of visitors) {
-            if(record.visitor_id === visitor._id.toString()) {
-                let establishment = await Establishment.findById({_id:record.establishment_id});
-
-                const log = {
-                    id: record.visitor_id, 
-                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
-                    establishment: establishment.name, 
-                    date: record.createdAt
-                };
-                logs.push(log);
-            }
-        }
-    }
-
-    res.render('./Administrator Module/dashboard', {logs, recordsCount});
-}
-
-const search_get = (req, res) => {
-    
+const establishments_list_get = async (req, res) => {
+    res.render('./Administrator Module/Establishments/list')
 }
 
 module.exports = {
     index_get,
     logout_get,
     dashboard_get,
-    requests_get,
-    request_post,
-    search_get
+    visitors_records_get,
+    visitors_trace_get,
+    visitors_list_get,
+    establishments_requests_get,
+    establishments_request_post,
+    establishments_list_get
 }

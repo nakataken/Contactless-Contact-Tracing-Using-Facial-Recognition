@@ -7,8 +7,16 @@ const router = Router();
 router.get('/', adminController.index_get);
 router.get('/logout', adminController.logout_get);
 router.get('/dashboard', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.dashboard_get);
-router.get('/requests', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.requests_get);
-router.post('/requests/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.request_post);
-router.get('/search/:name',  visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.search_get);
+
+// VISITORS
+router.get('/visitors/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_records_get);
+router.get('/visitors/trace', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_trace_get);
+router.get('/visitors/list', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_list_get);
+
+// ESTABLISHMENTS
+router.get('/establishments/requests', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.establishments_requests_get);
+router.post('/establishment/requests/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.establishments_request_post);
+router.get('/establishments/list', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.establishments_list_get);
+
 
 module.exports = router;
