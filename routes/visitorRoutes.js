@@ -36,6 +36,7 @@ router.get('/forgot/code/:email', visitorController.forgot_code_get);
 
 router.get('/profile', visitorAuth.visitorAuth, visitorAuth.checkVisitor, visitorController.profile_get);
 router.get('/details', visitorAuth.visitorAuth, visitorAuth.checkVisitor, visitorController.details_get);
+router.post('/details/upload', visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('vacCard'), visitorController.uploadVac_post);
 router.post('/details/change/password/old', visitorAuth.visitorAuth, visitorAuth.checkVisitor, visitorController.oldPassword_post);
 router.put('/details/change/password/new', visitorAuth.visitorAuth, visitorAuth.checkVisitor, visitorController.newPassword_put);
 

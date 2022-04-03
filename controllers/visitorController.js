@@ -20,7 +20,7 @@ const index_get = (req, res) => {
     const token = req.cookies.jwtVisitor;
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
-            if(error) return
+            if(error) return;
             Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
                 if(error) return
                 if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
@@ -44,10 +44,10 @@ const login_register = (req, res, url) => {
         jwt.verify(visitorToken, process.env.JWT_SECRET, (err, decodedToken) => {
             if(err) {
                 console.log(err.message);
-                res.redirect('/');
+                res.status(404).redirect('/');
             } else {
                 Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
-                    if(error) return
+                    if(error) return;
                     if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
                         res.redirect('/visitor/detect/1');
                     } else {
@@ -57,13 +57,9 @@ const login_register = (req, res, url) => {
             }
         });
     } else if (adminToken) {
-        jwt.verify(adminToken, process.env.JWT_SECRET, (err, decodedToken) => {
-            if(err) {
-                console.log(err.message);
-                res.redirect('/');
-            } else {
-                res.redirect('/admin/dashboard');
-            }
+        jwt.verify(adminToken, process.env.JWT_SECRET, (error, decodedToken) => {
+            if(error) return;
+            res.redirect('/admin/dashboard');
         });
     } else {
         res.render(url);
@@ -109,7 +105,7 @@ const register_post = async (req, res) => {
         })
     } catch (error) {
         console.log(error.message);
-        res.redirect('/');
+        res.status(404).redirect('/');
     }
 }
 
@@ -128,7 +124,7 @@ const register_code_get = (req, res) => {
         Visitor.countDocuments({email}, (err, count) => { 
             if(count==0 || !count) {
                 mailer.transporter.sendMail(mailData, async function (error, info) {
-                    if(error) return
+                    if(error) return;
                     res.json(code);
                 });
             } else {
@@ -137,7 +133,7 @@ const register_code_get = (req, res) => {
         })
     } catch(error) {
         console.log(error.message);
-        res.redirect('/');
+        res.status(404).redirect('/');
     }
 }
 
@@ -165,7 +161,7 @@ const login_post = (req, res) => {
                     }
                 } else {
                     Visitor.findOneAndUpdate({email:email}, { $set: { descriptions:[] }}, (error, visitor) => {
-                        if(error) return
+                        if(error) return;
                         if(visitor) {
                             const token = createToken(visitor._id);
                             console.log(visitor._id);
@@ -200,11 +196,11 @@ const forgot_get = (req, res) => {
 const forgot_post = async (req, res) => {
     const {newPass, emailConfirm} = req.body;
     Visitor.findOne({email:emailConfirm}, async (error, visitor) => {
-        if(error) return
+        if(error) return;
         if(visitor) {
             const hashedPassword = await bcrypt.hash(newPass, saltRounds);
             Visitor.updateOne({_id:visitor._id}, { $set: { password:hashedPassword }}, (error, visitor) => {
-                if(error) return
+                if(error) return;
                 if(visitor) res.redirect('/visitor/login');
             });
         }
@@ -226,8 +222,8 @@ const forgot_code_get = (req, res) => {
         Visitor.countDocuments({email}, (err, count) => { 
             if(count>0) {
                 mailer.transporter.sendMail(mailData, async function (error, info) {
-                    if(error) return
-                    res.json(code);
+                    if(error) return;
+                    res.status(201).json(code);
                 });
             } else {
                 res.json({emailError:true})
@@ -243,10 +239,8 @@ const forgot_code_get = (req, res) => {
 const profile_get = (req, res) => {
     const token = req.cookies.jwtVisitor;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-        qr.toDataURL(decodedToken.id, (err, src) => {
-        if (err) {
-            console.log(err)
-        }
+        qr.toDataURL(decodedToken.id, (error, src) => {
+        if (error) return;
         res.render('./Visitor Module/profile', {src});
         });
     });
@@ -257,6 +251,17 @@ const details_get = (req, res) => {
     res.render('./Visitor Module/details');
 }
 
+// UPLOAD VACCINATION CARD
+const uploadVac_post = (req, res) => {
+    const token = req.cookies.jwtVisitor;
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        Visitor.updateOne({_id:decodedToken.id}, {$set:{vaccine_card: req.file.filename}}, (error, visitor) => {
+            if(error) return;
+            res.status(201).redirect('/visitor/details');
+        })
+    });
+}
+
 // CHANGE PASSWORD
 const oldPassword_post = (req, res) => {
     const token = req.cookies.jwtVisitor;
@@ -264,7 +269,7 @@ const oldPassword_post = (req, res) => {
         Visitor.findById({_id:decodedToken.id}, async (err,data) => { 
             const auth = await bcrypt.compare(req.body.oldPass,data.password);
             if(auth) {
-                res.json({success:true});
+                res.status(201).json({success:true});
             } else {
                 res.json({success:false});
             }
@@ -296,6 +301,7 @@ module.exports = {
     forgot_code_get,
     profile_get,
     details_get,
+    uploadVac_post,
     oldPassword_post,
     newPassword_put
 }
