@@ -26,6 +26,11 @@ const dashboard_get = async (req, res) => {
 }
 
 // VISITORS
+const visitors_get = async (req, res) => {
+    let visitors = await Visitor.find();
+    res.json({visitors});
+}
+
 const visitors_records_get = async (req, res) => {
     let records = await Record.find();
     let visitors = await Visitor.find();
@@ -58,6 +63,22 @@ const visitors_list_get = async (req, res) => {
     res.render('./Administrator Module/Visitors/list');
 }
 
+const vaccination_status_put = async (req, res) => {
+    try {
+        Visitor.updateOne({_id:req.params.id}, {$set:{isVaccinated: true}}, (error, visitor) => {
+            if(error) throw error;
+            if(visitor) {
+                res.status(200).json({success:true});
+            } else {
+                res.status(404).json({success:false});
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
+
 // ESTABLISHMENTS
 const establishments_requests_get = async (req, res) => {
     let requests = await Request.find();
@@ -66,19 +87,13 @@ const establishments_requests_get = async (req, res) => {
 
 const unlinkPermit = (filename) => {
     fs.unlink(`./public/uploads/permit/${filename}`, (error) => {
-        if (error) {
-            console.error(error)
-            return
-        }
+        if (error) return;
     })
 }
 
 const unlinkValidID = (filename) => {
     fs.unlink(`./public/uploads/validID/${filename}`, (error) => {
-        if (error) {
-            console.error(error)
-            return
-        }
+        if (error) return;
     })
 }
 
@@ -129,7 +144,7 @@ const establishments_request_post = async (req, res) => {
                         await Request.deleteOne({_id:req.params.id})
                         unlinkPermit(request.permit);
                         unlinkValidID(request.validID);
-                        res.redirect('/admin/requests');
+                        res.redirect('/admin/establishments/requests');
                     }
                 })
             }
@@ -149,7 +164,7 @@ const establishments_request_post = async (req, res) => {
             await Request.deleteOne({_id:req.params.id})
             unlinkPermit(request.permit);
             unlinkValidID(request.validID);
-            res.redirect('/admin/requests');
+            res.redirect('/admin/establishments/requests');
         })
     }
 }
@@ -162,9 +177,11 @@ module.exports = {
     index_get,
     logout_get,
     dashboard_get,
+    visitors_get,
     visitors_records_get,
     visitors_trace_get,
     visitors_list_get,
+    vaccination_status_put,
     establishments_requests_get,
     establishments_request_post,
     establishments_list_get

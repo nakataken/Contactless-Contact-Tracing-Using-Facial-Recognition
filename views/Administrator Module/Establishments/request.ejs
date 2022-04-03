@@ -1,44 +1,70 @@
 <%- include("../partials/header.ejs", {title:"Establishments Request"}) %>
 
-    <% if(typeof(admin) != "undefined") { %>
-        <%- include("../partials/navbar.ejs"); %>
-
-        <div>
-            <table>
-                <thead>
-                    <td>Name</td>
-                    <td>Owner</td>
-                    <td>Address</td>
-                    <td>Email</td>
-                    <td>Contact</td>
-                    <td>Message</td>
-                    <td>Permit</td>
-                    <td>Valid ID</td>
-                    <td>Actions</td>
-                </thead>
-                <% for(var i=0; i < requests.length; i++) { %>
-                <tr>
-                    <td><%= requests[i].name %></td>
-                    <td><%= requests[i].owner %></td>
-                    <td><%= requests[i].address %></td>
-                    <td><%= requests[i].email %></td>
-                    <td><%= requests[i].contact %></td>
-                    <td><%= requests[i].message %></td>
-                    <td><img src="/uploads/permit/<%=requests[i].permit%>" alt="permit" style="height: 100px; width:100px"></td>
-                    <td><img src="/uploads/validID/<%=requests[i].validID%>" alt="validID" style="height: 100px; width:100px"></td>
-                    <td>
-                        <form action="/admin/establishments/requests/<%=requests[i]._id%>" method="POST">
-                            <input type="radio" name="status" value="approve">
-                            <label for="approve">Approve</label>
-                            <input type="radio" name="status" value="reject">
-                            <label for="reject">Reject</label>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </td>
-                </tr>
-                <% } %>
-            </table>
+    <div id="app">
+        <div v-if="admin">
+            <%- include("../partials/navbar.ejs"); %>
+            <div>
+                <table>
+                    <thead>
+                        <td>Name</td>
+                        <td>Owner</td>
+                        <td>Address</td>
+                        <td>Email</td>
+                        <td>Contact</td>
+                        <td>Message</td>
+                        <td>Permit</td>
+                        <td>Valid ID</td>
+                        <td>Actions</td>
+                    </thead>
+                    <tr v-for="request in requests" :key="request._id">
+                        <td>{{request.name}}</td>
+                        <td>{{request.owner}}</td>
+                        <td>{{request.email}}</td>
+                        <td>{{request.contact}}</td>
+                        <td>{{request.message}}</td>
+                        <td><img :src="permitURL(request.permit)" alt="permit" style="height: 100px; width:100px"></td>
+                        <td><img :src="validIDURL(request.validID)" alt="validID" style="height: 100px; width:100px"></td>
+                        <td>
+                            <form :action="actionURL(request._id)" method="POST">
+                                <input type="radio" name="status" value="approve" required>
+                                <label for="approve">Approve</label>
+                                <input type="radio" name="status" value="reject">
+                                <label for="reject">Reject</label>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    <% } %>
+    </div>
+    
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                requests: JSON.parse('<%- JSON.stringify(requests) %>'),
+            }
+        },
+        methods: {
+            validIDURL(pic) {
+                return `/uploads/validID/${pic}`
+            },
+            permitURL(pic) {
+                return `/uploads/permit/${pic}`
+            },
+            actionURL(id) {
+                return `/admin/establishments/requests/${id}`
+            }
+        },
+        mounted() {
+            console.log(this.requests)
+        }
+    });
+
+    app.mount('#app');
+</script>
 
 <%- include("../partials/footer.ejs"); %>
