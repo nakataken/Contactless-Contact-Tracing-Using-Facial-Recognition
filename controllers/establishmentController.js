@@ -289,7 +289,7 @@ const qr_post = (req, res) => {
             } else {
                 const record = new Record({visitor_id, establishment_id});
                 await record.save();
-                res.json({success:true, name:visitor.name});
+                res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
             }
 
         });

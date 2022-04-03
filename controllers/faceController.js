@@ -169,11 +169,14 @@ const verification_post = async (req, res) => {
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
                         
                         if(establishment.limitVaccinated) {
-                            if(!visitor.isVaccinated) res.json({success:false, message: "You are not vaccinated."});
-                            record.save((error, data) => {
-                                if(error) return;  
-                                res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
-                            }) 
+                            if(!visitor.isVaccinated) {
+                                res.json({success:false, message: "You are not vaccinated."});
+                            } else {
+                                record.save((error, data) => {
+                                    if(error) return;  
+                                    res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                                }) 
+                            }
                         } else {
                             record.save((error, data) => {
                                 if(error) return;  
@@ -188,13 +191,11 @@ const verification_post = async (req, res) => {
                     console.log("No face matched.");
                     res.json({success:false, message: "No face matched!"});
                 }
-            } else {
-                console.log("No visitors")
             }
         });
     } catch (error) {
         console.log(error.message);
-        res.status(401).json(error.message);
+        res.redirect('/');
     }
 }
 
