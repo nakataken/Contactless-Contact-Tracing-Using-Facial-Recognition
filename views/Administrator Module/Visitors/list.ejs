@@ -4,26 +4,29 @@
         <div v-if="admin">
             <%- include("../partials/navbar.ejs"); %>
             <div>
+                <input type="text" v-model="search">
                 <table>
                     <thead>
                         <td>Name</td>
                         <td>Address</td>
                         <td>Email</td>
-                        <td>Address</td>
+                        <td>Contact</td>
                         <td>Vaccination Status</td>
                         <td>Vaccination Card</td>
                     </thead>
 
-                    <tr v-for="visitor in visitors" :key="visitor._id">
+                    <tr v-for="visitor in filteredVisitors" :key="visitor._id">
                         <td>{{visitor.name.fname}} {{visitor.name.lname}}</td>
                         <td>{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
                         <td>{{visitor.email}}</td>
                         <td>{{visitor.contact}}</td>
                         <td v-if="visitor.isVaccinated">Fully Vaccinated</td>
-                        <td v-else>Not Vaccinated</td>
+                        <td v-else>
+                            Not Vaccinated
+                            <span @click="checkVaccinated(visitor._id)">Toggle Vaccine Status</span>
+                        </td>
                         <td v-if="visitor.vaccine_card"><img :src="vacCardURL(visitor.vaccine_card)" alt="vaccination card" style="height: 100px; width:100px"></td>
                         <td v-else>Not Uploaded</td>
-                        <td v-if="!visitor.isVaccinated"><span @click="checkVaccinated(visitor._id)">Toggle Vaccine Status</span></td>
                     </tr>
                 </table>
             </div>
@@ -66,7 +69,11 @@
             }
         },
         computed: {
-
+            filteredVisitors() {
+                return this.visitors.filter((visitor) => {
+                    if(visitor.name.fname || visitor.name.lname) return visitor.name.fname.includes(this.search.toUpperCase()) || visitor.name.lname.includes(this.search.toUpperCase());
+                });
+            },
         },
         mounted() {
             this.reloadContent();
