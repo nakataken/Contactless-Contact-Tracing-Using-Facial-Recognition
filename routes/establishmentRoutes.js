@@ -32,6 +32,7 @@ router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstabl
 router.get('/details', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.details_get);
 router.post('/details/change/password/old', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.oldPassword_post);
 router.put('/details/change/password/new', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment,establishmentController.newPassword_put);
+router.put('/details/change/limitation', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment,establishmentController.updateLimit_put);
 
 router.get('/dashboard', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.dashboard_get);
 

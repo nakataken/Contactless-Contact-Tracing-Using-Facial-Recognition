@@ -128,9 +128,9 @@ const establishments_request_post = async (req, res) => {
                 console.log(err)
             } else {
                 const establishment = new Establishment({
-                    name: _.lowerCase(request.name),
-                    owner: _.lowerCase(request.owner),
-                    address: request.address,
+                    name: _.upperCase(request.name),
+                    owner: _.upperCase(request.owner),
+                    address: _.upperCase(request.address),
                     email: request.email,
                     contact: request.contact,
                     password: hashedPassword

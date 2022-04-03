@@ -4,7 +4,8 @@ const Record = require("../models/Record.js");
 const {Canvas, Image} = require("canvas");
 const canvas = require("canvas");
 const faceapi = require("face-api.js");
-const fs = require('fs')
+const fs = require('fs');
+const Establishment = require("../models/Establishment.js");
 faceapi.env.monkeyPatch({ Canvas, Image });
 
 async function LoadModels() {
@@ -163,24 +164,29 @@ const verification_post = async (req, res) => {
 
                 if(results) {
                     try {
-                        // console.log(results);
+                        const establishment = await Establishment.findById(decodedToken.id);
                         const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
-
-                        record.save((err, data) => {
-                            if(err) {
-                                console.log(err);
-                            } else {
-                                res.json(visitor.name);
-                            }
-                        })  
+                        
+                        if(establishment.limitVaccinated) {
+                            if(!visitor.isVaccinated) res.json({success:false, message: "You are not vaccinated."});
+                            record.save((error, data) => {
+                                if(error) return;  
+                                res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                            }) 
+                        } else {
+                            record.save((error, data) => {
+                                if(error) return;  
+                                res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                            }) 
+                        } 
                     } catch (error) {
                         console.log(error.message);
-                        res.json({data: "No face matched."});
+                        res.json({success:false, message: "System Error!"});
                     }
                 } else {
                     console.log("No face matched.");
-                    res.json({data: "No face matched."});
+                    res.json({success:false, message: "No face matched!"});
                 }
             } else {
                 console.log("No visitors")

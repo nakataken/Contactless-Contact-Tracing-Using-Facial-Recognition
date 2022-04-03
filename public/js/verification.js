@@ -56,24 +56,11 @@ video.addEventListener('play', () => {
                     })
                     .then((response)=> {
                         response.json().then((data) => {
-                            if(response.ok) {
-                                console.log(data)
-                                if(data == "No face matched.") {
-                                    setTimeout(() => {
-                                        $('#person').text(data); 
-                                        window.location.href = "/establishment/verify";
-                                    }, 5000);
-                                } else {
-                                    $('#person').text(`${data.fname} ${data.lname}`); 
-                                    setTimeout(() => {
-                                        $('#person').text(""); 
-                                        window.location.href = "/establishment/verify";
-                                    }, 5000);
-                                }
-                            } else {
-                                $('#person').text("Cannot find face."); 
+                            $('#person').text(`${data.message}`); 
+                            setTimeout(() => {
+                                $('#person').text(""); 
                                 window.location.href = "/establishment/verify";
-                            }
+                            }, 5000);
                         })
                     });
                 }

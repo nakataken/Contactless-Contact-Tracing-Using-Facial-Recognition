@@ -223,7 +223,7 @@ const forgot_code_get = (req, res) => {
             if(count>0) {
                 mailer.transporter.sendMail(mailData, async function (error, info) {
                     if(error) return;
-                    res.status(201).json(code);
+                    res.json(code);
                 });
             } else {
                 res.json({emailError:true})
@@ -257,7 +257,7 @@ const uploadVac_post = (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
         Visitor.updateOne({_id:decodedToken.id}, {$set:{vaccine_card: req.file.filename}}, (error, visitor) => {
             if(error) return;
-            res.status(201).redirect('/visitor/details');
+            res.redirect('/visitor/details');
         })
     });
 }
@@ -269,7 +269,7 @@ const oldPassword_post = (req, res) => {
         Visitor.findById({_id:decodedToken.id}, async (err,data) => { 
             const auth = await bcrypt.compare(req.body.oldPass,data.password);
             if(auth) {
-                res.status(201).json({success:true});
+                res.json({success:true});
             } else {
                 res.json({success:false});
             }

@@ -5,6 +5,7 @@ const Record = require("../models/Record.js");
 const bcrypt = require("bcrypt");
 const mailer = require("../middlewares/mailer.js");
 const jwt = require("jsonwebtoken");
+const _ = require('lodash'); 
 const saltRounds = 10;
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -61,7 +62,7 @@ const request_code_get = (req, res) => {
             text: `Code: ${code}`
         };
 
-        Visitor.countDocuments({email}, (error, count) => { 
+        Establishment.countDocuments({email}, (error, count) => { 
             if(error) return
             if(count==0 || !count) {
                 mailer.transporter.sendMail(mailData, async function (err, info) {
@@ -182,6 +183,23 @@ const details_get = (req, res) => {
     res.render('./Establishment Module/details');
 }
 
+// CHANGE LIMIT
+const updateLimit_put = (req, res) => {
+    const token = req.cookies.jwtEstablishment;
+    let status = req.body.status;
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        Establishment.updateOne({_id:decodedToken.id}, { $set: { limitVaccinated:status}}, (error, establishment) => {
+            if(error) return;
+            if(establishment) {
+                res.json({success:true})
+            } else {
+                res.json({success:false})
+            }
+        });
+    });
+}
+
 // CHANGE PASSWORD
 const oldPassword_post = (req, res) => {
     const token = req.cookies.jwtEstablishment;
@@ -257,13 +275,23 @@ const qr_post = (req, res) => {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             let visitor_id = req.body.decodedText;
             let establishment_id = decodedToken.id;
-
-            const record = new Record({visitor_id, establishment_id});
+            const establishment = await Establishment.findById(establishment_id);
             const visitor = await Visitor.findById(visitor_id);
 
-            await record.save()  
+            if(establishment.limitVaccinated) {
+                if(visitor.isVaccinated) {
+                    const record = new Record({visitor_id, establishment_id});
+                    await record.save();
+                    res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                } else {
+                    res.json({success:false, message: "You are not vaccinated."});
+                }
+            } else {
+                const record = new Record({visitor_id, establishment_id});
+                await record.save();
+                res.json({success:true, name:visitor.name});
+            }
 
-            res.json(visitor.name);
         });
     } catch (error) {
         console.log(error.message);
@@ -284,6 +312,7 @@ module.exports = {
     logout_get,
     home_get,
     details_get,
+    updateLimit_put,
     oldPassword_post,
     newPassword_put,
     dashboard_get,

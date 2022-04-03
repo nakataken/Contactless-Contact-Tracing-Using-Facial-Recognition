@@ -29,7 +29,7 @@
                 .then((response)=> {
                     response.json().then((data) => {
                         fetched = false;
-                        $('#person').text(`${data.fname} ${data.lname}`); 
+                        $('#person').text(`${data.message}`); 
                         setTimeout(() => {
                             $('#person').text(""); 
                         }, 5000);
