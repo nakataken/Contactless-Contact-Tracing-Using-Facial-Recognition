@@ -1,5 +1,11 @@
 # Contraze: Web-based Contactless Contact-Tracing using Facial Recognition and QR
+
 Capstone Project
+
+Built using:
+1. EJS
+2. Node.js (Express.js)
+3. MongoDB
 
 Pre-requisites:
 1. VS Code (or atom)
