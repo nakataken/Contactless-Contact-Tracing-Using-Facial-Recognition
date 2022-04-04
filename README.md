@@ -21,8 +21,8 @@ Instruction:
 4. run "nodemon app" to run the server
 
 Folders
-/models - contains the data related logic
-/views - contains the frontend (UI/UX) logic
-/controllers - contains the control login
-/routes - contains the api endpoints 
-/public - contains the static files
+1. /models - contains the data related logic
+2. /views - contains the frontend (UI/UX) logic
+3. /controllers - contains the control login
+4. /routes - contains the api endpoints 
+5. /public - contains the static files
