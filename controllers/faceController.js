@@ -185,7 +185,7 @@ const verification_post = async (req, res) => {
                         } 
                     } catch (error) {
                         console.log(error.message);
-                        res.json({success:false, message: "System Error!"});
+                        res.json({success:false, message: "No face matched!"});
                     }
                 } else {
                     console.log("No face matched.");
