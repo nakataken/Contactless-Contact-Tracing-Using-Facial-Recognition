@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 app.set('view engine', 'ejs');
 
-const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster.y0biq.mongodb.net/Capstone?retryWrites=true&w=majority`;
+const dbURI = process.env.DB_URI;
 
 mongoose.connect(dbURI, 
     {useNewUrlParser: true, useUnifiedTopology: true})
