@@ -19,3 +19,10 @@ Instruction:
 2. run "npm install" or "npm i"
 3. get copy of .env file and paste it on root directory
 4. run "nodemon app" to run the server
+
+Folders
+/models - contains the data related logic
+/views - contains the frontend (UI/UX) logic
+/controllers - contains the control login
+/routes - contains the api endpoints 
+/public - contains the static files
