@@ -1,4 +1,4 @@
-# Contraze: Web-Based-Contactless-Contact-Tracing-Using-Facial-Recognition
+# Contraze: Web-based Contactless Contact-Tracing using Facial Recognition and QR
 Capstone Project
 
 Pre-requisites:
