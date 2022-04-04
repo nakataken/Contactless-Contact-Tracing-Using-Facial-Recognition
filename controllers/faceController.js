@@ -164,7 +164,6 @@ const verification_post = async (req, res) => {
                 const results = await resizedDetections.map((d) => faceMatcher.matchDescriptor(d.descriptor));
                 if(results) {
                     try {
-                        console.log
                         const establishment = await Establishment.findById(decodedToken.id);
                         const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
