@@ -5,17 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Establishment - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
     <% if(typeof(establishment) != "undefined") { %>
-    <ul>
-        <li>Welcome to <%=establishment.name%></li>
-        <li><a href="/establishment/dashboard">Dashboard</a></li>
-        <li><a href="/establishment/verify">Log Visitors (Face Recognition)</a></li>
-        <li><a href="/establishment/qr">Log Visitors (QR)</a></li>
-        <li><a href="/establishment/details">Establishment Details</a></li>
-        <li><a href="/establishment/logout">Logout</a></li>
-    </ul>
+    <div class="home_est container-fluid p-0">   
+        <nav  class="navbar navbar-expand-md navbar-light px-5 ">
+            <div  class="container-fluid px-md-5 mt-4">
+                <a class="navbar-brand" href="#"><div class="navbar-logo" ></div></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <ul class="navbar-nav ms-auto my-auto d-flex flex-md-row flex-column align-items-center ">
+                        <li class="nav-item mx-3"><a class="nav-link" href="/establishment/dashboard">Dashboard</a></li>
+                        <li><a href="/establishment/details">Establishment Details</a></li>
+                        <li class="nav-item dropdown" >
+                            <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Log Visitors
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/establishment/verify">Face Recognition</a>
+                              <a class="dropdown-item" href="/establishment/qr">QR Scanner</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mx-3" ><a class="nav-link" href="/establishment/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <div class="head container-fluid d-flex align-items-center p-0">
+            <div class="l-div col-lg-6 col-md-8 col-10 p-md-5 ms-lg-5 text-lg-start text-center mx-auto">
+                <h1>Welcome to <%=establishment.name%></h1>
+                <h5 class="col-lg-10 col-12 ">
+                    Lorem ipsum dolor sit amet consectetud, eum consequatur explicabo quibusdam tenetur. Totam excepturi magni quia, consectetur odio quis ex!
+                </h5>
+            </div>
+        </div>
+    </div>
+
     <% } %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
 </body>
 </html>

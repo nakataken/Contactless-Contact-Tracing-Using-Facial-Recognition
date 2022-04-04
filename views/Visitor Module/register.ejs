@@ -34,22 +34,27 @@
                         </div>
                         
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
+                    <div class="row mt-3 ">
+                        <div class="col-6 ">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
                             <p class="text-danger" id="emailError"></p>
                         </div>
-                        <div class=" col-6 row">
-                            <div class="col-8">
-                                <label for="code">Email verification code: </label>
-                                <input class="form-control" type="number" name="code" id="code" required>
-                                <p id="codeError" class="text-danger"></p>
+                        <div class="col-6">
+                            <label for="code" class="col-12">Email verification code: </label>
+                            <div class="col-12 d-flex flex-row">
+                                <div class="col-8">
+                                    <input class="form-control" type="number" name="code" id="code" required>
+                                    <p id="codeError" class="text-danger"></p>
+                                </div>
+                                <div class="col-4 mx-end ps-2">
+                                    <input type='button' id="getCode" class="btn form-control" value="Get Code"/>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <input type='button' id="getCode" class="btn my-bottom _1" value="Get Code"/>
-                            </div>
+                            
                         </div>
+
+                        
                     </div>
 
                     

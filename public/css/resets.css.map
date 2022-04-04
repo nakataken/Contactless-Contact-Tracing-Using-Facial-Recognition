@@ -1,1 +1,9 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"resets.css"}
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../sass/resets.scss"
+    ],
+    "names": [],
+    "file": "resets.css"
+}

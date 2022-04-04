@@ -5,14 +5,23 @@
 .main{ 
     background-color: $color-primary ;
 }
-
+.home_est{
+    background: url("../assets/images/frame_2.svg") ;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: right bottom;
+    nav{
+        .dropdown-menu{
+        background-color: transparent !important;
+        }
+    }
+}
 .home{
-    
     background: url("../assets/images/frame_5.svg") ;
     background-repeat: no-repeat;
     background-size: cover; 
     background-position: right bottom;
-
+    
 }
 
 nav{
@@ -26,22 +35,57 @@ nav{
     button{
         @include btn-white(normal,btn);
     }
+    @media screen and (min-width: 1124px){
+        .navbar-brand{
+            .navbar-logo{
+                height: 20px;
+                content: url("../assets/images/logo.png");
+            }
+            
+        }
+    }
+    @media screen and (max-width: 1124px){
+        .navbar-brand{
+            .navbar-logo{
+                height: 20px;
+                content: url("../assets/images/logo-white.png");
+            }
+            
+        }
+    }
+    
 }
 
 .head{
     min-height:90vh;
     .l-div{
+        @media screen and (min-width: 1124px){
+            h1{
+
+                @include text-primary(bold,tle); 
+                background: linear-gradient(98.32deg, $color-primary 15.35%, $color-secondary 83.49%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            h5{
+                @include text-black(thin,h3); 
+            }
+        }
+        @media screen and (max-width: 1124px){
+            h1{
+
+                @include text-primary(bold,tle); 
+                background: white;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            h5{
+                @include text-white(thin,h3); 
+            }
+        }
         
-        h1{
-            @include text-primary(bold,tle); 
-            background: linear-gradient(98.32deg, $color-primary 15.35%, $color-secondary 83.49%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        h5{
-            @include text-black(thin,h3); 
-        }
         @media screen and (min-width: 991px){
             button{
                 @include btn-primary(normal,btn);
@@ -103,6 +147,7 @@ nav{
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
+                color: black !important;
             }
             p{
                 text-align: center;
@@ -118,7 +163,7 @@ nav{
                 outline: 0;
                 background: transparent;
                 box-shadow: none !important;
-                border-bottom: 1px solid rgb(141, 137, 137,0.5);
+               // border-bottom: 1px solid rgb(141, 137, 137,0.5);
             }
             
             .btn-grad{
@@ -177,7 +222,7 @@ nav{
                 outline: 0;
                 background: transparent;
                 box-shadow: none !important;
-                border: 1px solid rgb(141, 137, 137,0.5) ;
+            //    border: 1px solid rgb(141, 137, 137,0.5) ;
 
                 &.name{
                     text-transform: uppercase !important;
@@ -260,10 +305,19 @@ nav{
             bottom:45%;
             z-index: 1;
         }
-        h1{
-            
-        }
     }
     
 }
 
+
+.wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    & > *{
+        padding: 10px;
+    }
+}
+  

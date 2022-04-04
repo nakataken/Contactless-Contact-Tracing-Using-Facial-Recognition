@@ -53,6 +53,7 @@ video.addEventListener('play', () => {
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
             
             screenshot.toBlob( async function(blob){
+                $('#loading').show();
                 var form = new FormData();
                 form.append("faces", blob, `detect${process}.png`);
                 if(!fetched) {
