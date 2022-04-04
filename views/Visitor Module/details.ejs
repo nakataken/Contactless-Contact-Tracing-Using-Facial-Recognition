@@ -1,0 +1,127 @@
+<%- include("./partials/header.ejs", {title:"Details"}) %>
+
+    <% if(typeof(visitor) != "undefined") { %>
+    <div>
+        <ul>
+            <% if(visitor.isVaccinated) { %> 
+                <li>Vaccination Status (Insert color green)</li>
+            <% } else { %>
+                <% if(visitor.vaccine_card) { %>
+                    <li>Vaccination Status (Insert color red)</li>
+                    <li>Chinecheck ng admin yung vac card, hintay ka 1-3 working days.</li>
+                <% } else { %>
+                    <li>Vaccination Status (Insert color red)</li>
+                    <li>Upload your vaccination card</li>
+                    <form class="" action="/visitor/details/upload" method="POST" enctype="multipart/form-data">
+                        <div class="">
+                            <label for="vacCard">Valid ID: </label>
+                            <input class="" type="file" id="vacCard" name="vacCard" accept="image/png, image/jpeg" required>
+                        </div>
+                        <button class="" type="submit">Submit</button>
+                    </form>
+                <% } %> 
+            <% } %>
+        </ul>
+        <p>Name: <%=visitor.name.fname%>  <%=visitor.name.mname%> <%=visitor.name.lname%></p>
+        <p>Email: <%=visitor.email%></p>
+        <p>Contact #: <%=visitor.contact%></p>
+        <p>Address: <%=visitor.address.barangay%>,  <%=visitor.address.city%> <%=visitor.address.province%></p>
+        <p>Birthdate: <%=visitor.bdate%></p>
+
+        <div>
+            <label>Change Password</label>
+            <input type="button" id="change" value="Change">
+            <div id="oldPassword">
+                <label>Enter old password: </label>
+                <input type="password" id="oldPass">
+                <input type="button" id="check" value="Submit">
+                <p id="oldPassError"></p>
+            </div>
+            <div id="newPassword">
+                <label>Enter new password: </label>
+                <input type="password" id="newPass">
+                <label>Enter new password: </label>
+                <input type="password" id="confPass">
+                <input type="button" id="confirm" value="Submit">
+                <div id="newPassError"></div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <script>
+        $('#oldPassword').hide();
+        $('#newPassword').hide();
+
+        document.querySelector('#change').addEventListener('click', (e) => {
+            $('#oldPassword').show();
+        })
+
+        document.querySelector('#check').addEventListener('click', async (e) => {
+            let oldPass = $("#oldPass").val();
+            if(oldPass) {
+                const rawResponse = await fetch('/visitor/details/change/password/old', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({oldPass})
+                });
+                const content = await rawResponse.json();
+                if(content.success) {
+                    $('#newPassword').show();
+                    $("#oldPassError").text("");
+                } else {
+                    $("#oldPassError").text("Wrong password.");
+                }
+            } else {
+                $("#oldPassError").text("Enter password.");
+            }
+        })
+
+        document.querySelector('#confirm').addEventListener('click', async (e) => {
+            let newPass = $("#newPass").val();
+            let confPass = $("#confPass").val();
+            if(newPass!="" && confPass!="") {
+                if(newPass == confPass) {
+                    $('.errorMsg').remove();
+                    let errors = [];
+                    if (newPass.length < 8) {
+                        errors.push("Your password must be at least 8 characters."); 
+                    }
+                    if (newPass.search(/[a-z]/i) < 0) {
+                        errors.push("Your password must contain at least one letter.");
+                    }
+                    if (newPass.search(/[0-9]/) < 0) {
+                        errors.push("Your password must contain at least one digit."); 
+                    }
+
+                    if(!errors.length) {
+                        await fetch('/visitor/details/change/password/new', {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({newPass})
+                        }).then((response)=> {
+                            if(response.redirected) {
+                                window.location.href = response.url;
+                            }
+                        });
+                    } else {
+                        for(i in errors) {
+                            $("#newPassError").append(`<p class="errorMsg">${errors[i]}</p>`);
+                        }
+                    } 
+                } else {
+                    $("#newPassError").text("Password didn't match.");
+                }
+            } else {
+                $("#newPassError").text("Fill up fields.");
+            }
+        })
+    </script>
+    
+<%- include("./partials/footer.ejs") %>

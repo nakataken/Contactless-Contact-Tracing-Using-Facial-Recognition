@@ -13,30 +13,91 @@ const index_get = (req, res) => {
     res.redirect('/admin/dashboard');
 }
 
-const requests_get = async (req, res) => {
+const logout_get = (req, res) => {
+    res.cookie('jwtAdmin', '', {maxAge: 1});
+    res.redirect('/');
+}
+
+const dashboard_get = async (req, res) => {
+    let visitorsCount = await Visitor.count();
+    let establishmentsCount = await Establishment.count();
+
+    res.render('./Administrator Module/dashboard', {visitorsCount, establishmentsCount});
+}
+
+// VISITORS
+const visitors_get = async (req, res) => {
+    let visitors = await Visitor.find();
+    res.json({visitors});
+}
+
+const visitors_records_get = async (req, res) => {
+    let records = await Record.find();
+    let visitors = await Visitor.find();
+    let logs = [];
+
+    for (const record of records) {
+        for (const visitor of visitors) {
+            if(record.visitor_id === visitor._id.toString()) {
+                let establishment = await Establishment.findById({_id:record.establishment_id});
+
+                const log = {
+                    id: record.visitor_id, 
+                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
+                    establishment: establishment.name, 
+                    date: record.createdAt
+                };
+                logs.push(log);
+            }
+        }
+    }
+
+    res.render('./Administrator Module/Visitors/records', {logs});
+}
+
+const visitors_trace_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/trace');
+}
+
+const visitors_list_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/list');
+}
+
+const vaccination_status_put = async (req, res) => {
+    try {
+        Visitor.updateOne({_id:req.params.id}, {$set:{isVaccinated: true}}, (error, visitor) => {
+            if(error) throw error;
+            if(visitor) {
+                res.status(200).json({success:true});
+            } else {
+                res.status(404).json({success:false});
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
+
+// ESTABLISHMENTS
+const establishments_requests_get = async (req, res) => {
     let requests = await Request.find();
-    res.render('./Administrator Module/request', {requests})
+    res.render('./Administrator Module/Establishments/request', {requests})
 }
 
 const unlinkPermit = (filename) => {
     fs.unlink(`./public/uploads/permit/${filename}`, (error) => {
-        if (error) {
-            console.error(error)
-            return
-        }
+        if (error) return;
     })
 }
 
 const unlinkValidID = (filename) => {
     fs.unlink(`./public/uploads/validID/${filename}`, (error) => {
-        if (error) {
-            console.error(error)
-            return
-        }
+        if (error) return;
     })
 }
 
-const request_post = async (req, res) => {
+const establishments_request_post = async (req, res) => {
     const request = await Request.findById(req.params.id);
     const status = req.body.status;
 
@@ -58,7 +119,8 @@ const request_post = async (req, res) => {
             from: 'contactrazerist@gmail.com',  // sender address
             to: request.email,   // list of receivers
             subject: 'Establishment account creation',
-            text: `Email: ${request.email} Password: ${password}`
+            // text: `Please change your account information immediately. Email: ${request.email} Password: ${password}`,
+            html: `<div><h1>Please change your account password immediately.</h1></br><p><strong>Email: ${request.email}</strong></p></br><p><strong>Password: ${password}<strong></p></div>`
         };
 
         mailer.transporter.sendMail(mailData, async function (err, info) {
@@ -66,9 +128,9 @@ const request_post = async (req, res) => {
                 console.log(err)
             } else {
                 const establishment = new Establishment({
-                    name: _.lowerCase(request.name),
-                    owner: _.lowerCase(request.owner),
-                    address: request.address,
+                    name: _.upperCase(request.name),
+                    owner: _.upperCase(request.owner),
+                    address: _.upperCase(request.address),
                     email: request.email,
                     contact: request.contact,
                     password: hashedPassword
@@ -82,60 +144,45 @@ const request_post = async (req, res) => {
                         await Request.deleteOne({_id:req.params.id})
                         unlinkPermit(request.permit);
                         unlinkValidID(request.validID);
-                        res.redirect('/admin/requests');
+                        res.redirect('/admin/establishments/requests');
                     }
                 })
             }
         });
     } else {
-        // Delete data on db and files
-        await Request.deleteOne({_id:req.params.id})
-        unlinkPermit(request.permit);
-        unlinkValidID(request.validID);
-        res.redirect('/admin/requests');
+        // Manage email options
+        const mailData = {
+            from: 'contactrazerist@gmail.com',  // sender address
+            to: request.email,   // list of receivers
+            subject: 'Establishment account creation',
+            html: `<div><h1>Your account creation request is rejected.</h1><ul><li>Establishment information is not valid.</li><li>Business Permit image not clear or valid.</li><li>Valid ID image not clear or valid.</li></ul></div>`
+        };
+
+        mailer.transporter.sendMail(mailData, async function (err, info) {
+            if(err) return
+            // Delete data on db and files
+            await Request.deleteOne({_id:req.params.id})
+            unlinkPermit(request.permit);
+            unlinkValidID(request.validID);
+            res.redirect('/admin/establishments/requests');
+        })
     }
 }
 
-const logout_get = (req, res) => {
-    res.cookie('jwtAdmin', '', {maxAge: 1});
-    res.redirect('/');
-}
-
-// Data Visualization
-const dashboard_get = async (req, res) => {
-    let records = await Record.find();
-    let visitors = await Visitor.find();
-    let recordsCount = records.length;
-    let logs = [];
-    
-    for (const record of records) {
-        for (const visitor of visitors) {
-            if(record.visitor_id === visitor._id.toString()) {
-                let establishment = await Establishment.findById({_id:record.establishment_id});
-
-                const log = {
-                    id: record.visitor_id, 
-                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
-                    establishment: establishment.name, 
-                    date: record.createdAt
-                };
-                logs.push(log);
-            }
-        }
-    }
-
-    res.render('./Administrator Module/dashboard', {logs, recordsCount});
-}
-
-const search_get = (req, res) => {
-    
+const establishments_list_get = async (req, res) => {
+    res.render('./Administrator Module/Establishments/list')
 }
 
 module.exports = {
     index_get,
     logout_get,
     dashboard_get,
-    requests_get,
-    request_post,
-    search_get
+    visitors_get,
+    visitors_records_get,
+    visitors_trace_get,
+    visitors_list_get,
+    vaccination_status_put,
+    establishments_requests_get,
+    establishments_request_post,
+    establishments_list_get
 }

@@ -18,23 +18,6 @@ const visitorAuth = (req, res, next) => {
     }
 }
 
-const adminAuth = (req, res, next) => {
-    const token = req.cookies.jwtAdmin;
-
-    if(token) {
-        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-            if(err) {
-                console.log(err.message);
-                res.redirect('/visitor/login');
-            } else {
-                next();
-            }
-        });
-    } else {
-        res.redirect('/visitor/login');
-    }
-}
-
 const checkVisitor = (req, res, next) => {
     const token = req.cookies.jwtVisitor;
 
@@ -53,6 +36,23 @@ const checkVisitor = (req, res, next) => {
     } else {
         res.locals.visitor = null;
         next();
+    }
+}
+
+const adminAuth = (req, res, next) => {
+    const token = req.cookies.jwtAdmin;
+
+    if(token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if(err) {
+                console.log(err.message);
+                res.redirect('/visitor/login');
+            } else {
+                next();
+            }
+        });
+    } else {
+        res.redirect('/visitor/login');
     }
 }
 
@@ -79,7 +79,7 @@ const checkAdmin = (req, res, next) => {
 
 module.exports = {
     visitorAuth,
-    adminAuth,
     checkVisitor,
+    adminAuth,
     checkAdmin
 };

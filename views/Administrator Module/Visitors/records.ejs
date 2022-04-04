@@ -1,0 +1,122 @@
+<%- include("../partials/header.ejs", {title:"Visitors Record"}) %>
+
+    <% if(typeof(admin) != "undefined") { %>
+        <%- include("../partials/navbar.ejs"); %>
+        <div id="app">
+            <form>
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" v-model="filter.name">
+                </div>
+                <div>
+                    <label for="establishment">Establishment Name</label>
+                    <input type="text" v-model="filter.establishment">
+                </div>
+                <div>
+                    <input v-model="option" type="radio" name="option" value="byDate" checked>
+                    <label>Filter Date - Date</label>
+                    <input v-model="option" type="radio" name="option" value="byTime"/>
+                    <label>Filter Current Date Time - Time</label>
+                </div>
+                <div>
+                    <label for="from">FROM</label>
+                    <div>
+                        <label for="date1">Date</label>
+                        <input type="date" v-model="filter.date1" id="date1" max="">
+                    </div>
+                    <div>
+                        <label for="fromTime1">From</label>
+                        <input type="text" v-model="filter.fromTime1">
+                    </div>
+                    <div>
+                        <label for="toTime1">To</label>
+                        <input type="text" v-model="filter.toTime1">
+                    </div>
+                </div>
+                <div>
+                    <label for="to">TO</label>
+                    <div>
+                        <label for="date2">Date</label>
+                        <input type="date" v-model="filter.date2" id="date2" max="">
+                    </div>
+                    <div>
+                        <label for="fromTime2">From</label>
+                        <input type="text" v-model="filter.fromTime2">
+                    </div>
+                    <div>
+                        <label for="toTime2">To</label>
+                        <input type="text" v-model="filter.toTime2">
+                    </div>
+                </div>
+                <button @click="submitFilter">Filter</button>
+            </form>
+
+            <table>
+                <thead>
+                    <td>Name</td>
+                    <td>Date & Time</td>
+                    <td>Establishment</td>
+                    <td></td>
+                </thead>
+
+                <tr v-for="log in logs" :key="log.id">
+                    <td>{{log.name}}</td>
+                    <td>{{log.date}}</td>
+                    <td>{{log.establishment}}</td>
+                    <td><span @click="handleAction">clickable option</span></td>
+                </tr>
+            </table>
+        </div>
+    <% } %>
+    
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                logs: JSON.parse('<%- JSON.stringify(logs) %>'),
+                option: "",
+                disableByDate: false,
+                disableByTime: false,
+                filter: {}
+            }
+        },
+        methods: {
+            submitFilter(event) {
+                event.preventDefault();
+                console.log(this.filter)
+            },
+            handleAction() {
+                alert("Clicked")
+            }
+        },
+        watch: {
+            option() {
+                if(this.option === "byDate") {
+                    console.log("FilterByDate")
+                } else {
+                    console.log("FilterByTime")
+                }
+            }
+        }
+    });
+
+    app.mount('#app');
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+
+    if (dd < 10)
+        dd = '0' + dd;
+
+    if (mm < 10)
+        mm = '0' + mm;
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("date1").setAttribute("max", today);
+    document.getElementById("date2").setAttribute("max", today);
+</script>
+
+
+<%- include("../partials/footer.ejs"); %>

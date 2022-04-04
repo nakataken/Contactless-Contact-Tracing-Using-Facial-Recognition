@@ -13,14 +13,27 @@ router.route('/request')
     .get(establishmentController.request_get)
     .post(upload.fields([{name: 'permit', maxCount: 1}, {name: 'validID', maxCount: 1}]), establishmentController.request_post);
 
-router.get('/request/code/:email', establishmentController.code_get);
+router.get('/request/code/:email', establishmentController.request_code_get);
 
 router.route('/login')
     .get(establishmentController.login_get)
     .post(establishmentController.login_post);
 
 router.get('/logout', establishmentController.logout_get);
+
+router.route('/forgot')
+    .get(establishmentController.forgot_get)
+    .put(establishmentController.forgot_post);
+
+router.get('/forgot/code/:email', establishmentController.forgot_code_get);
+
 router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.home_get);
+
+router.get('/details', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.details_get);
+router.post('/details/change/password/old', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.oldPassword_post);
+router.put('/details/change/password/new', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment,establishmentController.newPassword_put);
+router.put('/details/change/limitation', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment,establishmentController.updateLimit_put);
+
 router.get('/dashboard', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.dashboard_get);
 
 router.route('/qr')

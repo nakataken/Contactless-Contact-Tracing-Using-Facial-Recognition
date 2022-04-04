@@ -52,8 +52,8 @@
                         <textarea class="form-control" id="address" name="address" rows="4" cols="50"></textarea>
                     </div>
                     <div class="form-group mt-2 ">
-                        <label for="contact">Contact no: </label>
-                        <input class="form-control" type="number" name="contact" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
+                        <label for="contact">Contact no (+63): </label>
+                        <input class="form-control" type="number" name="contact" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" required>
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="message">Message: </label>
@@ -105,13 +105,18 @@
             fetch("/establishment/request/code/" + email)
                 .then((response) => {
                     response.json().then((data) => {
-                        emailVerify = data;
-                        // Remove after testing
-                        console.log(emailVerify);
-                        $("#codeError").text("");
-                        setTimeout(function(){
-                            e.target.disabled = false
-                        }, 60*1000);
+                        if(data.emailError) {
+                            e.target.disabled = false;
+                            $("#emailError").text("Email already exists.");
+                        } else {
+                            emailVerify = data;
+                            // Remove after testing
+                            console.log(emailVerify);
+                            $("#codeError").text("");
+                            setTimeout(function(){
+                                e.target.disabled = false
+                            }, 60*1000);
+                        }
                     });
                 });
         } else {

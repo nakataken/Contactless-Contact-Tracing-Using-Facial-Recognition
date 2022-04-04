@@ -4,7 +4,8 @@ const Record = require("../models/Record.js");
 const {Canvas, Image} = require("canvas");
 const canvas = require("canvas");
 const faceapi = require("face-api.js");
-const fs = require('fs')
+const fs = require('fs');
+const Establishment = require("../models/Establishment.js");
 faceapi.env.monkeyPatch({ Canvas, Image });
 
 async function LoadModels() {
@@ -52,65 +53,69 @@ const detect_post = async (req, res) => {
     }
 }
 
-const check_get = (req, res) => {
-    res.render('./Visitor Module/check');
-}
+// const check_get = (req, res) => {
+//     res.render('./Visitor Module/check');
+// }
 
-const check_post = async (req, res) => {
-    try {
-        const token = req.cookies.jwtVisitor;
+// const check_post = async (req, res) => {
+//     try {
+//         const token = req.cookies.jwtVisitor;
 
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            let visitors = await Visitor.find();
+//         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+//             let visitors = await Visitor.find();
 
-            if(visitors) {
-                for (i = 0; i < visitors.length; i++) {
-                    // Change the face data descriptors from Objects to Float32Array type
-                    for (j = 0; j < visitors[i].descriptions.length; j++) {
-                        visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
-                    }
-                    // Turn the DB face docs to
-                    visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
-                }
-                // Load face matcher to find the matching face
-                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
+//             if(visitors) {
+//                 for (i = 0; i < visitors.length; i++) {
+//                     // Change the face data descriptors from Objects to Float32Array type
+//                     for (j = 0; j < visitors[i].descriptions.length; j++) {
+//                         visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+//                     }
+//                     // Turn the DB face docs to
+//                     visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
+//                 }
+//                 // Load face matcher to find the matching face
+//                 const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
 
-                // Read the image using canvas or other method
-                const img = await canvas.loadImage(req.file.path);
-                let temp = faceapi.createCanvasFromMedia(img);
+//                 // Read the image using canvas or other method
+//                 const img = await canvas.loadImage(req.file.path);
+//                 let temp = faceapi.createCanvasFromMedia(img);
 
-                // Process the image for the model
-                const displaySize = { width: img.width, height: img.height };
-                faceapi.matchDimensions(temp, displaySize);
+//                 // Process the image for the model
+//                 const displaySize = { width: img.width, height: img.height };
+//                 faceapi.matchDimensions(temp, displaySize);
 
-                // Find matching faces
-                const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
+//                 // Find matching faces
+//                 const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+//                 const resizedDetections = await faceapi.resizeResults(detections, displaySize);
 
-                fs.unlink(req.file.path, (error) => {
-                    if (error) {
-                        console.error(error)
-                        return
-                    }
-                })
+//                 fs.unlink(req.file.path, (error) => {
+//                     if (error) {
+//                         console.error(error)
+//                         return
+//                     }
+//                 })
                 
-                const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
-
-                res.json({success:true});
-                // if(!results[0]) {
-                //     console.log(results);
-                //     res.json({success:true})
-                // } else {
-                //     console.log(results);
-                //     await Visitor.deleteOne({ _id: decodedToken.id });
-                //     res.json({success:false});
-                // }
-            }
-        });
-    } catch(error) {
-        console.log(error);
-    }
-}
+//                 // const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+//                 const results = await resizedDetections.map((d) => {
+//                     return faceMatcher.matchDescriptor(d.descriptor)
+//                 });
+//                 // res.json({success:true});
+//                 if(!results[0]) {
+//                     console.log("No same face detected.")
+//                     console.log(results);
+//                     res.json({success:true})
+//                 } else {
+//                     console.log("Same face detected.")
+//                     console.log(results);
+//                     // await Visitor.deleteOne({ _id: decodedToken.id });
+//                     res.json({success:false});
+//                 }
+//             }
+//         });
+//     } catch(error) {
+//         console.log(error);
+//     }
+// }
 
 const verification_get = (req, res) => {
     res.render('./Establishment Module/verify');
@@ -133,7 +138,7 @@ const verification_post = async (req, res) => {
                     visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
                 }   
                 // Load face matcher to find the matching face
-                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
+                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.90);
 
                 // Read the image using canvas or other method
                 const img = await canvas.loadImage(req.file.path);
@@ -159,33 +164,38 @@ const verification_post = async (req, res) => {
 
                 if(results) {
                     try {
-                        console.log(results);
-                        const user = await Visitor.findById(results[0]._label);
-                        // console.log(results[0]._distance);
+                        const establishment = await Establishment.findById(decodedToken.id);
+                        const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
-
-                        record.save((err, data) => {
-                            if(err) {
-                                console.log(err);
+                        
+                        if(establishment.limitVaccinated) {
+                            if(!visitor.isVaccinated) {
+                                res.json({success:false, message: "You are not vaccinated."});
                             } else {
-                                res.json(user.name);
+                                record.save((error, data) => {
+                                    if(error) return;  
+                                    res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                                }) 
                             }
-                        })  
+                        } else {
+                            record.save((error, data) => {
+                                if(error) return;  
+                                res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                            }) 
+                        } 
                     } catch (error) {
                         console.log(error.message);
-                        res.json({data: "No face matched."});
+                        res.json({success:false, message: "System Error!"});
                     }
                 } else {
                     console.log("No face matched.");
-                    res.json({data: "No face matched."});
+                    res.json({success:false, message: "No face matched!"});
                 }
-            } else {
-                console.log("No visitors")
             }
         });
     } catch (error) {
         console.log(error.message);
-        res.status(401).json(error.message);
+        res.redirect('/');
     }
 }
 
@@ -194,6 +204,6 @@ module.exports = {
     detect_post,
     verification_get,
     verification_post,
-    check_get,
-    check_post
+    // check_get,
+    // check_post
 }

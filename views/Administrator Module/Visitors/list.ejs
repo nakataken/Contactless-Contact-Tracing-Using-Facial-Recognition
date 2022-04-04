@@ -1,0 +1,85 @@
+<%- include("../partials/header.ejs", {title:"Visitors List"}) %>
+        
+    <div id="app">
+        <div v-if="admin">
+            <%- include("../partials/navbar.ejs"); %>
+            <div>
+                <input type="text" v-model="search">
+                <table>
+                    <thead>
+                        <td>Name</td>
+                        <td>Address</td>
+                        <td>Email</td>
+                        <td>Contact</td>
+                        <td>Vaccination Status</td>
+                        <td>Vaccination Card</td>
+                    </thead>
+
+                    <tr v-for="visitor in filteredVisitors" :key="visitor._id">
+                        <td>{{visitor.name.fname}} {{visitor.name.lname}}</td>
+                        <td>{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
+                        <td>{{visitor.email}}</td>
+                        <td>{{visitor.contact}}</td>
+                        <td v-if="visitor.isVaccinated">Fully Vaccinated</td>
+                        <td v-else>
+                            Not Vaccinated
+                            <span @click="checkVaccinated(visitor._id)">Toggle Vaccine Status</span>
+                        </td>
+                        <td v-if="visitor.vaccine_card"><img :src="vacCardURL(visitor.vaccine_card)" alt="vaccination card" style="height: 100px; width:100px"></td>
+                        <td v-else>Not Uploaded</td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+        
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                visitors: [],
+                search: "",
+                reloadContent: async () => {
+                    const response = await fetch("/admin/visitors");
+                    const result = await response.json();
+                    this.visitors = await result.visitors;                
+                }
+            }
+        },
+        methods: {
+            vacCardURL(pic) {
+                return `/uploads/vacCard/${pic}`
+            },
+            async checkVaccinated(id) {
+                const response = await fetch(`/admin/visitors/list/vaccinated/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if(result.success) {
+                    this.reloadContent();
+                }
+            }
+        },
+        computed: {
+            filteredVisitors() {
+                return this.visitors.filter((visitor) => {
+                    if(visitor.name.fname || visitor.name.lname) return visitor.name.fname.includes(this.search.toUpperCase()) || visitor.name.lname.includes(this.search.toUpperCase());
+                });
+            },
+        },
+        mounted() {
+            this.reloadContent();
+        }
+    });
+    app.mount('#app');
+</script>
+
+<%- include("../partials/footer.ejs"); %>

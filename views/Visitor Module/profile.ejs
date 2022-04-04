@@ -20,7 +20,16 @@
 
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <ul class="navbar-nav ms-auto my-auto d-flex flex-md-row flex-column align-items-center ">
+                        <li><a href="/visitor/details">Details</a></li>
                         <li class="nav-item mx-3" ><a class="nav-link" href="/visitor/logout">Logout</a></li>
+                    </ul>
+                    <ul>
+                        <% if(visitor.isVaccinated) { %> 
+                            <li>Vaccination Status (Insert color green)</li>
+                        <% } else { %>
+                            <li>Vaccination Status (Insert color red)</li>
+                            <li>Proceed to details page to upload your vaccination card. Insert message na ichecheck ng admin within 1-3 working days </li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
@@ -37,9 +46,8 @@
             </div>
         </div>
     </div>
-
+    
     <% } %>
-
     <script>
         let img = document.querySelector("img").src;
         const downloadQR = () => {

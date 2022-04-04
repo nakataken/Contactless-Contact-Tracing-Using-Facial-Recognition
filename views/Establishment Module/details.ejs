@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body>
+    <% if(typeof(establishment) != "undefined") { %>
+    <div>
+        <p>Name: <%=establishment.name%></p>
+        <p>Owner: <%=establishment.owner%></p>
+        <p>Address: <%=establishment.address%></p>
+        <p>Email:<%=establishment.email%></p>
+        <p>Contact #:<%=establishment.contact%></p>
+        
+        <div>
+            <label for="limit">Limit establishment for vaccinated person only.</label>
+            <% if(establishment.limitVaccinated) { %>
+                <input type="checkbox" id="limit" checked>
+            <% } else { %>
+                <input type="checkbox" id="limit">
+            <% } %>
+        </div>
+        
+        <div>
+            <label>Change Password</label>
+            <input type="button" id="change" value="Change">
+            <div id="oldPassword">
+                <label>Enter old password: </label>
+                <input type="password" id="oldPass">
+                <input type="button" id="check" value="Submit">
+                <p id="oldPassError"></p>
+            </div>
+            <div id="newPassword">
+                <label>Enter new password: </label>
+                <input type="password" id="newPass">
+                <label>Enter new password: </label>
+                <input type="password" id="confPass">
+                <input type="button" id="confirm" value="Submit">
+                <div id="newPassError"></div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <script>
+        const toggleStatus = async (status) => {
+            const response = await fetch('/establishment/details/change/limitation', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({status})
+            })
+
+            const result = await response.json();
+            
+            if(result.success) {
+                console.log("success");
+            }
+        }
+
+        $("#limit").change(function() {
+            if(this.checked) {
+                toggleStatus(true);
+            } else {
+                toggleStatus(false);
+            }
+        });
+
+        $('#oldPassword').hide();
+        $('#newPassword').hide();
+
+        document.querySelector('#change').addEventListener('click', (e) => {
+            $('#oldPassword').show();
+        })
+
+        document.querySelector('#check').addEventListener('click', async (e) => {
+            let oldPass = $("#oldPass").val();
+            if(oldPass) {
+                const rawResponse = await fetch('/establishment/details/change/password/old', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({oldPass})
+                });
+                const content = await rawResponse.json();
+                if(content.success) {
+                    $('#newPassword').show();
+                    $("#oldPassError").text("");
+                } else {
+                    $("#oldPassError").text("Wrong password.");
+                }
+            } else {
+                $("#oldPassError").text("Enter password.");
+            }
+        })
+
+        document.querySelector('#confirm').addEventListener('click', async (e) => {
+            let newPass = $("#newPass").val();
+            let confPass = $("#confPass").val();
+            if(newPass!="" && confPass!="") {
+                if(newPass == confPass) {
+                    $('.errorMsg').remove();
+                    let errors = [];
+                    if (newPass.length < 8) {
+                        errors.push("Your password must be at least 8 characters."); 
+                    }
+                    if (newPass.search(/[a-z]/i) < 0) {
+                        errors.push("Your password must contain at least one letter.");
+                    }
+                    if (newPass.search(/[0-9]/) < 0) {
+                        errors.push("Your password must contain at least one digit."); 
+                    }
+
+                    if(!errors.length) {
+                        await fetch('/establishment/details/change/password/new', {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({newPass})
+                        }).then((response)=> {
+                            if(response.redirected) {
+                                window.location.href = response.url;
+                            }
+                        });
+                    } else {
+                        for(i in errors) {
+                            $("#newPassError").append(`<p class="errorMsg">${errors[i]}</p>`);
+                        }
+                    } 
+                } else {
+                    $("#newPassError").text("Password didn't match.");
+                }
+            } else {
+                $("#newPassError").text("Fill up fields.");
+            }
+        })
+    </script>
+</body>
+</html>
