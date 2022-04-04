@@ -1,4 +1,4 @@
-# Web-Based-Contactless-Contact-Tracing-Using-Facial-Recognition
+# Contraze: Web-Based-Contactless-Contact-Tracing-Using-Facial-Recognition
 Capstone Project
 
 Pre-requisites:
@@ -13,5 +13,3 @@ Instruction:
 2. run "npm install" or "npm i"
 3. get copy of .env file and paste it on root directory
 4. run "nodemon app" to run the server
-
-
