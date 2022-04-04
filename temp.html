@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="../js/jquery.min.js"></script>
+     <link rel="stylesheet" href="/public/css/slider.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <title>Document</title>
+</head>
+<body>
+  <div id="app" class="modal-vue">
+
+    <div class="slides">
+      <transition-group 
+        name="slide"
+        mode="out-in"
+        enter-class="slide-in"
+        leave-class="slide-out"
+        enter-active-class="animated slide-in-active"
+        leave-active-class="animated slide-out-active"
+      >  
+        <div v-for="index in slides" :key="index">
+          <div class="container" v-if="index == active">
+            <custom-input/>
+          </div>
+        </div>
+
+      </transition-group>
+    </div>
+    <span
+      class="prev"
+      @click="move(-1)"
+    >
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    </span>
+    <span
+      class="next"
+      @click="move(1)"
+    >
+      <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </span>
+    <ul class="dots">
+      <li 
+        v-for="(dot, index) in slides"
+        :class="{ active: ++index === active }"
+        @click="jump(index)"
+      ></li>
+    </ul>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/vue@3"></script>
+
+  <script>
+
+
+      var app = Vue.createApp({
+        components: ['custom-input'],
+      data: function() {
+        return{
+          slides: 3,
+          active: 1,
+        
+        }
+      },
+
+      methods: {
+        move(amount) {
+          let newActive
+          const newIndex = this.active + amount
+          if (newIndex > this.slides) newActive = 1
+          if (newIndex === 0) newActive = this.slides
+          this.active = newActive || newIndex
+        },
+        jump(index) {
+          this.active = index
+        },
+      },
+      
+
+      })
+
+      app.component('custom-input', {
+           data(){
+            let n = this.$root.active -1
+                return {
+                  n,
+                  sliders: [
+                  {
+                    image:'/public/assets/images/FaceDetection.svg',
+                    label: "Face Detection",
+                    caption:"Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                  },
+                  {
+                    image:'/public/assets/images/Capturing.svg',
+                    label: "Capturing",
+                    caption:"Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                  },
+                  {
+                    image:'/public/assets/images/Saving.svg',
+                    label: "Verifying and Saving",
+                    caption:"Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                  },
+                ],
+                }
+            },
+           template: `
+           <div class="container">
+            <div class="col-12 mx-auto d-flex  flex-column justify-content-center">
+                <div class="col-10 mx-auto "><img class="col-12 mx-auto" v-bind:src="sliders[n].image" alt=""></div>
+                <h2 class="text-center mt-5">{{sliders[n].label}} </h2>
+                <p class="text-center">{{sliders[n].caption}} </p>
+            </div>
+          </div>
+           `,
+       })
+      
+      app.mount('#app')
+
+
+  </script>
+</body>
+</html>
