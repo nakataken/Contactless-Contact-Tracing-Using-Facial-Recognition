@@ -2,7 +2,7 @@ const dotenv = require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const https = require('https');
+// const https = require('https');
 const fs = require("fs");
 const mongoose = require("mongoose");
 const homeRoute = require("./routes/homeRoute.js");
@@ -13,10 +13,10 @@ const adminRoute = require("./routes/adminRoutes.js");
 const app = express();
 
 // https
-const httpsOptions = {
-    key: fs.readFileSync('./security/key.pem'),
-    cert: fs.readFileSync('./security/cert.pem')
-}
+// const httpsOptions = {
+//     key: fs.readFileSync('./security/key.pem'),
+//     cert: fs.readFileSync('./security/cert.pem')
+// }
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.json({limit: '50mb'}));
@@ -29,14 +29,14 @@ const dbURI = process.env.DB_URI;
 mongoose.connect(dbURI, 
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
-        https.createServer(httpsOptions, app).listen(process.env.PORT || 3000, '0.0.0.0', () => {
-            console.log("Server started on https://localhost:3000...");
-            console.log("Connected to the database...");
-        })
-        // app.listen(process.env.PORT || 3000, () => {
+        // https.createServer(httpsOptions, app).listen(process.env.PORT || 3000, '0.0.0.0', () => {
         //     console.log("Server started on https://localhost:3000...");
         //     console.log("Connected to the database...");
         // })
+        app.listen(process.env.PORT || 3000, () => {
+            console.log('\x1b[36m Server started... \x1b[0m');
+            console.log('\x1b[36m Connected to the database... \x1b[0m');
+        })
     })
     .catch((error) => {
         console.log(error);
