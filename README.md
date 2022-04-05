@@ -23,6 +23,6 @@ Instruction:
 Folders
 1. /models - contains the data related logic
 2. /views - contains the frontend (UI/UX) logic
-3. /controllers - contains the control login
+3. /controllers - contains the control logic
 4. /routes - contains the api endpoints 
 5. /public - contains the static files
