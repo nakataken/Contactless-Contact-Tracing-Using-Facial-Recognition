@@ -10,8 +10,8 @@ router.get('/dashboard', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminCon
 
 // VISITORS
 router.get('/visitors', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_get);
-router.get('/visitors/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_records_get);
 router.get('/visitors/trace', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_trace_get);
+router.get('/visitors/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_records_get);
 router.get('/visitors/list', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_list_get);
 router.put('/visitors/list/vaccinated/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.vaccination_status_put);
 // ESTABLISHMENTS

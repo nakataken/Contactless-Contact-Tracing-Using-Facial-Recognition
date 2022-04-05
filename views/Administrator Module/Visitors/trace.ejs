@@ -1,10 +1,166 @@
-<%- include("../partials/header.ejs", {title:"Visitor Trace"}) %>
+<%- include("../partials/header.ejs", {title:"Visitors Trace"}) %>
+<!-- PWEDE ITRACE KUNG SINO NAKASALAMUHA NI USER -->
+    <%- include("../partials/navbar.ejs"); %>
+    <div id="app">
+        <div v-if="admin">
+            <form>
+                <div>
+                    <label for="name">Name *</label>
+                    <input type="text" v-model="filter.name">
+                </div>
+                <div>
+                    <label for="establishment">Establishment Name</label>
+                    <input type="text" v-model="filter.establishment">
+                </div>
+                <div>
+                    <input v-model="option" type="radio" name="option" value="byDate" checked>
+                    <label>Date - Date</label>
+                    <input v-model="option" type="radio" name="option" value="byTime"/>
+                    <label>Time - Time</label>
+                </div>
+                <!-- First Option -->
+                <div v-if="!toggleOption">
+                    <div>
+                        <label>From</label>
+                        <input type="date" v-model="filter.date1" id="date1" :max="max"><span>*</span>
+                        <input type="time" v-model="filter.time1" required>
+                    </div>
+                    <div>
+                        <label>To</label>
+                        <input type="date" v-model="filter.date2" id="date2" :max="max"><span>*</span>
+                        <input type="time" v-model="filter.time2">
+                    </div>
+                </div>  
+                <!-- Second Option -->
+                <div v-else>
+                    <div>
+                        <label>Date</label>
+                        <input type="date" v-model="filter.date1" id="date1" :max="max"><span>*</span>
+                        <label>From</label>
+                        <input type="time" v-model="filter.time1">
+                        <label>From</label>
+                        <input type="time" v-model="filter.time2">
+                    </div>
+                </div>
+                <p v-if="errorMessage">{{errorMessage}}</p>
+                <button @click="submitFilter">Filter</button>
+            </form>
 
-    <% if(typeof(admin) != "undefined") { %>
-        <%- include("../partials/navbar.ejs"); %>
-        <div>
-            Trace
+            <div>
+                <select @change="sortChange">
+                    <option>Latest</option>
+                    <option>Older</option>
+                </select>
+            </div>
+
+            <table>
+                <thead>
+                    <td>Name</td>
+                    <td>Date & Time</td>
+                    <td>Establishment</td>
+                    <td></td>
+                </thead>
+
+                <tr v-for="log in filteredLogs" :key="log._id">
+                    <td>{{log.name.fname}} {{log.name.lname}}</td>
+                    <td>{{log.date}}</td>
+                    <td>{{log.establishment}}</td>
+                    <td><span @click="handleAction(log.visitor_id)">clickable option</span></td>
+                </tr>
+            </table>
         </div>
-    <% } %>
+    </div>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                logs: JSON.parse('<%- JSON.stringify(logs) %>'),
+                option: "byDate",
+                toggleOption: false,
+                filter: {},
+                sortOrder: "Latest",
+                max: "",
+                errorMessage: ""
+            }
+        },
+        methods: {
+            submitFilter(event) {
+                event.preventDefault();
+
+                // check required fields
+                if(!this.filter.name || !this.filter.date1) {
+                    this.errorMessage = "Fill up required fields."
+                    return;
+                }
+                if(this.option == "byDate") {
+                    if(!this.filter.date2) {
+                        this.errorMessage = "Fill up required fields."
+                        return;
+                    }
+                }
+
+                this.errorMessage = "";
+
+                let payload = {
+                    option: this.option,
+                    name: this.filter.name,
+                    establishment: this.filter.establishment,
+                    date1: this.filter.date1,
+                    date2: this.filter.date2,
+                    time1: this.filter.time1,
+                    time2: this.filter.time2,
+                }
+
+                console.log(payload);
+            },
+            sortChange(event) {
+                this.sortOrder = event.target.value;
+            },
+            handleAction(id) {
+                alert(id)
+            }
+        },
+        watch: {
+            option() {
+                if(this.option === "byDate") {
+                    this.toggleOption = false;
+                } else {
+                    this.toggleOption = true;
+                }
+            }
+        },
+        mounted() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) dd = '0' + dd;
+
+            if (mm < 10) mm = '0' + mm;
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            this.max = today;
+        },
+        computed: {
+            filteredLogs() {
+                if(this.sortOrder == "Older") {
+                    return this.logs.sort((a, b) => {
+                        return new Date(a.date) - new Date(b.date);
+                    });
+                } else {
+                    return this.logs.sort((a, b) => {
+                        return new Date(b.date) - new Date(a.date);
+                    });
+                }
+            }
+        }
+    });
+
+    app.mount('#app');
+</script>
+
 
 <%- include("../partials/footer.ejs"); %>

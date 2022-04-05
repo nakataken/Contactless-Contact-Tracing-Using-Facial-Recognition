@@ -31,7 +31,7 @@ const visitors_get = async (req, res) => {
     res.json({visitors});
 }
 
-const visitors_records_get = async (req, res) => {
+const visitors_trace_get = async (req, res) => {
     let records = await Record.find();
     let visitors = await Visitor.find();
     let logs = [];
@@ -42,8 +42,9 @@ const visitors_records_get = async (req, res) => {
                 let establishment = await Establishment.findById({_id:record.establishment_id});
 
                 const log = {
-                    id: record.visitor_id, 
-                    name: `${visitor.name.fname} ${visitor.name.mi} ${visitor.name.lname}`,
+                    id: record._id, 
+                    visitor_id: record.visitor_id,
+                    name: visitor.name,
                     establishment: establishment.name, 
                     date: record.createdAt
                 };
@@ -52,11 +53,11 @@ const visitors_records_get = async (req, res) => {
         }
     }
 
-    res.render('./Administrator Module/Visitors/records', {logs});
+    res.render('./Administrator Module/Visitors/trace', {logs});
 }
 
-const visitors_trace_get = async (req, res) => {
-    res.render('./Administrator Module/Visitors/trace');
+const visitors_records_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/records');
 }
 
 const visitors_list_get = async (req, res) => {
@@ -178,8 +179,8 @@ module.exports = {
     logout_get,
     dashboard_get,
     visitors_get,
-    visitors_records_get,
     visitors_trace_get,
+    visitors_records_get,
     visitors_list_get,
     vaccination_status_put,
     establishments_requests_get,
