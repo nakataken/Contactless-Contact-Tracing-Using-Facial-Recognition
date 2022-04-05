@@ -25,22 +25,13 @@ const dashboard_get = async (req, res) => {
     res.render('./Administrator Module/dashboard', {visitorsCount, establishmentsCount});
 }
 
-// VISITORS
-const visitors_get = async (req, res) => {
-    let visitors = await Visitor.find();
-    res.json({visitors});
-}
-
-const visitors_trace_get = async (req, res) => {
-    let records = await Record.find();
-    let visitors = await Visitor.find();
+const create_log = async (records, visitors) => {
     let logs = [];
 
     for (const record of records) {
         for (const visitor of visitors) {
             if(record.visitor_id === visitor._id.toString()) {
                 let establishment = await Establishment.findById({_id:record.establishment_id});
-
                 const log = {
                     id: record._id, 
                     visitor_id: record.visitor_id,
@@ -53,11 +44,89 @@ const visitors_trace_get = async (req, res) => {
         }
     }
 
-    res.render('./Administrator Module/Visitors/trace', {logs});
+    return logs;
+}
+
+// VISITORS
+const visitors_get = async (req, res) => {
+    let visitors = await Visitor.find();
+    res.json({visitors});
+}
+
+// VISITORS
+const visitors_logs_get = async (req, res) => {
+    let records = await Record.find();
+    let visitors = await Visitor.find();
+    let logs = [];
+
+    logs = await create_log(records, visitors);
+
+    res.json(logs);
+}
+
+const visitors_search_get = async (req, res) => {
+    let {fname, mi, lname} = req.query;
+    fname == "undefined" ? fname = "" : fname = _.upperCase(fname);
+    mi == "undefined" ? mi = "" : mi = _.upperCase(mi);
+    lname == "undefined" ? lname = "" : lname = _.upperCase(lname);
+    
+    let visitors = await Visitor.find({'name.fname': {$regex: fname, $options: 'i'},'name.mi': {$regex: mi, $options: 'i'},'name.lname': {$regex: lname, $options: 'i'}}).limit(5);
+    res.json({success: true, visitors});
+}
+
+const visitors_trace_get = async (req, res) => {
+    res.render('./Administrator Module/Visitors/trace');
+}
+
+const visitors_trace_filter_post = async (req, res) => {
+    let {option, id, date1, date2, time1, time2} = req.body;
+    let logs = [];
+    let records = [];
+    let visitors = await Visitor.find();
+
+    if(!time1) time1 = "00:00";
+    if(!time2) time2 = "23:59";
+
+    if(option == "byDate") {
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date2} ${time2}:00`);
+        records = await Record.find({establishment_id: id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    } else {
+        // get data byTime
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date1} ${time2}:00`);
+        records = await Record.find({establishment_id: id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    }
+
+    logs = await create_log(records, visitors);
+
+    res.json({success:true, logs});
 }
 
 const visitors_records_get = async (req, res) => {
     res.render('./Administrator Module/Visitors/records');
+}
+
+const visitors_records_filter_post = async (req, res) => {
+    let {option, visitor_id, establishment, date1, date2, time1, time2} = req.body;
+    let records = [];
+    
+    if(!time1) time1 = "00:00";
+    if(!time2) time2 = "23:59";
+    if(!establishment) establishment = "";
+
+    if(option == "byDate") {
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date2} ${time2}:00`);
+        records = await Record.find({visitor_id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    } else {
+        // get data byTime
+        let queryDate1 = new Date(`${date1} ${time1}`.split(' ')[0]);
+        let queryDate2 = new Date(`${date1} ${time2}`.split(' ')[0]);
+        records = await Record.find({visitor_id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    }
+    
+    res.json({success:true, records});
 }
 
 const visitors_list_get = async (req, res) => {
@@ -81,6 +150,12 @@ const vaccination_status_put = async (req, res) => {
 }
 
 // ESTABLISHMENTS
+const establishments_search_get = async (req, res) => {
+    let name =  _.upperCase(req.query.name);
+    let establishments = await Establishment.find({name: {$regex: name, $options: 'i'}}).limit(5);
+    res.json({success: true, establishments});
+}
+
 const establishments_requests_get = async (req, res) => {
     let requests = await Request.find();
     res.render('./Administrator Module/Establishments/request', {requests})
@@ -179,10 +254,15 @@ module.exports = {
     logout_get,
     dashboard_get,
     visitors_get,
+    visitors_logs_get,
+    visitors_search_get,
     visitors_trace_get,
+    visitors_trace_filter_post,
     visitors_records_get,
+    visitors_records_filter_post,
     visitors_list_get,
     vaccination_status_put,
+    establishments_search_get,
     establishments_requests_get,
     establishments_request_post,
     establishments_list_get

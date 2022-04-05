@@ -4,31 +4,38 @@
     <div id="app">
         <div v-if="admin">
             <form>
-                <div>
-                    <label for="name">Name *</label>
-                    <input type="text" v-model="filter.name">
-                </div>
+                <!-- 1. Enter establishment name -->
                 <div>
                     <label for="establishment">Establishment Name</label>
-                    <input type="text" v-model="filter.establishment">
+                    <input type="text" v-model="filter.establishment" :disabled="disableEstablishments">
+                    <button @click="searchEstablishment">Search</button>
+                    <p v-if="establishmentMessage">{{establishmentMessage}}</p>
                 </div>
+
+                <!-- 2. Load and choose specific establishment to get the specific id -->
+                <select v-model="selectedEstablishment" @change="submitEstablishment">
+                    <option value="none" disabled>Please select visitor.</option>
+                    <option v-for="establishment in establishments" :key="establishment._id" :value="establishment._id">{{establishment.name}}</option>
+                </select>
+                
                 <div>
-                    <input v-model="option" type="radio" name="option" value="byDate" checked>
+                    <input v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
                     <label>Date - Date</label>
-                    <input v-model="option" type="radio" name="option" value="byTime"/>
+                    <input v-model="option" type="radio" name="option" value="byTime" :disabled="disableFields">
                     <label>Time - Time</label>
                 </div>
+
                 <!-- First Option -->
                 <div v-if="!toggleOption">
                     <div>
                         <label>From</label>
-                        <input type="date" v-model="filter.date1" id="date1" :max="max"><span>*</span>
-                        <input type="time" v-model="filter.time1" required>
+                        <input type="date" v-model="filter.date1" id="date1" :max="max" :disabled="disableFields"><span>*</span>
+                        <input type="time" v-model="filter.time1" :disabled="disableFields">
                     </div>
                     <div>
                         <label>To</label>
-                        <input type="date" v-model="filter.date2" id="date2" :max="max"><span>*</span>
-                        <input type="time" v-model="filter.time2">
+                        <input type="date" v-model="filter.date2" id="date2" :max="max" :disabled="disableFields"><span>*</span>
+                        <input type="time" v-model="filter.time2" :disabled="disableFields">
                     </div>
                 </div>  
                 <!-- Second Option -->
@@ -43,14 +50,21 @@
                     </div>
                 </div>
                 <p v-if="errorMessage">{{errorMessage}}</p>
+                <button @click="clear">Clear</button>
                 <button @click="submitFilter">Filter</button>
             </form>
 
             <div>
-                <select @change="sortChange">
-                    <option>Latest</option>
-                    <option>Older</option>
-                </select>
+                <div>
+                    <select @change="sortChange">
+                        <option>Latest</option>
+                        <option>Older</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Search by First or Last Name</label>
+                    <input type="text" v-model="searchName">
+                </div>
             </div>
 
             <table>
@@ -70,29 +84,48 @@
             </table>
         </div>
     </div>
+
 <script>
     const app = Vue.createApp({
         data() {
             return {
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
-                logs: JSON.parse('<%- JSON.stringify(logs) %>'),
-                option: "byDate",
-                toggleOption: false,
-                filter: {},
+                logs: [],
                 sortOrder: "Latest",
                 max: "",
-                errorMessage: ""
+                filter: {},
+                establishments: [],
+                selectedEstablishment: "none",
+                disableEstablishments: false,
+                establishmentMessage: "",
+                disableFields: true,
+                option: "byDate",
+                toggleOption: false,
+                errorMessage: "",
+                searchName: "",
+                reloadContent: async () => {
+                    const response = await fetch("/admin/visitors/logs");
+                    const result = await response.json();
+                    this.logs = await result;                
+                }
             }
         },
         methods: {
-            submitFilter(event) {
+            clear(event) {
+                event.preventDefault();
+                this.filter = {};
+                this.visitors = [];
+                this.selectedEstablishment = "none";
+                this.establishmentMessage = "";
+                this.toggleOption = false;
+                this.disableEstablishments = false;
+                this.disableFields = true;
+                this.errorMessage = "";
+                this.reloadContent();
+            },
+            async submitFilter(event) {
                 event.preventDefault();
 
-                // check required fields
-                if(!this.filter.name || !this.filter.date1) {
-                    this.errorMessage = "Fill up required fields."
-                    return;
-                }
                 if(this.option == "byDate") {
                     if(!this.filter.date2) {
                         this.errorMessage = "Fill up required fields."
@@ -104,15 +137,50 @@
 
                 let payload = {
                     option: this.option,
-                    name: this.filter.name,
-                    establishment: this.filter.establishment,
+                    id: this.filter.id,
                     date1: this.filter.date1,
                     date2: this.filter.date2,
                     time1: this.filter.time1,
                     time2: this.filter.time2,
                 }
 
-                console.log(payload);
+                await fetch('/admin/visitors/trace/filter', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                }).then((response)=> {
+                    response.json().then((data) => {
+                        console.log(data);
+                        this.logs = data.logs;
+                    });
+                });
+            },
+            async searchEstablishment(event){
+                event.preventDefault();
+
+                if(!this.filter.establishment) {
+                    this.establishmentMessage = "Enter establishment name!";
+                    return
+                }
+
+                this.establishmentMessage = "";
+                
+                await fetch(`/admin/visitors/trace/search?name=${this.filter.establishment}`).then((response)=> {
+                    response.json().then((data) => {
+                        if(!data.establishments.length) {
+                            this.establishmentMessage = "Establishment not found!";
+                        } else {
+                            this.establishments = data.establishments;
+                            this.establishmentMessage = "Establishment/s loaded!";
+                        }
+                    });
+                });;
+            },
+            submitEstablishment(event){
+                this.establishmentMessage = "";
+                this.filter.id = event.target.value;
+                this.disableEstablishments = true;
+                this.disableFields = false;
             },
             sortChange(event) {
                 this.sortOrder = event.target.value;
@@ -143,16 +211,21 @@
             today = yyyy + '-' + mm + '-' + dd;
 
             this.max = today;
+            this.reloadContent();
         },
         computed: {
             filteredLogs() {
                 if(this.sortOrder == "Older") {
                     return this.logs.sort((a, b) => {
                         return new Date(a.date) - new Date(b.date);
+                    }).filter((log) => {
+                        return log.name.fname.includes(this.searchName) || log.name.lname.includes(this.searchName);
                     });
                 } else {
                     return this.logs.sort((a, b) => {
                         return new Date(b.date) - new Date(a.date);
+                    }).filter((log) => {
+                        return log.name.fname.includes(this.searchName.toUpperCase()) || log.name.lname.includes(this.searchName.toUpperCase());
                     });
                 }
             }
