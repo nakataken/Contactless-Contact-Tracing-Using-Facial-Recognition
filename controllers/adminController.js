@@ -61,7 +61,7 @@ const visitors_logs_get = async (req, res) => {
 
     logs = await create_log(records, visitors);
 
-    res.json(logs);
+    res.json({success: true, logs});
 }
 
 const visitors_search_get = async (req, res) => {
@@ -150,6 +150,11 @@ const vaccination_status_put = async (req, res) => {
 }
 
 // ESTABLISHMENTS
+const establishments_get = async (req, res) => {
+    let establishments = await Establishment.find();
+    res.json({establishments});
+}
+
 const establishments_search_get = async (req, res) => {
     let name =  _.upperCase(req.query.name);
     let establishments = await Establishment.find({name: {$regex: name, $options: 'i'}}).limit(5);
@@ -262,6 +267,7 @@ module.exports = {
     visitors_records_filter_post,
     visitors_list_get,
     vaccination_status_put,
+    establishments_get,
     establishments_search_get,
     establishments_requests_get,
     establishments_request_post,

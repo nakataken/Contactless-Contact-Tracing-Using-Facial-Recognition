@@ -106,7 +106,7 @@
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/logs");
                     const result = await response.json();
-                    this.logs = await result;                
+                    this.logs = await result.logs;                
                 }
             }
         },
@@ -189,15 +189,6 @@
                 alert(id)
             }
         },
-        watch: {
-            option() {
-                if(this.option === "byDate") {
-                    this.toggleOption = false;
-                } else {
-                    this.toggleOption = true;
-                }
-            }
-        },
         mounted() {
             var today = new Date();
             var dd = today.getDate();
@@ -212,6 +203,15 @@
 
             this.max = today;
             this.reloadContent();
+        },
+        watch: {
+            option() {
+                if(this.option === "byDate") {
+                    this.toggleOption = false;
+                } else {
+                    this.toggleOption = true;
+                }
+            }
         },
         computed: {
             filteredLogs() {
