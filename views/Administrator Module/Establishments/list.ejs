@@ -1,10 +1,71 @@
 <%- include("../partials/header.ejs", {title:"Establishments List"}) %>
 
-    <% if(typeof(admin) != "undefined") { %>
-        <%- include("../partials/navbar.ejs"); %>
-        <div>
-            LIST
+    <%- include("../partials/navbar.ejs"); %>
+
+    <div id="app">
+        <div v-if="admin">
+            <table>
+                <thead>
+                    <td>Establishment Name</td>
+                    <td>Establishment Owner</td>
+                    <td>Establishment Address</td>
+                    <td>Establishment Email</td>
+                    <td>Establishment Contact</td>
+                    <td>Limited for vaccinated person (Check/Ekis)</td>
+                </thead>
+
+                <tr v-for="establishment in establishments" :key="establishment._id">
+                    <td>{{establishment.name}}</td>
+                    <td>{{establishment.owner}}</td>
+                    <td>{{establishment.address}}</td>
+                    <td>{{establishment.email}}</td>
+                    <td>{{establishment.contact}}</td>
+                    <td v-if="establishment.limitVacinated">Check</td>
+                    <td v-else>Ekis</td>
+                </tr>
+            </table>
         </div>
-    <% } %>
+    </div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                establishments: [],
+                max: "",
+                reloadContent: async () => {
+                    const response = await fetch("/admin/establishments");
+                    const result = await response.json();
+                    this.establishments = await result.establishments;  
+                }
+            }
+        },
+        methods: {
+            
+        },
+        mounted() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) dd = '0' + dd;
+
+            if (mm < 10) mm = '0' + mm;
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            this.max = today;
+            this.reloadContent();
+        },
+        computed: {
+
+        }
+    });
+
+    app.mount('#app');
+</script>
+
 
 <%- include("../partials/footer.ejs"); %>

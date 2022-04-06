@@ -1,55 +1,74 @@
-<%- include("../partials/header.ejs", {title:"Visitors Record"}) %>
-
-    <% if(typeof(admin) != "undefined") { %>
-        <%- include("../partials/navbar.ejs"); %>
-        <div id="app">
+<%- include("../partials/header.ejs", {title:"Visitors Records"}) %>
+<!-- PWEDE ITRACE KUNG SAAN LUGAR PUMUNTA SI USER-->
+    <%- include("../partials/navbar.ejs"); %>
+    <div id="app">
+        <div v-if="admin">
             <form>
                 <div>
-                    <label for="name">Name</label>
-                    <input type="text" v-model="filter.name">
+                    <label>First Name *</label>
+                    <input type="text" v-model="filter.fname" :disabled="disableName">
                 </div>
+                <div>
+                    <label>Middle Initial</label>
+                    <input type="text" v-model="filter.mi" :disabled="disableName">
+                </div>
+                <div>
+                    <label>Last Name *</label>
+                    <input type="text" v-model="filter.lname" :disabled="disableName">
+                </div>
+                <p v-if="nameMessage">{{nameMessage}}</p>
+                <button @click="searchName">Search</button>
+
+                <select v-model="selectedVisitor" @change="submitName">
+                    <option value="none" disabled>Please select visitor.</option>
+                    <option v-for="visitor in visitors" :key="visitor.id" :value="visitor._id">{{visitor.name.fname}} {{visitor.name.lname}}</option>
+                </select>
+                
                 <div>
                     <label for="establishment">Establishment Name</label>
-                    <input type="text" v-model="filter.establishment">
+                    <input type="text" v-model="filter.establishment" :disabled="disableFields">
                 </div>
                 <div>
-                    <input v-model="option" type="radio" name="option" value="byDate" checked>
-                    <label>Filter Date - Date</label>
-                    <input v-model="option" type="radio" name="option" value="byTime"/>
-                    <label>Filter Current Date Time - Time</label>
+                    <input v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
+                    <label>Date - Date</label>
+                    <input v-model="option" type="radio" name="option" value="byTime" :disabled="disableFields">
+                    <label>Time - Time</label>
                 </div>
-                <div>
-                    <label for="from">FROM</label>
+                <!-- First Option -->
+                <div v-if="!toggleOption">
                     <div>
-                        <label for="date1">Date</label>
-                        <input type="date" v-model="filter.date1" id="date1" max="">
+                        <label>From</label>
+                        <input type="date" v-model="filter.date1" id="date1" :max="max" :disabled="disableFields"><span>*</span>
+                        <input type="time" v-model="filter.time1" :disabled="disableFields">
                     </div>
                     <div>
-                        <label for="fromTime1">From</label>
-                        <input type="text" v-model="filter.fromTime1">
+                        <label>To</label>
+                        <input type="date" v-model="filter.date2" id="date2" :max="max" :disabled="disableFields"><span>*</span>
+                        <input type="time" v-model="filter.time2" :disabled="disableFields">
                     </div>
+                </div>  
+                <!-- Second Option -->
+                <div v-else>
                     <div>
-                        <label for="toTime1">To</label>
-                        <input type="text" v-model="filter.toTime1">
-                    </div>
-                </div>
-                <div>
-                    <label for="to">TO</label>
-                    <div>
-                        <label for="date2">Date</label>
-                        <input type="date" v-model="filter.date2" id="date2" max="">
-                    </div>
-                    <div>
-                        <label for="fromTime2">From</label>
-                        <input type="text" v-model="filter.fromTime2">
-                    </div>
-                    <div>
-                        <label for="toTime2">To</label>
-                        <input type="text" v-model="filter.toTime2">
+                        <label>Date</label>
+                        <input type="date" v-model="filter.date1" id="date1" :max="max"><span>*</span>
+                        <label>From</label>
+                        <input type="time" v-model="filter.time1">
+                        <label>From</label>
+                        <input type="time" v-model="filter.time2">
                     </div>
                 </div>
+                <p v-if="errorMessage">{{errorMessage}}</p>
+                <button @click="clear">Clear</button>
                 <button @click="submitFilter">Filter</button>
             </form>
+
+            <div>
+                <select @change="sortChange">
+                    <option>Latest</option>
+                    <option>Older</option>
+                </select>
+            </div>
 
             <table>
                 <thead>
@@ -59,63 +78,164 @@
                     <td></td>
                 </thead>
 
-                <tr v-for="log in logs" :key="log.id">
-                    <td>{{log.name}}</td>
+                <tr v-for="log in filteredLogs" :key="log._id">
+                    <td>{{log.name.fname}} {{log.name.lname}}</td>
                     <td>{{log.date}}</td>
                     <td>{{log.establishment}}</td>
-                    <td><span @click="handleAction">clickable option</span></td>
+                    <td><span @click="handleAction(log.visitor_id)">clickable option</span></td>
                 </tr>
             </table>
         </div>
-    <% } %>
-    
+    </div>
 <script>
     const app = Vue.createApp({
         data() {
             return {
-                logs: JSON.parse('<%- JSON.stringify(logs) %>'),
-                option: "",
-                disableByDate: false,
-                disableByTime: false,
-                filter: {}
+                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                logs: [],
+                sortOrder: "Latest",
+                max: "",
+                filter: {},
+                visitors: [],
+                selectedVisitor: "none",
+                disableName: false,
+                disableFields: true,
+                option: "byDate",
+                toggleOption: false,
+                nameMessage: "",
+                errorMessage: "",
+                reloadContent: async () => {
+                    const response = await fetch("/admin/visitors/logs");
+                    const result = await response.json();
+                    this.logs = await result;                
+                }
             }
         },
         methods: {
-            submitFilter(event) {
+            clear(event) {
                 event.preventDefault();
-                console.log(this.filter)
+                this.filter = {};
+                this.visitors = [];
+                this.selectedVisitor = "none";
+                this.toggleOption = false;
+                this.disableName = false;
+                this.disableFields = true;
+                this.nameMessage = "";
+                this.errorMessage = "";
+                this.reloadContent();
             },
-            handleAction() {
-                alert("Clicked")
+            async submitFilter(event) {
+                event.preventDefault();
+
+                // check required fields
+                if(!this.filter.fname || !this.filter.lname || !this.filter.date1) {
+                    this.errorMessage = "Fill up required fields."
+                    return;
+                }
+                if(this.option == "byDate") {
+                    if(!this.filter.date2) {
+                        this.errorMessage = "Fill up required fields."
+                        return;
+                    }
+                }
+
+                this.errorMessage = "";
+
+                let payload = {
+                    option: this.option,
+                    visitor_id: this.filter.id,
+                    establishment: this.filter.establishment,
+                    date1: this.filter.date1,
+                    date2: this.filter.date2,
+                    time1: this.filter.time1,
+                    time2: this.filter.time2,
+                }
+
+                await fetch('/admin/visitors/records/filter', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                }).then((response)=> {
+                    response.json().then((data) => {
+                        console.log(data);
+                    });
+                });
+
+                console.log(payload);
+            },
+            async searchName(event){
+                event.preventDefault();
+
+                if(!this.filter.fname || !this.filter.lname) {
+                    this.nameMessage = "Enter first and last name before searching.";
+                    return
+                }
+
+                this.nameMessage = "";
+
+                await fetch(`/admin/visitors/records/search?fname=${this.filter.fname}&mi=${this.filter.mi}&lname=${this.filter.lname}`).then((response)=> {
+                    response.json().then((data) => {
+                        if(!data.visitors.length) {
+                            this.nameMessage = "Visitor not found!";
+                        } else {
+                            this.visitors = data.visitors;
+                            this.nameMessage = "Visitors loaded!";
+                        }
+                    });
+                });;
+            },
+            submitName(event){
+                this.filter.id = event.target.value;
+                this.disableName = true;
+                this.disableFields = false;
+            },
+            sortChange(event) {
+                this.sortOrder = event.target.value;
+            },
+            handleAction(id) {
+                alert(id)
             }
         },
         watch: {
             option() {
                 if(this.option === "byDate") {
-                    console.log("FilterByDate")
+                    this.toggleOption = false;
                 } else {
-                    console.log("FilterByTime")
+                    this.toggleOption = true;
+                }
+            }
+        },
+        mounted() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) dd = '0' + dd;
+
+            if (mm < 10) mm = '0' + mm;
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            this.max = today;
+            this.reloadContent();
+        },
+        computed: {
+            filteredLogs() {
+                if(this.sortOrder == "Older") {
+                    return this.logs.sort((a, b) => {
+                        return new Date(a.date) - new Date(b.date);
+                    });
+                } else {
+                    return this.logs.sort((a, b) => {
+                        return new Date(b.date) - new Date(a.date);
+                    });
                 }
             }
         }
     });
 
     app.mount('#app');
-
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-
-    if (dd < 10)
-        dd = '0' + dd;
-
-    if (mm < 10)
-        mm = '0' + mm;
-
-    today = yyyy + '-' + mm + '-' + dd;
-    document.getElementById("date1").setAttribute("max", today);
-    document.getElementById("date2").setAttribute("max", today);
 </script>
 
 

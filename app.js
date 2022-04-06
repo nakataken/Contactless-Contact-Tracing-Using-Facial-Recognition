@@ -30,12 +30,12 @@ mongoose.connect(dbURI,
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         https.createServer(httpsOptions, app).listen(process.env.PORT || 3000, '0.0.0.0', () => {
-            console.log("Server started on https://localhost:3000...");
-            console.log("Connected to the database...");
+            console.log('\x1b[36m Server started... \x1b[0m');
+            console.log('\x1b[36m Connected to the database... \x1b[0m');
         })
         // app.listen(process.env.PORT || 3000, () => {
-        //     console.log("Server started on https://localhost:3000...");
-        //     console.log("Connected to the database...");
+        //     console.log('\x1b[36m Server started... \x1b[0m');
+        //     console.log('\x1b[36m Connected to the database... \x1b[0m');
         // })
     })
     .catch((error) => {
@@ -43,6 +43,6 @@ mongoose.connect(dbURI,
     })
 
 app.use(homeRoute);
-app.use("/visitor",visitorRoute);
-app.use("/establishment",establishmentRoute);
+app.use("/visitor", visitorRoute);
+app.use("/establishment", establishmentRoute);
 app.use("/admin", adminRoute);
