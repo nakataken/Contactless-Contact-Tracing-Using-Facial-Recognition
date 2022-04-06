@@ -1,25 +1,55 @@
+
+
 <%- include("./partials/header.ejs", {title:"Dashboard"}) %>
 
     <% if(typeof(admin) != "undefined") { %>
-        <%- include("./partials/navbar.ejs"); %>
+    <div class="home_adm container-fluid p-0">   
+            <%- include("./partials/navbar.ejs"); %>
+        <div class="head container d-flex flex-column px-5 px-sm-2">
+            <h3 class="fw-b c-s mt-5">Dashboard</h3>
 
-        <div>
-            <p>NO OF REGISTERED CLIENTS</p>
-            <P><%=visitorsCount%></P>
-            <p><a href="/admin/visitors/list">SHOW LIST</a></p>
-        </div>
+            <div class="dashboard-card col-12 border-left-decoration mx-auto px-5 py-4 mt-3">
+                <h3 class="fw-b">Welcome, Admin!</h3>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore quod maiores, vel nemo itaque sapiente asperiores, quam blanditiis at, ipsum quos temporibus voluptate pariatur vitae ipsa. Voluptatibus consectetur soluta recusandae?</p>
+            </div>
+            <div class=" row row-cols-1 row-cols-md-3 g-2 g-lg-3 mt-5">
+                <div class="col">
+                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
+                        <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED CLIENTS</p>
+                        <p class="count m-0"><%=visitorsCount%></P>
+                        <a href="/admin/visitors/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
+                    </div>
+                  </div>
 
-        <div>
-            <p>NO OF REGISTERED ESTABLISHMENTS</p>
-            <P><%=establishmentsCount%></P>
-            <p><a href="/admin/establishments/list">SHOW LIST</a></p>
-        </div>
+                  <div class="col">
+                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
+                        <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED ESTABLISHMENTS</p>
+                        <p class="count m-0"><%=establishmentsCount%></P>
+                        <a href="/admin/establishments/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
+                    </div>
+                  </div>
 
-        <div>
-            <p>NO OF TAGGED AS POSITIVE LAST 14 DAYS</p>
-            <P>00</P>
-            <p><a href="#">SHOW LIST</a></p>
-        </div>
-    <% } %>
+                  <div class="col">
+                    
+                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
+                        <p class="fw-b c-dis p-0 m-0">TOTAL LIST OF POSITIVE LAST 14 DAYS</p>
+                        <p class="count m-0">0</P>
+                        <a href=""><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
+                    </div>
+                  </div>
+               
+        
+
+           
+                
+        
+                
+            </div>
+            
     
+        </div>
+        
+    </div>
+    <% } %>
+
 <%- include("./partials/footer.ejs"); %>

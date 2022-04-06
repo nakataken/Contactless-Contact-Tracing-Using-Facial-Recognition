@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400&display=swap');
 $color-primary: #65DF95;
 $color-secondary: #0FB3A8;
 $color-sub:#3354CC;
 $color-black: #11171F;
 $color-white: #ffffff;
 
-$font-regular: 'Montserrat', sans-serif;
+$font-regular: 'Ubuntu', sans-serif;
 
 $font-size:(
         "title":3rem,
@@ -27,6 +27,7 @@ $font-weight:(
     "bold": 600,
     "heavy": 700,
 );
+
 
 @function weight($weight-name){
     @return map-get($font-weight, $weight-name);
@@ -102,4 +103,18 @@ $font-weight:(
     font-weight: weight($weight-name) !important;
     font-size: fontsize($fontsize-name) !important;
  
+}
+
+@mixin box-shadow ($shaodw) {
+	-webkit-box-shadow: $shaodw;
+	-moz-box-shadow: $shaodw;
+	box-shadow: $shaodw;
+}
+
+h1,h2,h3,h4,h5,h5,p,a{
+    font-family: $font-regular !important;
+}
+
+a{
+    text-decoration: none !important;
 }

@@ -1,17 +1,37 @@
-<ul>
-    <li>ADMIN</li>
-    <li><a href="/admin/dashboard">Dashboard</a></li>
-    <li>
-        <li>Visitors</li>
-        <li><a href="/admin/visitors/records">Records</a></li>
-        <li><a href="/admin/visitors/trace">Trace</a></li>
-        <li><a href="/admin/visitors/list">List</a></li>
-    </li>
-    <li>
-        <li>Establishments</li>
-        <li><a href="/admin/establishments/requests">Request</a></li>
-        <!-- <li><a href="/admin/establishment/notify">Notify</a></li> -->
-        <li><a href="/admin/establishments/list">List</a></li>
-    </li>
-    <li><a href="/admin/logout">Logout</a></li>
-</ul>
+
+    <nav class="navbar navbar-expand-md navbar-dark px-5 ">
+        <div  class="container-fluid px-md-5 mt-4 ">
+            <a class="navbar-brand" href="#"><div class="navbar-logo" ></div></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto my-auto d-flex flex-md-row flex-column align-items-center ">
+                    <li class="nav-item mx-3"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+                    <li class="nav-item dropdown" >
+                        <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                           Visitors
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/admin/visitors/records">Records</a>
+                            <a class="dropdown-item" href="/admin/visitors/trace">Trace</a>
+                            <a class="dropdown-item" href="/admin/visitors/list">List</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown" >
+                        <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Establishments
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/admin/establishments/requests">Request</a>
+                            <!-- <a class="dropdown-item" href="/admin/establishment/notify">Notify</a> -->
+                            <a class="dropdown-item" href="/admin/establishments/list">List</a>
+                        </div>
+                    </li>
+                    <li class="nav-item mx-3" ><a class="nav-link" href="/admin/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+

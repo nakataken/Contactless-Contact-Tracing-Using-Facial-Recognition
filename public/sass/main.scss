@@ -1,10 +1,13 @@
 @import './resets';
 @import './variables';
 
-
+body{
+    background-color: #F5F6FE;
+}
 .main{ 
     background-color: $color-primary ;
 }
+
 .home_est{
     background: url("../assets/images/frame_2.svg") ;
     background-repeat: no-repeat;
@@ -12,17 +15,70 @@
     background-position: right bottom;
     nav{
         .dropdown-menu{
-        background-color: transparent !important;
+       // background-color: transparent !important;
         }
     }
 }
+
 .home{
     background: url("../assets/images/frame_5.svg") ;
     background-repeat: no-repeat;
     background-size: cover; 
     background-position: right bottom;
-    
 }
+
+.home_adm{
+  //  background: url("../assets/images/frame_2.svg") ;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: right bottom;
+    nav{
+        .dropdown-menu{
+        color: $color-secondary !important;
+        }
+        .nav-link{
+            @include text-white(bold,reg); 
+            color: $color-secondary !important;
+        }
+        .navbar-brand{
+            .navbar-logo{
+                height: 20px;
+                content: url("../assets/images/logo.png");
+            }
+            
+        }
+    }
+    .dashboard-card{
+        
+        height: 100% !important;
+        background: #FFFFFF;
+        border-radius: 3px;
+        @include box-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important);
+        &.border-left-decoration {
+            border-left: 3px solid $color-secondary;
+        }
+        .count{
+            font-size: 54px !important;
+            
+        }
+        .btn-prim{
+            background-color: $color-secondary;
+        }
+        .btn-prim:hover{
+            background-color: $color-primary;
+        }
+        .btn-sm {
+			padding: 0.125rem 0.5rem;
+			font-size: 0.75rem;
+            color: white;
+            a{
+                text-decoration: none !important;
+            }
+		}
+        
+    }
+}
+
 
 nav{
     background-color: transparent !important;
@@ -163,7 +219,7 @@ nav{
                 outline: 0;
                 background: transparent;
                 box-shadow: none !important;
-               // border-bottom: 1px solid rgb(141, 137, 137,0.5);
+                border-bottom: 1px solid rgba(141, 137, 137,0.5);
             }
             
             .btn-grad{
@@ -222,7 +278,7 @@ nav{
                 outline: 0;
                 background: transparent;
                 box-shadow: none !important;
-            //    border: 1px solid rgb(141, 137, 137,0.5) ;
+                border: 1px solid rgba(141, 137, 137,0.5) ;
 
                 &.name{
                     text-transform: uppercase !important;
@@ -269,15 +325,18 @@ nav{
     width: 50px;
     height: 50px;
     content: url('../assets/images/spinner.svg');
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
   }
   
-@keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-}
 @-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
 }
 
 ._1{
@@ -306,9 +365,7 @@ nav{
             z-index: 1;
         }
     }
-    
 }
-
 
 .wrapper {
     height: 100vh;
@@ -320,4 +377,25 @@ nav{
         padding: 10px;
     }
 }
-  
+
+.fw-r{
+    font-weight: 400;
+}
+.fw-m{
+    font-weight: 500;
+}
+.fw-b{
+    font-weight: 700;
+}
+
+.c-p{
+    color: $color-primary;
+}
+
+.c-s{
+    color: $color-secondary;
+}
+
+.c-dis{
+    color: #828DAE;
+}

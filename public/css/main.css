@@ -1,4 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400&display=swap");
+h1, h2, h3, h4, h5, h5, p, a {
+  font-family: "Ubuntu", sans-serif !important;
+}
+
+body {
+  background-color: #F5F6FE;
+}
+
 .main {
   background-color: #65DF95;
 }
@@ -10,15 +19,68 @@
   background-position: right bottom;
 }
 
-.home_est nav .dropdown-menu {
-  background-color: transparent !important;
-}
-
 .home {
   background: url("../assets/images/frame_5.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: right bottom;
+}
+
+.home_adm {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right bottom;
+}
+
+.home_adm nav .dropdown-menu {
+  color: #0FB3A8 !important;
+}
+
+.home_adm nav .nav-link {
+  color: #ffffff !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #0FB3A8 !important;
+}
+
+.home_adm nav .navbar-brand .navbar-logo {
+  height: 20px;
+  content: url("../assets/images/logo.png");
+}
+
+.home_adm .dashboard-card {
+  height: 100% !important;
+  background: #FFFFFF;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.home_adm .dashboard-card.border-left-decoration {
+  border-left: 3px solid #0FB3A8;
+}
+
+.home_adm .dashboard-card .count {
+  font-size: 54px !important;
+}
+
+.home_adm .dashboard-card .btn-prim {
+  background-color: #0FB3A8;
+}
+
+.home_adm .dashboard-card .btn-prim:hover {
+  background-color: #65DF95;
+}
+
+.home_adm .dashboard-card .btn-sm {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  color: white;
+}
+
+.home_adm .dashboard-card .btn-sm a {
+  text-decoration: none !important;
 }
 
 nav {
@@ -27,7 +89,7 @@ nav {
 
 .navbar .nav-link {
   color: #ffffff !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 500 !important;
   font-size: 1rem !important;
 }
@@ -35,7 +97,7 @@ nav {
 .navbar button {
   color: #0FB3A8;
   background-color: #ffffff;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   border-radius: 5px;
@@ -64,7 +126,7 @@ nav {
 @media screen and (min-width: 1124px) {
   .head .l-div h1 {
     color: #65DF95 !important;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
     font-weight: 600 !important;
     font-size: !important;
     background: linear-gradient(98.32deg, #65DF95 15.35%, #0FB3A8 83.49%);
@@ -74,7 +136,7 @@ nav {
   }
   .head .l-div h5 {
     color: #11171F !important;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
     font-weight: 400 !important;
     font-size: 1.3rem !important;
   }
@@ -83,7 +145,7 @@ nav {
 @media screen and (max-width: 1124px) {
   .head .l-div h1 {
     color: #65DF95 !important;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
     font-weight: 600 !important;
     font-size: !important;
     background: white;
@@ -93,7 +155,7 @@ nav {
   }
   .head .l-div h5 {
     color: #ffffff !important;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
     font-weight: 400 !important;
     font-size: 1.3rem !important;
   }
@@ -112,7 +174,7 @@ nav {
             box-shadow: 0 0 20px #eee;
     border-radius: 10px;
     display: block;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
     font-weight: 500;
     font-size: 1rem;
     border-radius: 5px;
@@ -134,7 +196,7 @@ nav {
   .head .l-div button {
     color: #0FB3A8;
     background-color: #ffffff;
-    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+    font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
     font-weight: 500;
     font-size: 1rem;
     border-radius: 5px;
@@ -149,7 +211,7 @@ nav {
 
 .second-sec .c-div h5 {
   color: #65DF95 !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
 }
@@ -181,7 +243,7 @@ nav {
 .login .login-subcon .c-div h1 {
   text-align: center;
   color: #65DF95 !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 700 !important;
   font-size: 2rem !important;
   background: linear-gradient(98.32deg, #65DF95 15.35%, #0FB3A8 83.49%);
@@ -194,14 +256,14 @@ nav {
 .login .login-subcon .c-div p {
   text-align: center;
   color: #11171F !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 500 !important;
   font-size: 0.9rem !important;
 }
 
 .login .login-subcon .c-div label {
   color: #11171F !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 500 !important;
   font-size: 0.9rem !important;
 }
@@ -213,6 +275,7 @@ nav {
   background: transparent;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
+  border-bottom: 1px solid rgba(141, 137, 137, 0.5);
 }
 
 .login .login-subcon .c-div .btn-grad {
@@ -227,7 +290,7 @@ nav {
           box-shadow: 0 0 20px #eee;
   border-radius: 10px;
   display: block;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   border-radius: 5px;
@@ -276,7 +339,7 @@ nav {
 .register .register-subcon .c-div h1 {
   text-align: center;
   color: #65DF95 !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 700 !important;
   font-size: 2rem !important;
   background: linear-gradient(98.32deg, #65DF95 15.35%, #0FB3A8 83.49%);
@@ -287,7 +350,7 @@ nav {
 
 .register .register-subcon .c-div p {
   color: #11171F !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 500 !important;
   font-size: 0.9rem !important;
 }
@@ -299,6 +362,7 @@ nav {
   background: transparent;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
+  border: 1px solid rgba(141, 137, 137, 0.5);
 }
 
 .register .register-subcon .c-div input.name {
@@ -308,7 +372,7 @@ nav {
 .register .register-subcon .c-div span {
   text-transform: uppercase;
   color: #11171F !important;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
 }
@@ -325,7 +389,7 @@ nav {
           box-shadow: 0 0 20px #eee;
   border-radius: 10px;
   display: block;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   border-radius: 5px;
@@ -355,7 +419,7 @@ nav {
           box-shadow: 0 0 20px #eee;
   border-radius: 10px;
   display: block;
-  font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   border-radius: 5px;
@@ -382,19 +446,28 @@ nav {
   width: 50px;
   height: 50px;
   content: url("../assets/images/spinner.svg");
-  animation: spin 1s ease-in-out infinite;
-  -webkit-animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s linear infinite;
+  /* Safari */
+  animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
     -webkit-transform: rotate(360deg);
   }
 }
 
-@-webkit-keyframes spin {
-  to {
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
     -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }
 
@@ -445,5 +518,29 @@ nav {
 
 .wrapper > * {
   padding: 10px;
+}
+
+.fw-r {
+  font-weight: 400;
+}
+
+.fw-m {
+  font-weight: 500;
+}
+
+.fw-b {
+  font-weight: 700;
+}
+
+.c-p {
+  color: #65DF95;
+}
+
+.c-s {
+  color: #0FB3A8;
+}
+
+.c-dis {
+  color: #828DAE;
 }
 /*# sourceMappingURL=main.css.map */
