@@ -4,8 +4,8 @@ h1, h2, h3, h4, h5, h5, p, a {
   font-family: "Ubuntu", sans-serif !important;
 }
 
-body {
-  background-color: #F5F6FE;
+a {
+  text-decoration: none !important;
 }
 
 .main {
@@ -58,7 +58,7 @@ body {
 }
 
 .home_adm .dashboard-card.border-left-decoration {
-  border-left: 3px solid #0FB3A8;
+  border-left: 3px solid #65DF95;
 }
 
 .home_adm .dashboard-card .count {
@@ -66,11 +66,11 @@ body {
 }
 
 .home_adm .dashboard-card .btn-prim {
-  background-color: #0FB3A8;
+  background-color: #65DF95;
 }
 
 .home_adm .dashboard-card .btn-prim:hover {
-  background-color: #65DF95;
+  background-color: #0FB3A8;
 }
 
 .home_adm .dashboard-card .btn-sm {
@@ -81,6 +81,20 @@ body {
 
 .home_adm .dashboard-card .btn-sm a {
   text-decoration: none !important;
+}
+
+.home_adm .adm-records input {
+  border: 0;
+  border-radius: 0px;
+  outline: 0;
+  background: transparent;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  border: 1px solid rgba(141, 137, 137, 0.5);
+}
+
+.home_adm .adm-records input.name {
+  text-transform: uppercase !important;
 }
 
 nav {
@@ -236,8 +250,9 @@ nav {
 
 .login .login-subcon .c-div {
   background-color: #ffffff;
-  -webkit-box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
-          box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 3px !important;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
 .login .login-subcon .c-div h1 {
@@ -317,6 +332,7 @@ nav {
   background-image: url("../assets/images/Frame_1.svg");
   background-repeat: no-repeat;
   background-size: cover;
+  border-radius: 3px;
   background-position: right bottom;
   background-attachment: fixed;
 }
@@ -332,8 +348,9 @@ nav {
 
 .register .register-subcon .c-div {
   background-color: #ffffff;
-  -webkit-box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
-          box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 3px !important;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
 .register .register-subcon .c-div h1 {
@@ -542,5 +559,64 @@ nav {
 
 .c-dis {
   color: #828DAE;
+}
+
+.app-btn-secondary {
+  background: #fff;
+  color: #5d6778;
+  border: 1px solid #bcc1cb;
+}
+
+.app-btn-secondary:hover {
+  color: #65DF95;
+  border: 1px solid #65DF95;
+  background: #fff;
+}
+
+.table {
+  font-size: 0.875rem;
+}
+
+.meta {
+  color: #65DF95;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.stat-cell {
+  text-align: right;
+}
+
+.table {
+  font-size: 0.875rem;
+}
+
+.table .cell {
+  border-color: #4e4b4b;
+  color: #4e4b4b;
+  vertical-align: middle;
+}
+
+.cell span {
+  display: inline-block;
+}
+
+.cell .note {
+  display: block;
+  color: #65DF95;
+  font-size: 0.75rem;
+}
+
+.btn-sm {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.truncate {
+  max-width: 250px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 /*# sourceMappingURL=main.css.map */

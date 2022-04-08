@@ -1,39 +1,51 @@
+<div class="home_adm container-fluid p-0">   
 <%- include("../partials/header.ejs", {title:"Visitors List"}) %>
         
     <div id="app">
-        <div v-if="admin">
+   
+        <div v-if="admin" class="app-card-body" >
             <%- include("../partials/navbar.ejs"); %>
-            <div>
-                <input type="text" v-model="search">
-                <table>
+            <div class="col-10 d-flex justify-content-end mx-auto mt-5">
+                <div class="col-6">
+                    <input class="form-control" type="text" v-model="search">
+                </div>
+            </div>
+            
+           
+            <div class="table-responsive  col-10 mx-auto p-0 mt-5">
+                
+                <table class="table app-table-hover mb-0 text-left">
                     <thead>
-                        <td>Name</td>
-                        <td>Address</td>
-                        <td>Email</td>
-                        <td>Contact</td>
-                        <td>Vaccination Status</td>
-                        <td>Vaccination Card</td>
+                        <tr>
+                            <th class="cell">Name</th>
+                            <th class="cell">Address</th>
+                            <th class="cell">Email</th>
+                            <th class="cell">Contact</th>
+                            <th class="cell">Vaccination Status</th>
+                            <th class="cell">Vaccination Card</th>
+                        </tr>
                     </thead>
-
+                    
                     <tr v-for="visitor in filteredVisitors" :key="visitor._id">
-                        <td>{{visitor.name.fname}} {{visitor.name.lname}}</td>
-                        <td>{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
-                        <td>{{visitor.email}}</td>
-                        <td>{{visitor.contact}}</td>
-                        <td v-if="visitor.isVaccinated">Fully Vaccinated</td>
-                        <td v-else>
-                            Not Vaccinated
-                            <span @click="checkVaccinated(visitor._id)">Toggle Vaccine Status</span>
+                        <td class="cell">{{visitor.name.fname}} {{visitor.name.lname}}</td>
+                        <td class="cell">{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
+                        <td class="cell">{{visitor.email}}</td>
+                        <td class="cell">{{visitor.contact}}</td>
+                        <td class="cell" v-if="visitor.isVaccinated"><span class="badge bg-success">Fully Vaccinated</span></td>
+                        <td class="cell" v-else>
+                        <span class="badge bg-secondary">Not Vaccinated</span>
+                        <span @click="checkVaccinated(visitor._id)">Toggle Vaccine Status</span>
                         </td>
-                        <td v-if="visitor.vaccine_card"><img :src="vacCardURL(visitor.vaccine_card)" alt="vaccination card" style="height: 100px; width:100px"></td>
-                        <td v-else>Not Uploaded</td>
+                        <td class="cell" v-if="visitor.vaccine_card"><a class="btn-sm app-btn-secondary" href="#">View</a><img :src="vacCardURL(visitor.vaccine_card)" alt="vaccination card" style="height: 100px; width:100px"></td>
+                        <td class="cell" v-else><span class="badge bg-secondary">Not Uploaded</span></td>
                     </tr>
+                   
                 </table>
-            </div>
-            </div>
-        </div>
+            </div><!--//table-responsive-->
+           
+        </div><!--//app-card-body-->	
     </div>
-        
+</div>   
 <script>
     const app = Vue.createApp({
         data() {

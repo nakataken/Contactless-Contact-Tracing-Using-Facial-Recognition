@@ -2,7 +2,7 @@
 @import './variables';
 
 body{
-    background-color: #F5F6FE;
+    //background-color: #F5F6FE;
 }
 .main{ 
     background-color: $color-primary ;
@@ -55,17 +55,17 @@ body{
         border-radius: 3px;
         @include box-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important);
         &.border-left-decoration {
-            border-left: 3px solid $color-secondary;
+            border-left: 3px solid $color-primary;
         }
         .count{
             font-size: 54px !important;
             
         }
         .btn-prim{
-            background-color: $color-secondary;
+            background-color: $color-primary
         }
         .btn-prim:hover{
-            background-color: $color-primary;
+            background-color: $color-secondary;
         }
         .btn-sm {
 			padding: 0.125rem 0.5rem;
@@ -77,6 +77,22 @@ body{
 		}
         
     }
+
+    .adm-records{
+        input {
+            border: 0;
+            border-radius: 0px;
+            outline: 0;
+            background: transparent;
+            box-shadow: none !important;
+            border: 1px solid rgba(141, 137, 137,0.5) ;
+            &.name{
+                text-transform: uppercase !important;
+            }
+        }
+    }
+
+   
 }
 
 
@@ -195,7 +211,8 @@ nav{
          
         .c-div{
             background-color: $color-white;
-            box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+            border-radius: 3px !important;
+            @include box-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important);
             h1{
                 text-align: center;
                 @include text-primary(heavy,h1);
@@ -247,6 +264,7 @@ nav{
     background-image: url("../assets/images/Frame_1.svg");
     background-repeat: no-repeat;
     background-size: cover; 
+    border-radius: 3px;
     background-position: right bottom;
     background-attachment: fixed;
     #r-form-parent{
@@ -260,7 +278,8 @@ nav{
          
         .c-div{
             background-color: $color-white;
-            box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.12);
+            border-radius: 3px !important;
+            @include box-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important);
             h1{
                 text-align: center;
                 @include text-primary(heavy,h1);
@@ -399,3 +418,63 @@ nav{
 .c-dis{
     color: #828DAE;
 }
+
+.app-btn-secondary{   
+    background:#fff;
+    color:#5d6778;
+    border:1px solid #bcc1cb;
+}
+.app-btn-secondary:hover{
+    color:$color-primary;
+    border:1px solid $color-primary;
+    background:#fff;
+}
+
+
+.table {
+    font-size: 0.875rem;		
+}
+.meta {
+    color: $color-primary;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.stat-cell {
+    text-align: right;
+}
+
+
+.table {
+    font-size: 0.875rem;	
+    .cell {
+        border-color: rgb(78, 75, 75);
+        color: rgb(78, 75, 75);
+        vertical-align: middle;
+    }	
+}
+.cell{
+    span {
+        display: inline-block;
+    }
+    .note {
+        display: block;
+        color: $color-primary;
+        font-size: 0.75rem;
+        
+    }
+}
+
+.btn-sm {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.truncate {
+    max-width: 250px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
