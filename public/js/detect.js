@@ -41,16 +41,16 @@ video.addEventListener('play', () => {
 
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
         faceapi.draw.drawDetections(canvas, resizedDetections)
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
 
-        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.9) {
+        if (resizedDetections.length > 0 && resizedDetections[0].detection.score > 0.8) {
             // Stop and get image data
-            video.pause();
             clearInterval(interval);
             let screenshot = document.getElementById('canvas');
             let context  = screenshot.getContext('2d');
             context.fillRect(0,0,displaySize.width,displaySize.height);
             context.drawImage(video,0,0,displaySize.width,displaySize.height);
+            video.pause();
             
             screenshot.toBlob( async function(blob){
                 $('#loading').show();
