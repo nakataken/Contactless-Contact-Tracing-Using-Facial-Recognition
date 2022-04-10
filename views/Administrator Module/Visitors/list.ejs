@@ -2,7 +2,6 @@
 <%- include("../partials/header.ejs", {title:"Visitors List"}) %>
         
     <div id="app">
-   
         <div v-if="admin" class="app-card-body" >
             <%- include("../partials/navbar.ejs"); %>
             <div class="col-10 d-flex justify-content-end mx-auto mt-5">
@@ -11,7 +10,6 @@
                 </div>
             </div>
             
-           
             <div class="table-responsive  col-10 mx-auto p-0 mt-5">
                 
                 <table class="table app-table-hover mb-0 text-left">
@@ -39,10 +37,8 @@
                         <td class="cell" v-if="visitor.vaccine_card"><a class="btn-sm app-btn-secondary" href="#">View</a><img :src="vacCardURL(visitor.vaccine_card)" alt="vaccination card" style="height: 100px; width:100px"></td>
                         <td class="cell" v-else><span class="badge bg-secondary">Not Uploaded</span></td>
                     </tr>
-                   
                 </table>
             </div><!--//table-responsive-->
-           
         </div><!--//app-card-body-->	
     </div>
 </div>   

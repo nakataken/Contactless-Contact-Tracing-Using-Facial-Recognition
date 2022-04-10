@@ -4,20 +4,12 @@
     <div id="app">
         <div v-if="admin">
             <form>
-                <!-- 1. Enter establishment name -->
                 <div>
-                    <label for="establishment">Establishment Name</label>
-                    <input type="text" v-model="filter.establishment" :disabled="disableEstablishments">
-                    <button @click="searchEstablishment">Search</button>
-                    <p v-if="establishmentMessage">{{establishmentMessage}}</p>
+                    <input list="establishments" placeholder="Select establishment" v-model="searchEstablishment" @change="submitEstablishment" :disabled="disableEstablishments"> 
+                    <datalist id="establishments"> 
+                        <option v-for="establishment in filteredEstablishments" :key="establishment._id" :value="establishment._id">{{establishment.name}}</option>
+                    </datalist> 
                 </div>
-
-                <!-- 2. Load and choose specific establishment to get the specific id -->
-                <select v-model="selectedEstablishment" @change="submitEstablishment">
-                    <option value="none" disabled>Please select visitor.</option>
-                    <option v-for="establishment in establishments" :key="establishment._id" :value="establishment._id">{{establishment.name}}</option>
-                </select>
-                
                 <div>
                     <input v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
                     <label>Date - Date</label>
@@ -62,8 +54,7 @@
                     </select>
                 </div>
                 <div>
-                    <label>Search by First or Last Name</label>
-                    <input type="text" v-model="searchName">
+                    <input type="text" v-model="searchVisitor" placeholder="Filter by First or Last Name">
                 </div>
             </div>
 
@@ -95,18 +86,22 @@
                 max: "",
                 filter: {},
                 establishments: [],
-                selectedEstablishment: "none",
                 disableEstablishments: false,
-                establishmentMessage: "",
                 disableFields: true,
                 option: "byDate",
                 toggleOption: false,
                 errorMessage: "",
-                searchName: "",
+                searchEstablishment: "",
+                searchVisitor: "",
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/logs");
                     const result = await response.json();
                     this.logs = await result.logs;                
+                },
+                getEstablishments: async () => {
+                    const response = await fetch("/admin/establishments");
+                    const result = await response.json();
+                    this.establishments = await result.establishments;  
                 }
             }
         },
@@ -114,14 +109,13 @@
             clear(event) {
                 event.preventDefault();
                 this.filter = {};
-                this.visitors = [];
-                this.selectedEstablishment = "none";
-                this.establishmentMessage = "";
                 this.toggleOption = false;
+                this.searchEstablishment = "";
                 this.disableEstablishments = false;
                 this.disableFields = true;
                 this.errorMessage = "";
                 this.reloadContent();
+                this.getEstablishments();
             },
             async submitFilter(event) {
                 event.preventDefault();
@@ -150,34 +144,12 @@
                     body: JSON.stringify(payload)
                 }).then((response)=> {
                     response.json().then((data) => {
-                        console.log(data);
                         this.logs = data.logs;
+                        console.log(this.logs);
                     });
                 });
             },
-            async searchEstablishment(event){
-                event.preventDefault();
-
-                if(!this.filter.establishment) {
-                    this.establishmentMessage = "Enter establishment name!";
-                    return
-                }
-
-                this.establishmentMessage = "";
-                
-                await fetch(`/admin/visitors/trace/search?name=${this.filter.establishment}`).then((response)=> {
-                    response.json().then((data) => {
-                        if(!data.establishments.length) {
-                            this.establishmentMessage = "Establishment not found!";
-                        } else {
-                            this.establishments = data.establishments;
-                            this.establishmentMessage = "Establishment/s loaded!";
-                        }
-                    });
-                });;
-            },
             submitEstablishment(event){
-                this.establishmentMessage = "";
                 this.filter.id = event.target.value;
                 this.disableEstablishments = true;
                 this.disableFields = false;
@@ -189,7 +161,7 @@
                 alert(id)
             }
         },
-        mounted() {
+        async mounted() {
             var today = new Date();
             var dd = today.getDate();
             var mm = today.getMonth() + 1;
@@ -202,7 +174,9 @@
             today = yyyy + '-' + mm + '-' + dd;
 
             this.max = today;
-            this.reloadContent();
+
+            await this.reloadContent();
+            await this.getEstablishments();
         },
         watch: {
             option() {
@@ -219,15 +193,22 @@
                     return this.logs.sort((a, b) => {
                         return new Date(a.date) - new Date(b.date);
                     }).filter((log) => {
-                        return log.name.fname.includes(this.searchName) || log.name.lname.includes(this.searchName);
+                        const name = `${log.name.fname.toUpperCase()} ${log.name.lname.toUpperCase()}`
+                        return name.includes(this.searchVisitor.toUpperCase());
                     });
                 } else {
                     return this.logs.sort((a, b) => {
                         return new Date(b.date) - new Date(a.date);
                     }).filter((log) => {
-                        return log.name.fname.includes(this.searchName.toUpperCase()) || log.name.lname.includes(this.searchName.toUpperCase());
+                        const name = `${log.name.fname.toUpperCase()} ${log.name.lname.toUpperCase()}`
+                        return name.includes(this.searchVisitor.toUpperCase());
                     });
                 }
+            },
+            filteredEstablishments() {
+                return this.establishments.filter((establishment) => {
+                    return establishment.name.includes(this.searchEstablishment.toUpperCase());
+                })
             }
         }
     });

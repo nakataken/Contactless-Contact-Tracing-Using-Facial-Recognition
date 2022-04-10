@@ -1,40 +1,15 @@
-
-
-    <%- include("../partials/header.ejs", {title:"Visitors Records"}) %>
+<%- include("../partials/header.ejs", {title:"Visitors Records"}) %>
 <!-- PWEDE ITRACE KUNG SAAN LUGAR PUMUNTA SI USER-->
 <div class="home_adm container-fluid p-0"> 
     <%- include("../partials/navbar.ejs"); %>
     <div id="app" class="adm-records">
         <div v-if="admin">
             <form class="container">
-                <div class="row row-cols-1 row-cols-md-3 g-2 g-lg-3 ">
-                    <div class="form-group col">
-                        <label>First Name *</label>
-                        <input  class="form-control"  type="text" v-model="filter.fname" :disabled="disableName">
-                    </div>
-                    <div class="form-group col">
-                        <label>Middle Initial</label>
-                        <input  class="form-control" type="text" v-model="filter.mi" :disabled="disableName">
-                    </div>
-                    <div class="form-group col">
-                        <label>Last Name *</label>
-                        <input  class="form-control" type="text" v-model="filter.lname" :disabled="disableName">
-                    </div>
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3 mt-4">
-
-                    <select v-model="selectedVisitor" @change="submitName">
-                        <option value="none" disabled>Please select visitor.</option>
-                        <option v-for="visitor in visitors" :key="visitor.id" :value="visitor._id">{{visitor.name.fname}} {{visitor.name.lname}}</option>
-                    </select>
-                    <p v-if="nameMessage">{{nameMessage}}a</p>
-                    <button @click="searchName">Search</button>
-                </div>
-              
-                
-                <div>
-                    <label for="establishment">Establishment Name</label>
-                    <input  class="form-control" type="text" v-model="filter.establishment" :disabled="disableFields">
+                <div class="row row-cols-1 row-cols-md-3 g-2 g-lg-3">
+                    <input list="visitors" placeholder="Select Visitor" v-model="searchVisitor" @change="submitVisitor" :disabled="disableVisitor">
+                    <datalist id="visitors"> 
+                        <option v-for="visitor in filteredVisitors" :key="visitor._id" :value="visitor._id">{{visitor.name.fname}} {{visitor.name.lname}}</option>
+                    </datalist> 
                 </div>
                 <div>
                     <input  class="form-control" v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
@@ -72,10 +47,15 @@
             </form>
 
             <div>
-                <select @change="sortChange">
-                    <option>Latest</option>
-                    <option>Older</option>
-                </select>
+                <div>
+                    <select @change="sortChange">
+                        <option>Latest</option>
+                        <option>Older</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="text" v-model="searchEstablishment" placeholder="Filter by establishment name">
+                </div>
             </div>
 
             <table>
@@ -109,17 +89,22 @@
                 max: "",
                 filter: {},
                 visitors: [],
-                selectedVisitor: "none",
-                disableName: false,
+                searchVisitor: "",
+                searchEstablishment: "",
+                disableVisitor: false,
                 disableFields: true,
                 option: "byDate",
                 toggleOption: false,
-                nameMessage: "",
                 errorMessage: "",
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/logs");
                     const result = await response.json();
-                    this.logs = await result;                
+                    this.logs = await result.logs;              
+                },
+                getVisitors: async () => {
+                    const response = await fetch("/admin/visitors");
+                    const result = await response.json();
+                    this.visitors = await result.visitors;                
                 }
             }
         },
@@ -128,22 +113,24 @@
                 event.preventDefault();
                 this.filter = {};
                 this.visitors = [];
-                this.selectedVisitor = "none";
+                this.searchVisitor = "";
+                this.searchEstablishment = "",
                 this.toggleOption = false;
-                this.disableName = false;
+                this.disableVisitor = false;
                 this.disableFields = true;
-                this.nameMessage = "";
                 this.errorMessage = "";
                 this.reloadContent();
+                this.getVisitors();
             },
             async submitFilter(event) {
                 event.preventDefault();
 
                 // check required fields
-                if(!this.filter.fname || !this.filter.lname || !this.filter.date1) {
+                if(!this.filter.date1) {
                     this.errorMessage = "Fill up required fields."
                     return;
                 }
+
                 if(this.option == "byDate") {
                     if(!this.filter.date2) {
                         this.errorMessage = "Fill up required fields."
@@ -155,8 +142,7 @@
 
                 let payload = {
                     option: this.option,
-                    visitor_id: this.filter.id,
-                    establishment: this.filter.establishment,
+                    id: this.filter.id,
                     date1: this.filter.date1,
                     date2: this.filter.date2,
                     time1: this.filter.time1,
@@ -169,36 +155,13 @@
                     body: JSON.stringify(payload)
                 }).then((response)=> {
                     response.json().then((data) => {
-                        console.log(data);
+                        this.logs = data.logs;
                     });
                 });
-
-                console.log(payload);
             },
-            async searchName(event){
-                event.preventDefault();
-
-                if(!this.filter.fname || !this.filter.lname) {
-                    this.nameMessage = "Enter first and last name before searching.";
-                    return
-                }
-
-                this.nameMessage = "";
-
-                await fetch(`/admin/visitors/records/search?fname=${this.filter.fname}&mi=${this.filter.mi}&lname=${this.filter.lname}`).then((response)=> {
-                    response.json().then((data) => {
-                        if(!data.visitors.length) {
-                            this.nameMessage = "Visitor not found!";
-                        } else {
-                            this.visitors = data.visitors;
-                            this.nameMessage = "Visitors loaded!";
-                        }
-                    });
-                });;
-            },
-            submitName(event){
+            submitVisitor(event){
                 this.filter.id = event.target.value;
-                this.disableName = true;
+                this.disableVisitor = true;
                 this.disableFields = false;
             },
             sortChange(event) {
@@ -217,7 +180,7 @@
                 }
             }
         },
-        mounted() {
+        async mounted() {
             var today = new Date();
             var dd = today.getDate();
             var mm = today.getMonth() + 1;
@@ -230,19 +193,31 @@
             today = yyyy + '-' + mm + '-' + dd;
 
             this.max = today;
-            this.reloadContent();
+
+            await this.reloadContent();
+            await this.getVisitors();
         },
         computed: {
             filteredLogs() {
                 if(this.sortOrder == "Older") {
                     return this.logs.sort((a, b) => {
                         return new Date(a.date) - new Date(b.date);
+                    }).filter((log) => {
+                        return log.establishment.includes(this.searchEstablishment.toUpperCase());
                     });
                 } else {
                     return this.logs.sort((a, b) => {
                         return new Date(b.date) - new Date(a.date);
+                    }).filter((log) => {
+                        return log.establishment.includes(this.searchEstablishment.toUpperCase());
                     });
                 }
+            },
+            filteredVisitors() {
+                return this.visitors.filter((visitor) => {
+                    const name = `${visitor.name.fname.toUpperCase()} ${visitor.name.lname.toUpperCase()}`
+                    return name.includes(this.searchVisitor.toUpperCase());
+                })
             }
         }
     });

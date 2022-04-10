@@ -108,25 +108,27 @@ const visitors_records_get = async (req, res) => {
 }
 
 const visitors_records_filter_post = async (req, res) => {
-    let {option, visitor_id, establishment, date1, date2, time1, time2} = req.body;
+    let {option, id, date1, date2, time1, time2} = req.body;
+    let logs = [];
     let records = [];
+    let visitors = await Visitor.find();
     
     if(!time1) time1 = "00:00";
     if(!time2) time2 = "23:59";
-    if(!establishment) establishment = "";
 
     if(option == "byDate") {
         let queryDate1 = new Date(`${date1} ${time1}:00`);
         let queryDate2 = new Date(`${date2} ${time2}:00`);
-        records = await Record.find({visitor_id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
     } else {
         // get data byTime
-        let queryDate1 = new Date(`${date1} ${time1}`.split(' ')[0]);
-        let queryDate2 = new Date(`${date1} ${time2}`.split(' ')[0]);
-        records = await Record.find({visitor_id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date1} ${time2}:00`);
+        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
     }
-    
-    res.json({success:true, records});
+
+    logs = await create_log(records, visitors);
+    res.json({success:true, logs});
 }
 
 const visitors_list_get = async (req, res) => {
