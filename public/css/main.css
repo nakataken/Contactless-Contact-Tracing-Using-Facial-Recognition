@@ -27,26 +27,7 @@ a {
 }
 
 .home_adm {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: right bottom;
-}
-
-.home_adm nav .dropdown-menu {
-  color: #0FB3A8 !important;
-}
-
-.home_adm nav .nav-link {
-  color: #ffffff !important;
-  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  color: #0FB3A8 !important;
-}
-
-.home_adm nav .navbar-brand .navbar-logo {
-  height: 20px;
-  content: url("../assets/images/logo.png");
+  background-color: #F5F6FE !important;
 }
 
 .home_adm .dashboard-card {
@@ -573,14 +554,16 @@ nav {
   background: #fff;
 }
 
-.table {
-  font-size: 0.875rem;
+.navbar-logo {
+  height: 20px;
+  content: url("../assets/images/logo.png");
 }
 
-.meta {
-  color: #65DF95;
-  font-weight: 500;
-  font-size: 0.875rem;
+.table-responsive {
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  background-color: white;
 }
 
 .stat-cell {
@@ -591,20 +574,20 @@ nav {
   font-size: 0.875rem;
 }
 
-.table .cell {
-  border-color: #4e4b4b;
-  color: #4e4b4b;
+.table th {
+  border-color: #c7c7c7;
+  color: #5d6778;
   vertical-align: middle;
 }
 
-.cell span {
-  display: inline-block;
+.table td {
+  border-color: rgba(93, 103, 120, 0.75);
+  color: rgba(93, 103, 120, 0.75);
+  vertical-align: middle;
 }
 
-.cell .note {
-  display: block;
-  color: #65DF95;
-  font-size: 0.75rem;
+.table tr:hover td {
+  color: #5d6778;
 }
 
 .btn-sm {
@@ -618,5 +601,37 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.modal-vue .overlay {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.overlay-div {
+  height: 100% !important;
+}
+
+.modal-div {
+  background-color: #fff;
+  min-height: 60vh !important;
+  max-height: 60vh !important;
+  overflow-y: hidden !important;
+}
+
+.modal-div .vacCard {
+  min-height: 80% !important;
+  max-height: 80% !important;
+  overflow-y: scroll !important;
+}
+
+.modal-vue .close {
+  top: 10px;
+  right: 10px;
 }
 /*# sourceMappingURL=main.css.map */

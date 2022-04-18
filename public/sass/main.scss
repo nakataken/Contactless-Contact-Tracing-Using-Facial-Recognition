@@ -28,26 +28,8 @@ body{
 }
 
 .home_adm{
-  //  background: url("../assets/images/frame_2.svg") ;
-    background-repeat: no-repeat;
-    background-size: cover; 
-    background-position: right bottom;
-    nav{
-        .dropdown-menu{
-        color: $color-secondary !important;
-        }
-        .nav-link{
-            @include text-white(bold,reg); 
-            color: $color-secondary !important;
-        }
-        .navbar-brand{
-            .navbar-logo{
-                height: 20px;
-                content: url("../assets/images/logo.png");
-            }
-            
-        }
-    }
+
+    background-color: #F5F6FE !important;
     .dashboard-card{
         
         height: 100% !important;
@@ -430,40 +412,46 @@ nav{
     background:#fff;
 }
 
-
-.table {
-    font-size: 0.875rem;		
+.navbar-logo{
+    height: 20px;
+    content: url("../assets/images/logo.png");
 }
-.meta {
-    color: $color-primary;
-    font-weight: 500;
-    font-size: 0.875rem;
+
+//table
+.table-responsive{
+    border-radius: 3px;
+    @include box-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important);
+    background-color: white;
 }
 
 .stat-cell {
     text-align: right;
 }
 
-
 .table {
-    font-size: 0.875rem;	
-    .cell {
-        border-color: rgb(78, 75, 75);
-        color: rgb(78, 75, 75);
+    font-size: 0.875rem;
+    
+    th{
+        border-color: rgb(199, 199, 199);
+        color: rgba(93, 103, 120, 1);            ;
+            vertical-align: middle;
+    }
+
+   
+    td{
+        border-color:  rgba(93, 103, 120, 0.75); 
+        color:  rgba(93, 103, 120, 0.75) ; 
         vertical-align: middle;
-    }	
-}
-.cell{
-    span {
-        display: inline-block;
     }
-    .note {
-        display: block;
-        color: $color-primary;
-        font-size: 0.75rem;
-        
+
+    tr:hover{
+        td{
+            color:  rgba(93, 103, 120,1) ; 
+        }
     }
 }
+    
+
 
 .btn-sm {
     padding: 0.125rem 0.5rem;
@@ -478,3 +466,39 @@ nav{
     white-space: nowrap;
 }
 
+
+
+//modal
+
+.modal-vue .overlay {
+position: fixed;
+z-index: 9998;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, .5);
+}
+
+
+.overlay-div{
+    height: 100% !important;
+}
+.modal-div {
+    background-color: #fff;
+    min-height: 60vh !important;
+    max-height: 60vh !important;
+    overflow-y: hidden !important;
+
+    .vacCard{
+        min-height: 80% !important;
+        max-height: 80% !important;
+        overflow-y: scroll !important;
+    }
+}
+  
+.modal-vue .close{
+    //position: absolute;
+    top: 10px;
+    right: 10px;
+}

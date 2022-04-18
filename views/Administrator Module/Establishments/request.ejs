@@ -1,41 +1,50 @@
 <%- include("../partials/header.ejs", {title:"Establishments Request"}) %>
 
-    <div id="app">
-        <div v-if="admin">
-            <%- include("../partials/navbar.ejs"); %>
-            <div>
-                <table>
-                    <thead>
-                        <td>Name</td>
-                        <td>Owner</td>
-                        <td>Address</td>
-                        <td>Email</td>
-                        <td>Contact</td>
-                        <td>Message</td>
-                        <td>Permit</td>
-                        <td>Valid ID</td>
-                        <td>Actions</td>
-                    </thead>
-                    <tr v-for="request in requests" :key="request._id">
-                        <td>{{request.name}}</td>
-                        <td>{{request.owner}}</td>
-                        <td>{{request.email}}</td>
-                        <td>{{request.contact}}</td>
-                        <td>{{request.message}}</td>
-                        <td><img :src="permitURL(request.permit)" alt="permit" style="height: 100px; width:100px"></td>
-                        <td><img :src="validIDURL(request.validID)" alt="validID" style="height: 100px; width:100px"></td>
-                        <td>
-                            <form :action="actionURL(request._id)" method="POST">
-                                <input type="radio" name="status" value="approve" required>
-                                <label for="approve">Approve</label>
-                                <input type="radio" name="status" value="reject">
-                                <label for="reject">Reject</label>
-                                <button type="submit">Submit</button>
-                            </form>
-                        </td>
-                    </tr>
-                </table>
+<div id="app"> 
+    <div v-if="admin"  class="home_adm  container-fluid p-0">   
+        <%- include("../partials/navbar.ejs"); %>
+        <div class="app-wrapper">
+            <div class="app-content pt-3 p-md-3 p-lg-4">
+                <div class="container-xl">
+                    <div class="head container" >
+                        <div class="table-responsive  col-12 mx-auto p-0 mt-5">
+                            <table class="table app-table-hover mb-0">
+                                <thead>
+                                    <th class="cell">Name</th>
+                                    <th class="cell">Owner</th>
+                                    <th class="cell">Address</th>
+                                    <th class="cell">Email</th>
+                                    <th class="cell">Contact</th>
+                                    <th class="cell">Message</th>
+                                    <th class="cell">Permit</th>
+                                    <th class="cell">Valid ID</th>
+                                    <th class="cell">Actions</th>
+                                </thead>
+                                <tr v-for="request in requests" :key="request._id">
+                                    <td class="cell">{{request.name}}</td>
+                                    <td class="cell">{{request.owner}}</td>
+                                    <td class="cell">{{request.email}}</td>
+                                    <td class="cell">{{request.contact}}</td>
+                                    <td class="cell">{{request.message}}</td>
+                                    <td class="cell"><img :src="permitURL(request.permit)" alt="permit" style="height: 100px; width:100px"></td>
+                                    <td class="cell"><img :src="validIDURL(request.validID)" alt="validID" style="height: 100px; width:100px"></td>
+                                    <td class="cell">
+                                        <form :action="actionURL(request._id)" method="POST">
+                                            <input type="radio" name="status" value="approve" required>
+                                            <label for="approve">Approve</label>
+                                            <input type="radio" name="status" value="reject">
+                                            <label for="reject">Reject</label>
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+           
         </div>
     </div>
     
