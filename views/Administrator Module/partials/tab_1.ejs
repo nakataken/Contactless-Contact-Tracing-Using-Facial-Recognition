@@ -1,0 +1,73 @@
+
+                            <form>
+                                <div>
+                                    <input list="establishments" placeholder="Select establishment" v-model="searchEstablishment" @change="submitEstablishment" :disabled="disableEstablishments"> 
+                                    <datalist id="establishments"> 
+                                        <option v-for="establishment in filteredEstablishments" :key="establishment._id" :value="establishment._id">{{establishment.name}}</option>
+                                    </datalist> 
+                                </div>
+                                <div>
+                                    <input v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
+                                    <label>Date - Date</label>
+                                    <input v-model="option" type="radio" name="option" value="byTime" :disabled="disableFields">
+                                    <label>Time - Time</label>
+                                </div>
+                
+                                <!-- First Option -->
+                                <div v-if="!toggleOption">
+                                    <div>
+                                        <label>From</label>
+                                        <input type="date" v-model="filter.date1" id="date1" :max="max" :disabled="disableFields"><span>*</span>
+                                        <input type="time" v-model="filter.time1" :disabled="disableFields">
+                                    </div>
+                                    <div>
+                                        <label>To</label>
+                                        <input type="date" v-model="filter.date2" id="date2" :max="max" :disabled="disableFields"><span>*</span>
+                                        <input type="time" v-model="filter.time2" :disabled="disableFields">
+                                    </div>
+                                </div>  
+                                <!-- Second Option -->
+                                <div v-else>
+                                    <div>
+                                        <label>Date</label>
+                                        <input type="date" v-model="filter.date1" id="date1" :max="max"><span>*</span>
+                                        <label>From</label>
+                                        <input type="time" v-model="filter.time1">
+                                        <label>From</label>
+                                        <input type="time" v-model="filter.time2">
+                                    </div>
+                                </div>
+                                <p v-if="errorMessage">{{errorMessage}}</p>
+                                <button @click="clear">Clear</button>
+                                <button @click="submitFilter">Filter</button>
+                            </form>
+                
+                            <div>
+                                <div>
+                                    <select @change="sortChange">
+                                        <option>Latest</option>
+                                        <option>Older</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <input type="text" v-model="searchVisitor" placeholder="Filter by First or Last Name">
+                                </div>
+                            </div>
+                            <div class="table-responsive  col-12 mx-auto p-0 mt-5">
+                                <table class="table app-table-hover mb-0 text-left">
+                                    <thead class="text-center">
+                                        <th class="cell">Name</th>
+                                        <th class="cell">Date & Time</th>
+                                        <th class="cell">Establishment</th>
+                                        <th class="cell"></th>
+                                    </thead>
+                    
+                                    <tr v-for="log in filteredLogs" :key="log._id">
+                                        <td class="cell">{{log.name.fname}} {{log.name.lname}}</td>
+                                        <td class="cell">{{log.date}}</td>
+                                        <td class="cell">{{log.establishment}}</td>
+                                        <td class="cell"><span @click="handleAction(log.visitor_id)">clickable option</span></td>
+                                    </tr>
+                                </table>
+</div>
+
