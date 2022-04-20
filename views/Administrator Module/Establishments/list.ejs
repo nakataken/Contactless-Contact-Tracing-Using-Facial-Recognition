@@ -1,43 +1,40 @@
 <%- include("../partials/header.ejs", {title:"Establishments List"}) %>
-    <div id="app">
-        <div v-if="admin"  class="home_adm  container-fluid p-0">   
-            <%- include("../partials/navbar.ejs"); %>
-            <div class="app-wrapper">
-                <div class="app-content pt-3 p-md-3 p-lg-4">
-                    <div class="container-xl">
-                       
-                        <div class="head container" >
-                            <div class="table-responsive  col-12 mx-auto p-0 mt-5">
-                                <table  class="table app-table-hover mb-0">
-                                    <thead>
-                                        <th class="cell">Establishment Name</th>
-                                        <th class="cell">Establishment Owner</th>
-                                        <th class="cell">Establishment Address</th>
-                                        <th class="cell">Establishment Email</th>
-                                        <th class="cell">Establishment Contact</th>
-                                        <th class="cell">Limited for vaccinated person (Check/Ekis)</th>
-                                    </thead>
-                    
-                                    <tr v-for="establishment in establishments" :key="establishment._id">
-                                        <td class="cell">{{establishment.name}}</td>
-                                        <td class="cell">{{establishment.owner}}</td>
-                                        <td class="cell">{{establishment.address}}</td>
-                                        <td class="cell">{{establishment.email}}</td>
-                                        <td class="cell">{{establishment.contact}}</td>
-                                        <td class="cell" v-if="establishment.limitVacinated">Check</td>
-                                        <td class="cell" v-else>Ekis</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            
-                            
-                       </div>   
-                    </div>
+
+<div id="app">
+    <div v-if="admin"  class="home_adm  container-fluid p-0">   
+        <%- include("../partials/navbar.ejs"); %>
+        <div class="app-wrapper">
+            <div class="app-content pt-3 p-md-3 p-lg-4">
+                <div class="container-xl">
+                    <div class="head container" >
+                        <div class="table-responsive  col-12 mx-auto p-0 mt-5">
+                            <table  class="table app-table-hover mb-0">
+                                <thead>
+                                    <th class="cell">Establishment Name</th>
+                                    <th class="cell">Establishment Owner</th>
+                                    <th class="cell">Establishment Address</th>
+                                    <th class="cell">Establishment Email</th>
+                                    <th class="cell">Establishment Contact</th>
+                                    <th class="cell">Limited for vaccinated person (Check/Ekis)</th>
+                                </thead>
+                
+                                <tr v-for="establishment in establishments" :key="establishment._id">
+                                    <td class="cell">{{establishment.name}}</td>
+                                    <td class="cell">{{establishment.owner}}</td>
+                                    <td class="cell">{{establishment.address}}</td>
+                                    <td class="cell">{{establishment.email}}</td>
+                                    <td class="cell">{{establishment.contact}}</td>
+                                    <td class="cell" v-if="establishment.limitVacinated">Check</td>
+                                    <td class="cell" v-else>Ekis</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>   
                 </div>
             </div>
-            
         </div>
     </div>
+</div>
 
 <script>
     const app = Vue.createApp({

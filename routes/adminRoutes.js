@@ -8,19 +8,16 @@ router.get('/', adminController.index_get);
 router.get('/logout', adminController.logout_get);
 router.get('/dashboard', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.dashboard_get);
 
+// RECORDS
+router.get('/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_get);
+router.get('/records/logs', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_log_get);
+router.post('/records/visitors/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_visitors_filter_post);
+router.post('/records/establishments/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_establishments_filter_post);
+
 // VISITORS
 router.get('/visitors', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_get);
-router.get('/visitors/logs', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_logs_get);
-router.get('/visitors/trace', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_trace_get)
-router.get('/visitors/trace/search', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.establishments_search_get);
-router.post('/visitors/trace/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_trace_filter_post);
-
-router.get('/visitors/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_records_get);
-router.get('/visitors/records/search', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_search_get);
-router.post('/visitors/records/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_records_filter_post);
-
 router.get('/visitors/list', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_list_get);
-router.put('/visitors/list/vaccinated/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.vaccination_status_put);
+router.put('/visitors/list/vaccinated/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_vaccination_status_put);
 
 // ESTABLISHMENTS
 router.get('/establishments', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.establishments_get);

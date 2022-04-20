@@ -47,14 +47,12 @@ const create_log = async (records, visitors) => {
     return logs;
 }
 
-// VISITORS
-const visitors_get = async (req, res) => {
-    let visitors = await Visitor.find();
-    res.json({visitors});
+// RECORDS
+const records_get = (req, res) => {
+    res.render('./Administrator Module/records');
 }
 
-// VISITORS
-const visitors_logs_get = async (req, res) => {
+const records_log_get = async (req, res) => {
     let records = await Record.find();
     let visitors = await Visitor.find();
     let logs = [];
@@ -64,21 +62,31 @@ const visitors_logs_get = async (req, res) => {
     res.json({success: true, logs});
 }
 
-const visitors_search_get = async (req, res) => {
-    let {fname, mi, lname} = req.query;
-    fname == "undefined" ? fname = "" : fname = _.upperCase(fname);
-    mi == "undefined" ? mi = "" : mi = _.upperCase(mi);
-    lname == "undefined" ? lname = "" : lname = _.upperCase(lname);
+const records_visitors_filter_post = async (req, res) => {
+    let {option, id, date1, date2, time1, time2} = req.body;
+    let logs = [];
+    let records = [];
+    let visitors = await Visitor.find();
     
-    let visitors = await Visitor.find({'name.fname': {$regex: fname, $options: 'i'},'name.mi': {$regex: mi, $options: 'i'},'name.lname': {$regex: lname, $options: 'i'}}).limit(5);
-    res.json({success: true, visitors});
+    if(!time1) time1 = "00:00";
+    if(!time2) time2 = "23:59";
+
+    if(option == "byDate") {
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date2} ${time2}:00`);
+        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    } else {
+        // get data byTime
+        let queryDate1 = new Date(`${date1} ${time1}:00`);
+        let queryDate2 = new Date(`${date1} ${time2}:00`);
+        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+    }
+
+    logs = await create_log(records, visitors);
+    res.json({success:true, logs});
 }
 
-const visitors_trace_get = async (req, res) => {
-    res.render('./Administrator Module/Visitors/trace');
-}
-
-const visitors_trace_filter_post = async (req, res) => {
+const records_establishments_filter_post = async (req, res) => {
     let {option, id, date1, date2, time1, time2} = req.body;
     let logs = [];
     let records = [];
@@ -103,39 +111,17 @@ const visitors_trace_filter_post = async (req, res) => {
     res.json({success:true, logs});
 }
 
-const visitors_records_get = async (req, res) => {
-    res.render('./Administrator Module/Visitors/records');
-}
-
-const visitors_records_filter_post = async (req, res) => {
-    let {option, id, date1, date2, time1, time2} = req.body;
-    let logs = [];
-    let records = [];
-    let visitors = await Visitor.find();
-    
-    if(!time1) time1 = "00:00";
-    if(!time2) time2 = "23:59";
-
-    if(option == "byDate") {
-        let queryDate1 = new Date(`${date1} ${time1}:00`);
-        let queryDate2 = new Date(`${date2} ${time2}:00`);
-        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
-    } else {
-        // get data byTime
-        let queryDate1 = new Date(`${date1} ${time1}:00`);
-        let queryDate2 = new Date(`${date1} ${time2}:00`);
-        records = await Record.find({visitor_id:id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
-    }
-
-    logs = await create_log(records, visitors);
-    res.json({success:true, logs});
+// VISITORS
+const visitors_get = async (req, res) => {
+    res.render('./Administrator Module/visitors');
 }
 
 const visitors_list_get = async (req, res) => {
-    res.render('./Administrator Module/Visitors/list');
+    let visitors = await Visitor.find();
+    res.json({visitors});
 }
 
-const vaccination_status_put = async (req, res) => {
+const visitors_vaccination_status_put = async (req, res) => {
     try {
         Visitor.updateOne({_id:req.params.id}, {$set:{isVaccinated: true}}, (error, visitor) => {
             if(error) throw error;
@@ -155,12 +141,6 @@ const vaccination_status_put = async (req, res) => {
 const establishments_get = async (req, res) => {
     let establishments = await Establishment.find();
     res.json({establishments});
-}
-
-const establishments_search_get = async (req, res) => {
-    let name =  _.upperCase(req.query.name);
-    let establishments = await Establishment.find({name: {$regex: name, $options: 'i'}}).limit(5);
-    res.json({success: true, establishments});
 }
 
 const establishments_requests_get = async (req, res) => {
@@ -260,17 +240,17 @@ module.exports = {
     index_get,
     logout_get,
     dashboard_get,
+    // Records
+    records_get,
+    records_log_get,
+    records_visitors_filter_post,
+    records_establishments_filter_post,
+    // Visitors
     visitors_get,
-    visitors_logs_get,
-    visitors_search_get,
-    visitors_trace_get,
-    visitors_trace_filter_post,
-    visitors_records_get,
-    visitors_records_filter_post,
     visitors_list_get,
-    vaccination_status_put,
+    visitors_vaccination_status_put,
+    // Establishments
     establishments_get,
-    establishments_search_get,
     establishments_requests_get,
     establishments_request_post,
     establishments_list_get
