@@ -28,6 +28,9 @@
                                     <td class="cell" v-else>Ekis</td>
                                 </tr>
                             </table>
+                            <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
+                                <div class="my-auto" id="loading"></div>
+                            </div>
                         </div>
                     </div>   
                 </div>
@@ -41,12 +44,14 @@
         data() {
             return {
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                loaded: false,
                 establishments: [],
                 max: "",
                 reloadContent: async () => {
                     const response = await fetch("/admin/establishments");
                     const result = await response.json();
-                    this.establishments = await result.establishments;  
+                    this.establishments = await result.establishments;
+                    this.loaded = true;
                 }
             }
         },

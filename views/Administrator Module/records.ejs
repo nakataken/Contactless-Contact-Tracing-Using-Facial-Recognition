@@ -10,6 +10,9 @@
                                 <a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab" data-bs-toggle="tab" href="" @click="toggleTab(1)" role="tab" aria-controls="orders-all" aria-selected="true">Visitors</a>
                                 <a class="flex-sm-fill text-sm-center nav-link"  id="orders-paid-tab" data-bs-toggle="tab" href="" @click="toggleTab(2)" role="tab" aria-controls="orders-paid" aria-selected="false">Establishment</a>
                             </nav>
+
+                            
+
                             <!-- Trace by Visitors -->
                             <div v-if="tab == 1">
                                 <form class="container">
@@ -126,7 +129,7 @@
                             </div>
 
                             <!-- Table 1 -->
-                            <div class="table-responsive  col-12 mx-auto p-0 mt-5">
+                            <div class="table-responsive col-12 mx-auto p-0 mt-5">
                                 <table  class="table app-table-hover mb-0 text-center">
                                 <thead>
                                     <th class="cell">Name</th>
@@ -136,13 +139,20 @@
                                 </thead>
 
                                 <tr v-for="log in filteredLogs" :key="log._id">
+
+  
                                     <td class="cell">{{log.name.fname}} {{log.name.lname}}</td>
                                     <td class="cell">{{log.date}}</td>
                                     <td class="cell">{{log.establishment}}</td>
                                     <td class="cell"><span class="btn-sm app-btn-secondary" @click="handleAction(log.visitor_id)">clickable option</span></td>
+                                    
                                 </tr>
                                 </table>
+                                <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
+                                    <div class="my-auto" id="loading"></div>
+                                </div>
                             </div>
+                           
 
                             <!-- Table 2 -->
                         </div>
@@ -157,6 +167,7 @@
             return {
                 // General
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
+                loaded: false,
                 tab: 1,
                 logs: [],
                 sortOrder: "Latest",
@@ -168,7 +179,8 @@
                 reloadContent: async () => {
                     const response = await fetch("/admin/records/logs");
                     const result = await response.json();
-                    this.logs = await result.logs;                
+                    this.logs = await result.logs;
+                    this.loaded = true;            
                 },
                 // For Tab 1
                 searchTab1: "",
@@ -178,7 +190,8 @@
                 getVisitors: async () => {
                     const response = await fetch("/admin/visitors/list");
                     const result = await response.json();
-                    this.visitors = await result.visitors;                
+                    this.visitors = await result.visitors;   
+                    this.loaded = true;
                 },
                 // For Tab 2
                 searchTab2: "",
@@ -188,12 +201,14 @@
                 getEstablishments: async () => {
                     const response = await fetch("/admin/establishments");
                     const result = await response.json();
-                    this.establishments = await result.establishments;  
+                    this.establishments = await result.establishments; 
+                    this.loaded = true;
                 }
             }
         },
         methods: {
             // General
+         
             toggleTab(toggle) {
                 this.tab = toggle;
             },
@@ -230,6 +245,7 @@
                 this.filter.id = event.target.value;
                 this.disableVisitor = true;
                 this.disableFields = false;
+            
             },
             async submitVisitorFilter(event) {
                 event.preventDefault();

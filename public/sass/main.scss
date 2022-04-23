@@ -509,3 +509,14 @@ background-color: rgba(0, 0, 0, .5);
 .orders-table-tab{
     background-color: white !important;
 }
+
+.table-responsive {
+        min-height: 80vh !important;
+        max-height: 80vh !important;
+        overflow-y: scroll !important;
+}
+
+
+.load-div{
+    min-height: 70vh !important;
+}

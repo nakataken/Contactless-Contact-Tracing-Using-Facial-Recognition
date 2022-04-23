@@ -30,24 +30,49 @@
                                 <td class="cell">{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
                                 <td class="cell">{{visitor.email}}</td>
                                 <td class="cell">{{visitor.contact}}</td>
-                                <td class="cell" v-if="visitor.isVaccinated"><span class="badge bg-success">Fully Vaccinated</span></td>
-                                <td class="cell" v-else>
-                                    <span class="badge bg-secondary">Not Vaccinated</span>
-                                    <span @click="checkVaccinated(visitor._id)">Click here</span>
+
+                                <td class="cell text-center" v-if="visitor.isVaccinated"><span class="badge bg-success">Fully Vaccinated</span></td>
+                                <td class="cell text-center" v-else>
+                                    <span class="btn-sm app-btn-secondary mx-auto" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="vacStatus(visitor._id)">Not Vaccinated</span>
                                 </td>
-                                <td class="cell" v-if="visitor.vaccine_card"><a class="btn-sm app-btn-secondary" href="#" @click="showPic(visitor.vaccine_card)">View</a></td>
-                                <td class="cell" v-else><span class="badge bg-secondary">Not Uploaded</span></td>
+
+                                <td class="cell text-center" v-if="visitor.vaccine_card"><a class="btn-sm app-btn-secondary" href="#" @click="showPic(visitor.vaccine_card)">View</a></td>
+                                <td class="cell text-center" v-else><span class="badge bg-secondary">Not Uploaded</span></td>
                             </tr>
                         </table>
+                        <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
+                            <div class="my-auto" id="loading"></div>
+                        </div>
                     </div>
+
+
+
+
                 </div><!--//app-card-body-->	
             </div><!--//container-fluid-->
         </div><!--//app-content-->
         </div><!--//app-wrapper-->   
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body py-5 text-center">
+                Are you sure you want to change the Vaccination Status?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"  @click="checkVaccinated()" data-bs-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+        <!-- Modal end -->
     <div class="modal-vue">
-        <div class="overlay " v-if="showModal" @click="showModal = false">
-            <modal-content />
+        <div class="overlay " v-if="showVacCard" @click="showVacCard = false">
+            <modal-vaccard />
         </div>
     </div>
 </div>
@@ -57,7 +82,10 @@
         el: '#app',
         data() {
             return {
-                showModal: false,
+                loaded: false,
+                showVacCard: false,
+                showConfirm: false,
+                changeVacStat: "",
                 picurl: "",
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
                 visitors: [],
@@ -65,15 +93,22 @@
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/list");
                     const result = await response.json();
-                    this.visitors = await result.visitors;                
+                    this.visitors = await result.visitors;  
+                    this.loaded = true;
                 }
             }
         },
         methods: {
+            vacStatus(id){
+                this.changeVacStat = id;
+                console.log("here");
+                this.showConfirm = true;
+            },
             vacCardURL(pic) {
                 return `/uploads/vacCard/${pic}`
             },
-            async checkVaccinated(id) {
+            async checkVaccinated() {
+                id = this.changeVacStat
                 const response = await fetch(`/admin/visitors/list/vaccinated/${id}`, {
                     method: 'PUT',
                     headers: {
@@ -90,7 +125,7 @@
             },
             showPic(pic){      
                 this.picurl = `/uploads/vacCard/${pic}`;
-                this.showModal= true;
+                this.showVacCard= true;
             },
         },
         computed: {
@@ -104,7 +139,7 @@
             this.reloadContent();
         },
     })
-    app.component('modal-content',{
+    app.component('modal-vaccard',{
         data(){
         let pic = this.$root.picurl;
             return{
@@ -115,13 +150,25 @@
             <div class="overlay-div col-12 d-flex flex-column justify-content-between align-items-center p-5 my-auto">
                     <div class="modal-div col-12 col-lg-8 col-xl-6 mx-auto my-auto p-3">
                         <div class="col-12 d-flex btn justify-content-end p-0">
-                            <button class="close btn" @click="showModal = false">x</button>
+                            <button class="close btn" @click="showVacCard = false">x</button>
                         </div>
                         <div class="vacCard border col-10 mx-auto">
                             <img  v-bind:src="pic" alt="vaccination card" class="col-12">
                         </div>
                     </div>
             </div>
+        `
+    })
+    app.component('confirmvacstatus',{
+        data(){
+        let visId = this.$root.changeVacStat;
+            return{
+                visId,
+            }
+        },
+        template:`
+   
+        
         `
     })
     app.mount('#app');
