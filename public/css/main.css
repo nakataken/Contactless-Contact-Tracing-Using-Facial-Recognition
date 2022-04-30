@@ -470,11 +470,11 @@ nav {
 }
 
 ._1 {
-  background-color: #65DF95;
+  background-color: #65DF95 !important;
 }
 
 ._2 {
-  background-color: #0FB3A8;
+  background-color: #0FB3A8 !important;
 }
 
 .cam_module {
@@ -647,5 +647,17 @@ nav {
 
 .load-div {
   min-height: 70vh !important;
+}
+
+.app-menu {
+  background-color: green !important;
+}
+
+.btn-primary {
+  color: white !important;
+}
+
+.pagination .page-link {
+  color: #65DF95 !important;
 }
 /*# sourceMappingURL=main.css.map */

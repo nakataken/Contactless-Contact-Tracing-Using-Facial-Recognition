@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             
-                            <tr v-for="visitor in filteredVisitors" :key="visitor._id">
+                            <tr v-for="(visitor, index) in filteredVisitors.slice(pageFirstIndex,pageLastIndex)" :key="visitor._id">
                                 <td class="cell">{{visitor.name.fname}} {{visitor.name.lname}}</td>
                                 <td class="cell">{{visitor.address.barangay}} {{visitor.address.city}} {{visitor.address.province}}</td>
                                 <td class="cell">{{visitor.email}}</td>
@@ -44,10 +44,17 @@
                             <div class="my-auto" id="loading"></div>
                         </div>
                     </div>
-
-
-
-
+                    <div class="mt-5 d-flex flex-row justify-content-center">
+                        <nav aria-label="Page navigation example mt-5 mx-auto">
+                            <ul class="pagination">
+                                <li class="page-item"  @click="getPrevPageIndex()"><a class="page-link" href="#">Previous</a></li>
+                                <div class="border px-5 d-flex align-items-center"><p class="my-auto">{{pageFirstIndex+1}}-{{pageLastIndex}}</p></div>
+                                <li class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                          </nav>
+                    </div>
+               
+              
                 </div><!--//app-card-body-->	
             </div><!--//container-fluid-->
         </div><!--//app-content-->
@@ -64,10 +71,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary"  @click="checkVaccinated()" data-bs-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-primary"  @click="checkVaccinated()" data-bs-dismiss="modal">Save</button>
             </div>
         </div>
-        </div>
+        </div>  
     </div>
         <!-- Modal end -->
     <div class="modal-vue">
@@ -83,13 +90,20 @@
         data() {
             return {
                 loaded: false,
+                search: "",
+
+                pageCurrent:1,
+                pageFirstIndex:0,
+                pageLastIndex:10,
+
+
                 showVacCard: false,
                 showConfirm: false,
                 changeVacStat: "",
                 picurl: "",
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
                 visitors: [],
-                search: "",
+   
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/list");
                     const result = await response.json();
@@ -118,7 +132,7 @@
                 });
 
                 const result = await response.json();
-
+          
                 if(result.success) {
                     this.reloadContent();
                 }
@@ -127,17 +141,45 @@
                 this.picurl = `/uploads/vacCard/${pic}`;
                 this.showVacCard= true;
             },
+            getNextPageIndex(){
+                if(this.pageLastIndex < this.pageCount){
+                    this.pageFirstIndex =  this.pageLastIndex;
+                    this.pageLastIndex = this.pageFirstIndex  +10;
+                    if(this.pageLastIndex > this.pageCount){
+                        this.pageLastIndex = (this.pageLastIndex-10) + (this.pageCount % 10)
+                    }
+                }
+            },
+            getPrevPageIndex(){
+                if(this.pageFirstIndex > 0){
+                    this.pageLastIndex = this.pageFirstIndex;
+                    this.pageFirstIndex =   this.pageFirstIndex-10;
+                }
+            },
+  
         },
         computed: {
             filteredVisitors() {
+         
                 return this.visitors.filter((visitor) => {
-                    if(visitor.name.fname || visitor.name.lname) return visitor.name.fname.includes(this.search.toUpperCase()) || visitor.name.lname.includes(this.search.toUpperCase());
-                });
+                if(visitor.name.fname || visitor.name.lname)
+                  { 
+                    return visitor.name.fname.includes(this.search.toUpperCase(),) || visitor.name.lname.includes(this.search.toUpperCase(),);}
+                    
+                })
             },
+            pageCount(){
+                return  this.filteredVisitors.length
+            },
+            
         },
         mounted() {
             this.reloadContent();
+
         },
+        watch:{
+           
+        }
     })
     app.component('modal-vaccard',{
         data(){
@@ -159,18 +201,7 @@
             </div>
         `
     })
-    app.component('confirmvacstatus',{
-        data(){
-        let visId = this.$root.changeVacStat;
-            return{
-                visId,
-            }
-        },
-        template:`
-   
-        
-        `
-    })
+    
     app.mount('#app');
 </script>
 

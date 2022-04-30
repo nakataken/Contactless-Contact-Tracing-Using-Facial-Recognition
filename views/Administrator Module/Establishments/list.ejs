@@ -9,6 +9,7 @@
                     <div class="head container" >
                         <div class="table-responsive  col-12 mx-auto p-0 mt-5">
                             <table  class="table app-table-hover mb-0">
+                                
                                 <thead>
                                     <th class="cell">Establishment Name</th>
                                     <th class="cell">Establishment Owner</th>
@@ -18,7 +19,7 @@
                                     <th class="cell">Limited for vaccinated person (Check/Ekis)</th>
                                 </thead>
                 
-                                <tr v-for="establishment in establishments" :key="establishment._id">
+                                <tr v-for="establishment in establishments.slice(pageFirstIndex,pageLastIndex)" :key="establishment._id">
                                     <td class="cell">{{establishment.name}}</td>
                                     <td class="cell">{{establishment.owner}}</td>
                                     <td class="cell">{{establishment.address}}</td>
@@ -31,6 +32,15 @@
                             <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
                                 <div class="my-auto" id="loading"></div>
                             </div>
+                        </div>
+                        <div class="mt-5 d-flex flex-row justify-content-center">
+                            <nav aria-label="Page navigation example mt-5 mx-auto">
+                                <ul class="pagination">
+                                    <li class="page-item"  @click="getPrevPageIndex()"><a class="page-link" href="#">Previous</a></li>
+                                    <div class="border px-5 d-flex align-items-center"><p class="my-auto">{{pageFirstIndex+1}}-{{pageLastIndex}}</p></div>
+                                    <li class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                              </nav>
                         </div>
                     </div>   
                 </div>
@@ -47,6 +57,9 @@
                 loaded: false,
                 establishments: [],
                 max: "",
+                pageCurrent:1,
+                pageFirstIndex:0,
+                pageLastIndex:10,
                 reloadContent: async () => {
                     const response = await fetch("/admin/establishments");
                     const result = await response.json();
@@ -56,7 +69,21 @@
             }
         },
         methods: {
-            
+            getNextPageIndex(){length
+                if(this.pageLastIndex < this.establishments.length){
+                    this.pageFirstIndex =  this.pageLastIndex;
+                    this.pageLastIndex = this.pageFirstIndex  +10;
+                    if(this.pageLastIndex >  this.establishments.length){
+                        this.pageLastIndex = (this.pageLastIndex-10) + ( this.establishments.length % 10)
+                    }
+                }
+            },
+            getPrevPageIndex(){
+                if(this.pageFirstIndex > 0){
+                    this.pageLastIndex = this.pageFirstIndex;
+                    this.pageFirstIndex =   this.pageFirstIndex-10;
+                }
+            },
         },
         mounted() {
             var today = new Date();

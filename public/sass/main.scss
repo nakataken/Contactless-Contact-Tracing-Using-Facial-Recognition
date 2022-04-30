@@ -341,10 +341,10 @@ nav{
 }
 
 ._1{
-    background-color: $color-primary;
+    background-color: $color-primary !important;
 }
 ._2{
-    background-color: $color-secondary;
+    background-color: $color-secondary !important;
 }
 
 .cam_module{
@@ -519,4 +519,18 @@ background-color: rgba(0, 0, 0, .5);
 
 .load-div{
     min-height: 70vh !important;
+}
+
+.app-menu{
+    background-color: green !important;
+}
+
+.btn-primary{
+    color: white !important;
+}
+
+.pagination {
+    .page-link{
+        color: $color-primary !important;
+    }
 }
