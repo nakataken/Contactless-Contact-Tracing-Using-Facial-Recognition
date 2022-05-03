@@ -245,6 +245,8 @@
             // General
          
             toggleTab(toggle) {
+                this.pageFirstIndex = 0
+                this.pageLastIndex= 10
                 this.tab = toggle;
             },
             sortChange(event) {
@@ -441,6 +443,7 @@
                     return establishment.name.includes(this.searchEstablishment.toUpperCase());
                 })
             },
+            
             
         }
     });

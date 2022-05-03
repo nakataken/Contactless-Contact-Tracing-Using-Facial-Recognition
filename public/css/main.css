@@ -114,6 +114,22 @@ nav {
   }
 }
 
+#navbar-green {
+  background-color: #0FB3A8 !important;
+}
+
+#navbar-green .nav-link {
+  color: #ffffff !important;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+}
+
+#navbar-green .navbar-brand .navbar-logo {
+  height: 20px;
+  content: url("../assets/images/logo-white.png");
+}
+
 .head {
   min-height: 90vh;
 }
@@ -659,5 +675,53 @@ nav {
 
 .pagination .page-link {
   color: #65DF95 !important;
+}
+
+.vaccinated-badge {
+  background-color: white !important;
+  color: #0FB3A8;
+  font-size: 14px;
+}
+
+.vaccinated-badge .dot {
+  max-height: 5px !important;
+  padding: 5px;
+  background-color: green;
+  overflow: hidden !important;
+}
+
+.not-vaccinated-badge {
+  background-color: white !important;
+  color: red;
+  font-size: 14px;
+}
+
+.not-vaccinated-badge .dot {
+  max-height: 5px !important;
+  padding: 5px;
+  background-color: green;
+  overflow: hidden !important;
+}
+
+.profile h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555252;
+}
+
+.profile p {
+  font-size: 14px;
+}
+
+.profile .btn-sm {
+  background-color: white;
+}
+
+.profile .vaccinated {
+  background-color: green;
+}
+
+.profile .not-vaccinated {
+  background-color: #e46b6b;
 }
 /*# sourceMappingURL=main.css.map */

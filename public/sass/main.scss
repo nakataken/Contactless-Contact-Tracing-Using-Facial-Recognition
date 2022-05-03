@@ -110,6 +110,21 @@ nav{
     
 }
 
+#navbar-green{
+
+    background-color: $color-secondary !important;
+    .nav-link{
+        @include text-white(normal,reg); 
+    } 
+  
+    .navbar-brand{
+        .navbar-logo{
+            height: 20px;
+            content: url("../assets/images/logo-white.png");
+        }
+        
+    }
+}
 .head{
     min-height:90vh;
     .l-div{
@@ -532,5 +547,51 @@ background-color: rgba(0, 0, 0, .5);
 .pagination {
     .page-link{
         color: $color-primary !important;
+    }
+}
+
+.vaccinated-badge{
+    background-color:white!important;
+    color: $color-secondary;
+    font-size: 14px;
+
+    .dot{
+        max-height: 5px !important;
+        padding: 5px;
+        background-color: green;
+        overflow: hidden !important;
+    }
+}
+
+.not-vaccinated-badge{
+    background-color:white!important;
+    color:red;
+    font-size: 14px;
+
+    .dot{
+        max-height: 5px !important;
+        padding: 5px;
+        background-color: green;
+        overflow: hidden !important;
+    }
+}
+ 
+.profile{
+    h5{
+        font-size: 16px;
+        font-weight: 600;
+        color: rgb(85, 82, 82);
+    }
+    p{
+        font-size: 14px;
+    }
+    .btn-sm{
+        background-color: white;
+    }
+    .vaccinated{
+        background-color: green;
+    }
+    .not-vaccinated{
+        background-color: rgb(228, 107, 107);
     }
 }

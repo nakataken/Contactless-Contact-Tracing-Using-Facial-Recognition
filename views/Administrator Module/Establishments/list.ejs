@@ -19,7 +19,7 @@
                                     <th class="cell">Limited for vaccinated person (Check/Ekis)</th>
                                 </thead>
                 
-                                <tr v-for="establishment in establishments.slice(pageFirstIndex,pageLastIndex)" :key="establishment._id">
+                                <tr  v-for="establishment in establishments.slice(pageFirstIndex,pageLastIndex)" :key="establishment._id">
                                     <td class="cell">{{establishment.name}}</td>
                                     <td class="cell">{{establishment.owner}}</td>
                                     <td class="cell">{{establishment.address}}</td>
@@ -59,7 +59,9 @@
                 max: "",
                 pageCurrent:1,
                 pageFirstIndex:0,
-                pageLastIndex:10,
+               // pageLastIndex:,
+
+
                 reloadContent: async () => {
                     const response = await fetch("/admin/establishments");
                     const result = await response.json();
@@ -69,7 +71,9 @@
             }
         },
         methods: {
-            getNextPageIndex(){length
+
+          
+            getNextPageIndex(){
                 if(this.pageLastIndex < this.establishments.length){
                     this.pageFirstIndex =  this.pageLastIndex;
                     this.pageLastIndex = this.pageFirstIndex  +10;
@@ -101,7 +105,16 @@
             this.reloadContent();
         },
         computed: {
-
+            pageLastIndex(){
+                if(this.pageFirstIndex == 0 && this.establishments.length < 10 ){
+                  return  this.establishments.length;
+                }
+                else
+                    return 10;
+            },
+        },
+        watch:{
+            
         }
     });
 
