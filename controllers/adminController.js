@@ -111,6 +111,20 @@ const records_establishments_filter_post = async (req, res) => {
     res.json({success:true, logs});
 }
 
+const records_trace_get = async (req, res) => {
+    let record = await Record.findOne({_id: req.params.id});
+    let visitors = await Visitor.find();
+
+    let date = record.createdAt.toISOString().slice(0, 10);
+    let queryDate1 = new Date(`${date}T00:00:00.00Z`);
+    let queryDate2 = new Date(`${date}T23:59:59.00Z`);
+    let trace = await Record.find({establishment_id:record.establishment_id, createdAt: { $gte: queryDate1, $lt: queryDate2}})
+
+    logs = await create_log(trace, visitors);
+
+    res.json({success:true, logs});
+}
+
 // VISITORS
 const visitors_get = async (req, res) => {
     res.render('./Administrator Module/visitors');
@@ -245,6 +259,7 @@ module.exports = {
     records_log_get,
     records_visitors_filter_post,
     records_establishments_filter_post,
+    records_trace_get,
     // Visitors
     visitors_get,
     visitors_list_get,
