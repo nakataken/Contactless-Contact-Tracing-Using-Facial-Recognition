@@ -1,5 +1,21 @@
+/* Chrome, Safari, Edge, Opera */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400&display=swap");
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.vh-100 {
+  min-height: 100vh !important;
+}
+
 h1, h2, h3, h4, h5, h5, p, a {
   font-family: "Ubuntu", sans-serif !important;
 }
@@ -10,6 +26,10 @@ a {
 
 .main {
   background-color: #65DF95;
+}
+
+label {
+  font-weight: 600;
 }
 
 .home_est {
@@ -723,5 +743,9 @@ nav {
 
 .profile .not-vaccinated {
   background-color: #e46b6b;
+}
+
+._1 {
+  background-color: pink !important;
 }
 /*# sourceMappingURL=main.css.map */

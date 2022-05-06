@@ -8,6 +8,11 @@ body{
     background-color: $color-primary ;
 }
 
+
+label{
+    font-weight:  weight(bold);
+}
+
 .home_est{
     background: url("../assets/images/frame_2.svg") ;
     background-repeat: no-repeat;
@@ -594,4 +599,8 @@ background-color: rgba(0, 0, 0, .5);
     .not-vaccinated{
         background-color: rgb(228, 107, 107);
     }
+}
+
+._1 {
+    background-color: pink !important;
 }
