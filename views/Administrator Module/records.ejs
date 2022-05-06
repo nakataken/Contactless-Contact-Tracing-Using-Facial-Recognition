@@ -137,7 +137,6 @@
                                         <button class="btn btn-primary me-2" @click="clear">Clear</button>
                                         <button class="btn btn-primary" @click="submitEstablishmentFilter">Filter</button>
                                     </div>
-                                   
                                 </form>
 
                                 <div  class="container mt-3">
@@ -163,11 +162,11 @@
                                     <th class="cell"></th>
                                 </thead>
                                 
-                                <tr v-for="log in filteredLogs.slice(pageFirstIndex,pageLastIndex)" :key="log._id">
+                                <tr v-for="log in filteredLogs.slice(pageFirstIndex,pageLastIndex)" :key="log.id">
                                     <td class="cell">{{log.name.fname}} {{log.name.lname}}</td>
                                     <td class="cell">{{log.date}}</td>
                                     <td class="cell">{{log.establishment}}</td>
-                                    <td class="cell"><span class="btn-sm app-btn-secondary" @click="handleAction(log.visitor_id)">clickable option</span></td>
+                                    <td class="cell"><span class="btn-sm app-btn-secondary" @click="traceCloseContacts(log.id)">clickable option</span></td>
                                 </tr>
                                 </table>
                                 <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
@@ -182,16 +181,43 @@
                                         <div class="border px-5 d-flex align-items-center"><p class="my-auto">{{pageFirstIndex+1}}-{{pageLastIndex}}</p></div>
                                         <li class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></li>
                                     </ul>
-                                  </nav>
+                                </nav>
                             </div>
                             <!-- Table 2 -->
+                            <div id="closeContacts" class="table-responsive col-12 mx-auto p-0 mt-5">
+                                <table  class="table app-table-hover mb-0 text-center">
+                                <thead>
+                                    <th class="cell">Name</th>
+                                    <th class="cell">Date & Time</th>
+                                    <th class="cell"></th>
+                                </thead>
+                                
+                                <tr v-for="contact in closeContacts" :key="contact.id">
+                                    <td class="cell">{{contact.name.fname}} {{contact.name.lname}}</td>
+                                    <td class="cell">{{contact.date}}</td>
+                                    <td class="cell"><span class="btn-sm app-btn-secondary" @click="removeCloseContact(contact.id)">Remove</span></td>
+                                </tr>
+                                </table>
+                                <div v-if="!loaded" class="load-div col-12 d-flex justify-content-center align-items-center">
+                                    <div class="my-auto" id="loading"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <button :disabled="!isTraced" @click="generateReport">Generate Report</button>
+                            </div>
                         </div>
                     </div>  
                 </div>
             </div> 
         </div>
     </div>
+
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>
+
 <script>
+    const { jsPDF } = jspdf;
+
     const app = Vue.createApp({
         data() {
             return {
@@ -204,13 +230,12 @@
                 max: "",
                 filter: {},                
                 disableFields: true,
+                toggleOption: false,
                 option: "byDate",
                 errorMessage: "",
-
                 pageCurrent:1,
                 pageFirstIndex:0,
                 pageLastIndex:10,
-
                 reloadContent: async () => {
                     const response = await fetch("/admin/records/logs");
                     const result = await response.json();
@@ -238,12 +263,14 @@
                     const result = await response.json();
                     this.establishments = await result.establishments; 
                     this.loaded = true;
-                }
+                },
+                // For table 2
+                isTraced: false,
+                closeContacts: []
             }
         },
         methods: {
             // General
-         
             toggleTab(toggle) {
                 this.pageFirstIndex = 0
                 this.pageLastIndex= 10
@@ -251,9 +278,6 @@
             },
             sortChange(event) {
                 this.sortOrder = event.target.value;
-            },
-            handleAction(id) {
-                alert(id)
             },
             clear(event) {
                 event.preventDefault();
@@ -264,8 +288,12 @@
                 this.reloadContent();
                 this.searchVisitor = "";
                 this.searchEstablishment = "";
+                this.option = "byDate";
+                this.sortOrder = "Latest";
+                this.closeContacts = [];
+                this.isTraced = false;
 
-                if(tab == 1) {
+                if(this.tab == 1) {
                     this.searchTab1 = "";
                     this.visitors = [];
                     this.disableVisitor = false;
@@ -374,6 +402,34 @@
                     this.pageFirstIndex =   this.pageFirstIndex-10;
                 }
             },
+            // For table 2
+            async traceCloseContacts(id) {
+                await fetch('/admin/records/trace/'+id).then((response)=> {
+                    response.json().then((data) => {
+                        this.closeContacts = data.logs;
+                        this.isTraced = true;
+                    });
+                });
+            },
+            async removeCloseContact(id) {
+                this.closeContacts = this.closeContacts.filter(record => {
+                    return record.id != id;
+                })
+            },
+            generateReport() {
+                let pdfName = 'REPORT_' + Date.now(); 
+                let pdf = new jsPDF();
+                var col = ["Name","Date", "Establishment"];
+                var rows = [];
+
+                this.closeContacts.forEach(record => {
+                    let temp = [`${record.name.fname} ${record.name.lname}`, record.date, record.establishment];
+                    rows.push(temp);
+                })
+
+                pdf.autoTable(col, rows, { startY: 10 });
+                pdf.save(pdfName + '.pdf');
+            }
         },
         async mounted() {
             var today = new Date();
@@ -443,8 +499,6 @@
                     return establishment.name.includes(this.searchEstablishment.toUpperCase());
                 })
             },
-            
-            
         }
     });
 

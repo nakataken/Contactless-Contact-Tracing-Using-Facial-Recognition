@@ -13,6 +13,7 @@ router.get('/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminContr
 router.get('/records/logs', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_log_get);
 router.post('/records/visitors/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_visitors_filter_post);
 router.post('/records/establishments/filter', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_establishments_filter_post);
+router.get('/records/trace/:id', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_trace_get);
 
 // VISITORS
 router.get('/visitors', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.visitors_get);
