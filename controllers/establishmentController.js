@@ -88,7 +88,7 @@ const login_get = (req, res) => {
                 console.log(err.message);
                 res.redirect('/');
             } else {
-                res.redirect('/establishment/home');
+                res.redirect('/establishment/dashboard');
             }
         });
     } else {
@@ -106,7 +106,7 @@ const login_post = (req, res) => {
             if(auth) {
                 const token = createToken(data.id);
                 res.cookie('jwtEstablishment', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect('/establishment/home');
+                res.redirect('/establishment/dashboard');
             } else {
                 login_error(res, "Wrong email or password", email);
             }
@@ -171,11 +171,6 @@ const forgot_code_get = (req, res) => {
 const logout_get = (req, res) => {
     res.cookie('jwtEstablishment', '', {maxAge: 1});
     res.redirect('/establishment/login');
-}
-
-// HOME
-const home_get = (req, res) => {
-    res.render('./Establishment Module/home');
 }
 
 // DETAILS
@@ -310,7 +305,6 @@ module.exports = {
     forgot_post,
     forgot_code_get,
     logout_get,
-    home_get,
     details_get,
     updateLimit_put,
     oldPassword_post,

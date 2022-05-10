@@ -27,8 +27,6 @@ router.route('/forgot')
 
 router.get('/forgot/code/:email', establishmentController.forgot_code_get);
 
-router.get('/home', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.home_get);
-
 router.get('/details', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.details_get);
 router.post('/details/change/password/old', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment, establishmentController.oldPassword_post);
 router.put('/details/change/password/new', establishmentAuth.requireAuth, establishmentAuth.checkEstablishment,establishmentController.newPassword_put);
