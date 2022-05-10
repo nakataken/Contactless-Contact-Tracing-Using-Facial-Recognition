@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const https = require('https');
 const fs = require("fs");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const homeRoute = require("./routes/homeRoute.js");
 const visitorRoute = require("./routes/visitorRoutes.js");
@@ -23,6 +24,7 @@ app.use(express.json({limit: '50mb'}));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 app.set('view engine', 'ejs');
+app.use(cors());
 
 const dbURI = process.env.DB_URI;
 
