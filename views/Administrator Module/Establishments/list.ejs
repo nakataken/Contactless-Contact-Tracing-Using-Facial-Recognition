@@ -71,8 +71,6 @@
             }
         },
         methods: {
-
-          
             getNextPageIndex(){
                 if(this.pageLastIndex < this.establishments.length){
                     this.pageFirstIndex =  this.pageLastIndex;
@@ -105,13 +103,7 @@
             this.reloadContent();
         },
         computed: {
-            pageLastIndex(){
-                if(this.pageFirstIndex == 0 && this.establishments.length < 10 ){
-                  return  this.establishments.length;
-                }
-                else
-                    return 10;
-            },
+        
         },
         watch:{
             

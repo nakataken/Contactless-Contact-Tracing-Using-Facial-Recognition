@@ -8,6 +8,7 @@
             
         
                 <form class="mt-5">
+                    <!--Name-->
                     <div class="row">   
                         <div class="form-group col-5">
                             <label for="fname">First Name: </label>
@@ -22,6 +23,8 @@
                             <input class="form-control name" type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
                     </div>
+
+                    <!--B-date, Phone #-->
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="bdate">Birthdate</label>
@@ -34,7 +37,9 @@
                         </div>
                         
                     </div>
-                    <div class="row mt-3 ">
+
+                    <!--Email & Code-->
+                    <div class="row mt-2 ">
                         <div class="col-6 ">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
@@ -54,6 +59,7 @@
                         </div>
                     </div>
                     
+                    <!--Address
                     <div class="row">
                         <div class="col-6">
                             <label for="region">Region: </label>
@@ -64,7 +70,8 @@
                             <input class="form-control" type="text" name="province" required>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    
+                    <div class="row ">
                         <div class="col-6">
                             <label for="city">City: </label>
                             <input class="form-control" type="text" name="city" required>
@@ -74,7 +81,41 @@
                             <input class="form-control" type="text" name="barangay" required>
                         </div>
                     </div>
-                    
+                    -->
+                 
+                    <!--Vue code starts here-->
+                    <div id="app">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="city">Region: </label>
+                                <select  class="form-control" v-model="selectedRegion"   name="region" required>
+                                    <option v-for="region in regions" v-bind:value="region" >{{ region.name }}</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="barangay">Province: </label>
+                                <select  class="form-control"  v-model="selectedProvince" name="province" required>
+                                    <option v-for="province in provincefilteredItems" v-bind:value="province">{{ province.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6"> 
+                                <label>City: </label>
+                                <select  class="form-control" name="city" v-model="selectedCity" required >
+                                    <option v-for="city in cityfilteredItems" v-bind:value="city">{{city.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6"> 
+                                <label>Barangay: </label>
+                                <select  class="form-control" name="barangay"   required>
+                                    <option v-for="barangay in barangayfilteredItems" >{{ barangay.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!--end-->
 
                     <div class="row mt-3">
                         <div class="col-6">
@@ -102,6 +143,7 @@
 </div>
 
 <script>
+
     var emailVerify = 0;
     // var passIsSame = false;
 
@@ -227,5 +269,75 @@
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("datefield").setAttribute("max", today);
 </script>
+<script src="https://unpkg.com/vue@3"></script>
+<script>
+    let app = Vue.createApp({
+        data() {
+            return {
+             regions: null,
+             provinces: null,
+             city: null,
+             barangays: null,
 
+             loading: true,
+             errored: false,
+             address: null,
+
+             selectedRegion: '',
+             selectedProvince: '',
+             selectedCity: '',
+             reloadRegion: async () => {
+                 const response = await fetch("/json/regions.json");
+                 const result = await response.json();
+                 this.regions = await result;  
+                 this.loading = false;
+             },
+             reloadProvince: async () => {
+                 const response = await fetch("/json/provinces.json");
+                 const result = await response.json();
+                 this.provinces = await result;  
+             },
+             reloadCity: async () => {
+                 const response = await fetch("/json/city-mun.json");
+                 const result = await response.json();
+                 this.city = await result;  
+             },
+             reloadBarangay: async () => {
+                 const response = await fetch("/json/barangays.json");
+                 const result = await response.json();
+                 this.barangays = await result;  
+             }
+            }
+        },
+        methods: {
+         
+        },
+        computed: {
+             provincefilteredItems: function() {
+                 this.reloadProvince();
+                 return this.provinces.filter(function(el) {
+                 return el.reg_code === this.selectedRegion.reg_code;
+                 }, this);
+             },
+             cityfilteredItems: function() {
+                 this.reloadCity();
+                 return this.city.filter(function(el) {
+                 return el.prov_code === this.selectedProvince.prov_code;
+                 }, this);
+             },
+             barangayfilteredItems: function() {
+                 this.reloadBarangay();
+                 return this.barangays.filter(function(el) {
+                 return el.mun_code === this.selectedCity.mun_code;
+                 }, this);
+             },
+        },
+        mounted() {
+            this.reloadRegion();
+         },
+    })
+
+    app.mount('#app')
+    
+ </script>
 <%- include("./partials/footer.ejs") %>
