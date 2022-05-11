@@ -8,7 +8,6 @@
             
         
                 <form class="mt-5">
-                    <!--Name-->
                     <div class="row">   
                         <div class="form-group col-5">
                             <label for="fname">First Name: </label>
@@ -23,8 +22,6 @@
                             <input class="form-control name" type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
                     </div>
-
-                    <!--B-date, Phone #-->
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="bdate">Birthdate</label>
@@ -37,9 +34,7 @@
                         </div>
                         
                     </div>
-
-                    <!--Email & Code-->
-                    <div class="row mt-2 ">
+                    <div class="row mt-3 ">
                         <div class="col-6 ">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
@@ -59,63 +54,27 @@
                         </div>
                     </div>
                     
-                    <!--Address
                     <div class="row">
                         <div class="col-6">
                             <label for="region">Region: </label>
-                            <input class="form-control" type="text" name="region" required>
+                            <select id="region"></select>
                         </div>
                         <div  class="col-6">
                             <label for="province">Province: </label>
-                            <input class="form-control" type="text" name="province" required>
+                            <select id="province"></select>
                         </div>
                     </div>
-                    
-                    <div class="row ">
+                    <div class="row mt-3">
                         <div class="col-6">
                             <label for="city">City: </label>
-                            <input class="form-control" type="text" name="city" required>
+                            <select id="city"></select>
                         </div>
                         <div class="col-6">
                             <label for="barangay">Barangay: </label>
-                            <input class="form-control" type="text" name="barangay" required>
+                            <select id="barangay"></select>
                         </div>
                     </div>
-                    -->
-                 
-                    <!--Vue code starts here-->
-                    <div id="app">
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="city">Region: </label>
-                                <select  class="form-control" v-model="selectedRegion"   name="region" required>
-                                    <option v-for="region in regions" v-bind:value="region" >{{ region.name }}</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label for="barangay">Province: </label>
-                                <select  class="form-control"  v-model="selectedProvince" name="province" required>
-                                    <option v-for="province in provincefilteredItems" v-bind:value="province">{{ province.name }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-6"> 
-                                <label>City: </label>
-                                <select  class="form-control" name="city" v-model="selectedCity" required >
-                                    <option v-for="city in cityfilteredItems" v-bind:value="city">{{city.name}}</option>
-                                </select>
-                            </div>
-                            <div class="col-6"> 
-                                <label>Barangay: </label>
-                                <select  class="form-control" name="barangay"   required>
-                                    <option v-for="barangay in barangayfilteredItems" >{{ barangay.name }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <!--end-->
+                    
 
                     <div class="row mt-3">
                         <div class="col-6">
@@ -139,16 +98,23 @@
 
         </div>
     </div>
-    
 </div>
 
-<script>
+<script src="https://f001.backblazeb2.com/file/buonzz-assets/jquery.ph-locations-v1.0.0.js"></script>
 
+<script>
+    let barangays = [], cities = [], provinces = [], regions = [];
+
+    fetch('/json/barangays.json').then(response=>response.json()).then(data=>{ console.log(data) })
+    fetch('/json/city-mun.json').then(response=>response.json()).then(data=>{ console.log(data); })
+    fetch('/json/provinces.json').then(response=>response.json()).then(data=>{ console.log(data); })
+    fetch('/json/regions.json').then(response=>response.json()).then(data=>{ console.log(data); })
+</script>
+
+<script>
     var emailVerify = 0;
     // var passIsSame = false;
-
     const form = document.querySelector('form');
-
     // Submit form
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -164,7 +130,6 @@
         const email = form.email.value;
         const pass = form.pass.value;
         const cpass = form.cpass.value;
-
         let code = form.code.value;
                 
         if(pass == cpass) {
@@ -208,14 +173,12 @@
             $("#message").append(`<p class="passError">Password didn't match.</p>`);
         }
     });
-
     // Validate email
     const validateEmail = (email) => {
         return email.match(
             /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
     };
-
     // Get Verification Code from email
     document.querySelector('#getCode').addEventListener('click', (e) => {
         let email = $("#email").val();
@@ -242,7 +205,6 @@
             $("#emailError").text("Input correct email.");
         }
     })
-
     // // Script for matching password
     // $('#pass, #cpass').on('keyup', function () {
     //     if ($('#pass').val() == $('#cpass').val()) {
@@ -253,91 +215,17 @@
     //         $('#message').html('Not Matching').css('color', 'red');
     //     }
     // });
-
     // Script for max bdate 
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-
     if (dd < 10)
         dd = '0' + dd;
-
     if (mm < 10)
         mm = '0' + mm;
-
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("datefield").setAttribute("max", today);
 </script>
-<script src="https://unpkg.com/vue@3"></script>
-<script>
-    let app = Vue.createApp({
-        data() {
-            return {
-             regions: null,
-             provinces: null,
-             city: null,
-             barangays: null,
 
-             loading: true,
-             errored: false,
-             address: null,
-
-             selectedRegion: '',
-             selectedProvince: '',
-             selectedCity: '',
-             reloadRegion: async () => {
-                 const response = await fetch("/json/regions.json");
-                 const result = await response.json();
-                 this.regions = await result;  
-                 this.loading = false;
-             },
-             reloadProvince: async () => {
-                 const response = await fetch("/json/provinces.json");
-                 const result = await response.json();
-                 this.provinces = await result;  
-             },
-             reloadCity: async () => {
-                 const response = await fetch("/json/city-mun.json");
-                 const result = await response.json();
-                 this.city = await result;  
-             },
-             reloadBarangay: async () => {
-                 const response = await fetch("/json/barangays.json");
-                 const result = await response.json();
-                 this.barangays = await result;  
-             }
-            }
-        },
-        methods: {
-         
-        },
-        computed: {
-             provincefilteredItems: function() {
-                 this.reloadProvince();
-                 return this.provinces.filter(function(el) {
-                 return el.reg_code === this.selectedRegion.reg_code;
-                 }, this);
-             },
-             cityfilteredItems: function() {
-                 this.reloadCity();
-                 return this.city.filter(function(el) {
-                 return el.prov_code === this.selectedProvince.prov_code;
-                 }, this);
-             },
-             barangayfilteredItems: function() {
-                 this.reloadBarangay();
-                 return this.barangays.filter(function(el) {
-                 return el.mun_code === this.selectedCity.mun_code;
-                 }, this);
-             },
-        },
-        mounted() {
-            this.reloadRegion();
-         },
-    })
-
-    app.mount('#app')
-    
- </script>
 <%- include("./partials/footer.ejs") %>
