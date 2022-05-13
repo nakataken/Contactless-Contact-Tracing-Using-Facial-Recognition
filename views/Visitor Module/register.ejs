@@ -57,21 +57,25 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="region">Region: </label>
-                            <select id="region"></select>
+                            <select class="form-control" id="selectRegion">
+                            </select>
                         </div>
                         <div  class="col-6">
                             <label for="province">Province: </label>
-                            <select id="province"></select>
+                            <select class="form-control" id="selectProvince">
+                            </select>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="city">City: </label>
-                            <select id="city"></select>
+                            <select class="form-control" id="selectCity">
+                            </select>
                         </div>
                         <div class="col-6">
                             <label for="barangay">Barangay: </label>
-                            <select id="barangay"></select>
+                            <select class="form-control" id="selectBarangay">
+                            </select>
                         </div>
                     </div>
                     
@@ -103,15 +107,96 @@
 <script src="https://f001.backblazeb2.com/file/buonzz-assets/jquery.ph-locations-v1.0.0.js"></script>
 
 <script>
-    let barangays = [], cities = [], provinces = [], regions = [];
+    let regionCode = 0 , provinceCode = 0, cityCode = 0;
+    let provinces, cities, barangays;
+    let selectedRegion, selectedProvince, selectedCity, selectedBarangay;
 
-    fetch('/json/barangays.json').then(response=>response.json()).then(data=>{ console.log(data) })
-    fetch('/json/city-mun.json').then(response=>response.json()).then(data=>{ console.log(data); })
-    fetch('/json/provinces.json').then(response=>response.json()).then(data=>{ console.log(data); })
-    fetch('/json/regions.json').then(response=>response.json()).then(data=>{ console.log(data); })
-</script>
+    fetch('/json/regions.json').then(response=>response.json()).then(data => getRegion(data))
+    fetch('/json/provinces.json').then(response=>response.json()).then(data =>provinces = data)
+    fetch('/json/city-mun.json').then(response=>response.json()).then(data =>cities = data)
+    fetch('/json/barangays.json').then(response=>response.json()).then(data =>barangays = data)
 
-<script>
+    function  getRegion  (data) {
+        var jsonList = {"Table" : data}
+        $(document).ready(function(){
+            var listItems= "";
+            listItems += "<option >Select Region...</option>";
+            for (var i = 0; i < jsonList.Table.length; i++){
+                listItems+= "<option data-region='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].reg_code + "'>" + jsonList.Table[i].name + "</option>";
+            }
+                $("#selectRegion").html(listItems);
+                $("#selectProvince").html("");
+                $("#selectCity").html("");
+                $("#selectBarangay").html("");
+        });
+    }
+
+    $('#selectRegion').on('change', function (e) {
+        var optionSelected = $("option:selected.code", this);
+        regionCode = this.value;
+        selectedRegion = $(this).find(':selected').data('region');
+
+        var jsonList = {"Table" : provincefilteredItems(regionCode) }
+        $(document).ready(function(){
+            var listItems= "";
+            listItems += "<option >Select Province...</option>";
+            for (var i = 0; i < jsonList.Table.length; i++){
+                listItems+= "<option data-province='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].prov_code + "'>" + jsonList.Table[i].name + "</option>";
+            }
+            $("#selectProvince").html(listItems);
+            $("#selectCity").html("");
+            $("#selectBarangay").html("");
+        });  
+    })
+
+    $('#selectProvince').on('change', function (e) {
+        var optionSelected = $("option:selected", this);
+        provinceCode = this.value;
+        selectedProvince = $(this).find(':selected').data('province');
+
+        var jsonList = {"Table" : cityfilteredItems(provinceCode) }
+        $(document).ready(function(){
+        var listItems= "";
+        listItems += "<option >Select City...</option>";
+        for (var i = 0; i < jsonList.Table.length; i++){
+            listItems+= "<option data-city='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].mun_code + "'>" + jsonList.Table[i].name + "</option>";
+        }
+            $("#selectCity").html(listItems);
+            $("#selectBarangay").html("");
+        });  
+    })
+
+    $('#selectCity').on('change', function (e) {
+        var optionSelected = $("option:selected", this);
+        cityCode = this.value;
+        selectedCity = $(this).find(':selected').data('city');
+
+        var jsonList = {"Table" : barangayfilteredItems(cityCode) }
+        $(document).ready(function(){
+        var listItems= "";
+        listItems += "<option >Select Barangay...</option>";
+        for (var i = 0; i < jsonList.Table.length; i++){
+            listItems+= "<option data-barangay='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].name + "'>" + jsonList.Table[i].name + "</option>";
+        }
+            $("#selectBarangay").html(listItems);
+        });  
+
+    })
+
+    $('#selectBarangay').on('change', function (e) {
+        selectedBarangay = $(this).find(':selected').data('barangay');
+    })
+    
+    function provincefilteredItems(regionCode){
+        return provinces.filter(function(el) {return el.reg_code === regionCode;});
+    }
+    function cityfilteredItems(provinceCode){
+        return cities.filter(function(el) {return el.prov_code === provinceCode;});
+    }
+    function barangayfilteredItems(cityCode){
+        return barangays.filter(function(el) {return el.mun_code === cityCode;});
+    }
+
     var emailVerify = 0;
     // var passIsSame = false;
     const form = document.querySelector('form');
@@ -123,10 +208,10 @@
         const lname = form.lname.value;
         const contact = form.contact.value;
         const bdate = form.bdate.value;
-        const region = form.region.value
-        const province = form.province.value;
-        const city = form.city.value;
-        const barangay = form.barangay.value;
+        const region = selectedRegion;
+        const province = selectedProvince;
+        const city = selectedCity;
+        const barangay = selectedBarangay;
         const email = form.email.value;
         const pass = form.pass.value;
         const cpass = form.cpass.value;
