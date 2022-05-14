@@ -24,7 +24,7 @@ const index_get = (req, res) => {
             Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
                 if(error) return
                 if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
-                    res.redirect('/visitor/detect/1');
+                    res.redirect('/visitor/detect/instruction');
                 } else {
                     res.redirect('/visitor/profile');
                 }
@@ -49,7 +49,7 @@ const login_register = (req, res, url) => {
                 Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
                     if(error) return;
                     if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
-                        res.redirect('/visitor/detect/1');
+                        res.redirect('/visitor/detect/instruction');
                     } else {
                         res.redirect('/visitor/profile');
                     }
@@ -67,6 +67,10 @@ const login_register = (req, res, url) => {
 } 
 
 // REGISTER
+const data_privacy_get = (req, res) => {
+    login_register(req, res, './Visitor Module/data-privacy');
+}
+
 const register_get = (req, res) => {
     login_register(req, res, "./Visitor Module/register");
 }
@@ -100,7 +104,7 @@ const register_post = async (req, res) => {
             } else {
                 const token = createToken(data.id);
                 res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                res.redirect("/visitor/detect/1");
+                res.redirect("/visitor/detect/instruction");
             }
         })
     } catch (error) {
@@ -290,6 +294,7 @@ const newPassword_put = (req, res) => {
 
 module.exports = {
     index_get,
+    data_privacy_get,
     register_get,
     register_post,
     register_code_get,

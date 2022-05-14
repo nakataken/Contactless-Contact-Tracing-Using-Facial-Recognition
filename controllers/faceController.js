@@ -16,6 +16,10 @@ async function LoadModels() {
 
 LoadModels();
 
+const instruction_get = (req, res) => {
+    res.render('./Visitor Module/instruction');
+}
+
 const detect_get = (req, res) => {
     res.render('./Visitor Module/detect', {process: req.params.process});
 }
@@ -42,7 +46,7 @@ const detect_post = async (req, res) => {
                     })
                     processFace++;
                     if(processFace < 6)
-                        res.redirect(`/visitor/detect/${processFace}`);
+                        res.redirect(`/visitor/detect/process/${processFace}`);
                     else 
                         res.redirect('/visitor/login');
                 }   
@@ -199,6 +203,7 @@ const verification_post = async (req, res) => {
 }
 
 module.exports = {
+    instruction_get,
     detect_get,
     detect_post,
     verification_get,

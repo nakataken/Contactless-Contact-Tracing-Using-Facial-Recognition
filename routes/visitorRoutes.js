@@ -8,6 +8,8 @@ const router = Router();
 
 router.get('/', visitorController.index_get);
 
+router.get('/data-privacy', visitorController.data_privacy_get);
+
 router.route('/register')
     .get(visitorController.register_get)
     .post(visitorController.register_post);
@@ -18,7 +20,8 @@ router.get('/register/code/:email', visitorController.register_code_get);
     // .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.check_get)
     // .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('check'), faceController.check_post);
 
-router.route('/detect/:process')
+router.get('/detect/instruction', visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.instruction_get )
+router.route('/detect/process/:process')
     .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.detect_get)
     .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('faces'), faceController.detect_post);
 

@@ -58,7 +58,7 @@ video.addEventListener('play', () => {
                 form.append("faces", blob, `detect${process}.png`);
                 if(!fetched) {
                     fetched = true;
-                    await fetch(`/visitor/detect/${process}`, { 
+                    await fetch(`/visitor/detect/process/${process}`, { 
                         method: 'POST', 
                         body: form
                     })
