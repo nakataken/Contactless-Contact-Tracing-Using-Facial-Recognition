@@ -15,37 +15,41 @@
                         </div>
                         <div class="form-group col-2">
                             <label for="mi">M.I.: </label>
-                            <input class="form-control name" type="text" name="mi" <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
+                            <input class="form-control name" type="text" name="mi" placeholder="M.I."  <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
                         </div>
-                        <div class="form-group col-5"">
+                        <div class="form-group col-5">
                             <label for="lname">Last Name: </label>
-                            <input class="form-control name" type="text" name="lname" <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
+                            <input class="form-control name" type="text" name="lname" placeholder="Last Name"  <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
+                        <p  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row">
                         <div class="col-6">
                             <label for="bdate">Birthdate</label>
                             <input class="form-control" id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
                         </div>
                         <div class="col-6">
                             <label class="col-12" for="contact">Contact No. (+63): </label>
-                            <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
-                            <p class="text-danger" id="contactError"></p>
+                            <!--
+                                <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
+                            -->
+                            <input id="number" type="text" data-masked="" name="contact"  data-inputmask="'mask': '(+63) 999 - 999 - 9999'" placeholder="(+63) xxx - xxx - xxxx" class="form-control  col-10" required>
+                            <p id="contactError"  class="text-danger" style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
                         </div>
                         
                     </div>
-                    <div class="row mt-3 ">
-                        <div class="col-6 ">
+                    <div class="row my-0 ">
+                        <div class="col-6" style="padding-bottom: none !important;">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
-                            <p class="text-danger" id="emailError"></p>
+                            <p class="text-danger"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;" id="emailError"></p>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 ">
                             <label for="code" class="col-12">Email verification code: </label>
                             <div class="col-12 d-flex flex-row">
                                 <div class="col-8">
                                     <input class="form-control" type="number" name="code" id="code" required>
-                                    <p id="codeError" class="text-danger"></p>
+                                    <p id="codeError"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
                                 </div>
                                 <div class="col-4 mx-end ps-2">
                                     <input type='button' id="getCode" class="btn form-control" value="Get Code"/>
@@ -53,28 +57,27 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="row">
                         <div class="col-6">
                             <label for="region">Region: </label>
-                            <select class="form-control" id="selectRegion">
+                            <select class="form-control" id="selectRegion" required>
                             </select>
                         </div>
                         <div  class="col-6">
                             <label for="province">Province: </label>
-                            <select class="form-control" id="selectProvince">
+                            <select class="form-control" id="selectProvince" required>
                             </select>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="city">City: </label>
-                            <select class="form-control" id="selectCity">
+                            <select class="form-control" id="selectCity" required>
                             </select>
                         </div>
                         <div class="col-6">
                             <label for="barangay">Barangay: </label>
-                            <select class="form-control" id="selectBarangay">
+                            <select class="form-control" id="selectBarangay" required>
                             </select>
                         </div>
                     </div>
@@ -89,7 +92,7 @@
                             <label for="cpass">Confirm Password</label>
                             <input class="form-control" id="cpass" type="password" name="cpass" minlength="8" required>
                         </div>
-                        <div id="message" class="text-danger"></div>
+                        <p id="message"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;"></p>
                     </div>
                     
                     <button type="submit" class="btn col-12 reg-btn mt-5">Register</button>
@@ -104,9 +107,19 @@
     </div>
 </div>
 
-<script src="https://f001.backblazeb2.com/file/buonzz-assets/jquery.ph-locations-v1.0.0.js"></script>
+</script>
+<!--
+    <script src="https://f001.backblazeb2.com/file/buonzz-assets/jquery.ph-locations-v1.0.0.js"></script>
+
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.3/jquery.inputmask.bundle.min.js"></script>
 
 <script>
+    $(document).ready(function(){
+          Inputmask().mask(document.querySelectorAll("#number"));
+    });
+
     let regionCode = 0 , provinceCode = 0, cityCode = 0;
     let provinces, cities, barangays;
     let selectedRegion, selectedProvince, selectedCity, selectedBarangay;
@@ -120,7 +133,7 @@
         var jsonList = {"Table" : data}
         $(document).ready(function(){
             var listItems= "";
-            listItems += "<option >Select Region...</option>";
+            listItems += "<option  value='' >Select Region...</option>";
             for (var i = 0; i < jsonList.Table.length; i++){
                 listItems+= "<option data-region='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].reg_code + "'>" + jsonList.Table[i].name + "</option>";
             }
@@ -130,6 +143,7 @@
                 $("#selectBarangay").html("");
         });
     }
+   
 
     $('#selectRegion').on('change', function (e) {
         var optionSelected = $("option:selected.code", this);
@@ -139,7 +153,7 @@
         var jsonList = {"Table" : provincefilteredItems(regionCode) }
         $(document).ready(function(){
             var listItems= "";
-            listItems += "<option >Select Province...</option>";
+            listItems += "<option  value='' >Select Province...</option>";
             for (var i = 0; i < jsonList.Table.length; i++){
                 listItems+= "<option data-province='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].prov_code + "'>" + jsonList.Table[i].name + "</option>";
             }
@@ -157,7 +171,7 @@
         var jsonList = {"Table" : cityfilteredItems(provinceCode) }
         $(document).ready(function(){
         var listItems= "";
-        listItems += "<option >Select City...</option>";
+        listItems += "<option  value='' >Select City...</option>";
         for (var i = 0; i < jsonList.Table.length; i++){
             listItems+= "<option data-city='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].mun_code + "'>" + jsonList.Table[i].name + "</option>";
         }
@@ -174,7 +188,7 @@
         var jsonList = {"Table" : barangayfilteredItems(cityCode) }
         $(document).ready(function(){
         var listItems= "";
-        listItems += "<option >Select Barangay...</option>";
+        listItems += "<option value=''> Select Barangay...</option>";
         for (var i = 0; i < jsonList.Table.length; i++){
             listItems+= "<option data-barangay='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].name + "'>" + jsonList.Table[i].name + "</option>";
         }
@@ -183,6 +197,7 @@
 
     })
 
+   
     $('#selectBarangay').on('change', function (e) {
         selectedBarangay = $(this).find(':selected').data('barangay');
     })
@@ -216,7 +231,14 @@
         const pass = form.pass.value;
         const cpass = form.cpass.value;
         let code = form.code.value;
-                
+        
+        // Check if number is valid
+        var number = $("[name='contact']").val();
+        if (number.replace(/[^0-9]/g,'') != 12) {
+            $('#number').val(null);
+            $('#contactError').text("Please put valid contact number");
+        }
+
         if(pass == cpass) {
             $('.passError').remove();
             let errors = [];
