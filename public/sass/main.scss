@@ -293,7 +293,7 @@ nav{
             p{
                 @include text-black(normal,p);
             }
-            input {
+            input, select {
                 border: 0;
                 border-radius: 0px;
                 outline: 0;
@@ -603,4 +603,10 @@ background-color: rgba(0, 0, 0, .5);
 
 ._1 {
     background-color: pink !important;
+}
+
+.messageText{
+    font-size:11px !important; 
+    padding: 0 !important; 
+    margin: 0 !important;
 }

@@ -24,9 +24,13 @@
                         <li class="nav-item mx-3"><a class="nav-link" href="/visitor/details">Details</a></li>
                         <li class="nav-item mx-3" ><a class="nav-link" href="/visitor/logout">Logout</a></li>
                         <% if(visitor.isVaccinated) { %> 
-                            <li class="badge vaccinated-badge"><img class="me-1" src="https://img.icons8.com/material-rounded/12/0FB3A8/filled-circle.png"/>Vaccinated </li>
+                            <li class="badge vaccinated-badge">
+                                Vaccinated 
+                            </li>
                         <% } else { %>
-                            <li> <a class="badge not-vaccinated-badge" href="/visitor/details">Not Vaccinated</a></li>
+                            <li> 
+                                <a class="badge not-vaccinated-badge" href="/visitor/details">Not Vaccinated</a>
+                            </li>
                         <% } %>
                     </ul>
                    

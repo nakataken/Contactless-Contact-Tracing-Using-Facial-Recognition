@@ -22,11 +22,11 @@
                 <form class="column mt-md-4 mt-2"  onsubmit="return submitForm(event)" action="/establishment/request" method="POST" enctype="multipart/form-data">
                     <div class="form-group mt-2 ">
                         <label for="name">Establishment Name: </label>
-                        <input class="form-control" type="text" name="name" required>
+                        <input class="form-control"  type="text" name="name" required>
                     </div>
                     <div class="form-group mt-2 "> 
                         <label for="owner">Owner Name: </label>
-                        <input class="form-control" type="text" name="owner" required>
+                        <input class="form-control" onkeydown="return /[a-z '.]/i.test(event.key)"  type="text" name="owner" required>
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="email">Email: </label>
@@ -61,11 +61,11 @@
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="permit">Business Permit: </label>
-                        <input class="form-control" type="file" id="permit" name="permit" accept="image/png, image/jpeg">
+                        <input class="form-control" type="file" id="permit" name="permit" accept="image/png, image/jpeg" required>
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="validID">Valid ID: </label>
-                        <input class="form-control" type="file" id="validID" name="validID" accept="image/png, image/jpeg">
+                        <input class="form-control" type="file" id="validID" name="validID" accept="image/png, image/jpeg" required>
                     </div>
                     <button class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
                     <div class="col-12 d-flex justify-content-center mt-5">

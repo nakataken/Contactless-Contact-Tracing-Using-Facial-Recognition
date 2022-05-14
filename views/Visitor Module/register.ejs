@@ -3,7 +3,7 @@
 <div class="register container-fluid d-flex flex-row align-items-center justify-content-center p-0">
     <div class="register-subcon col-xl-8 col-lg-10 col-md-11 col-10 row">
         <div id="r-form-parent"class="c-div col-lg-10 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
-            <div id="r-form" class="col-12 px-0 ">
+            <div id="r-form" class="col-12 px-3 ">
                 <h1>Contact Information Gathering</h1>
             
         
@@ -11,22 +11,24 @@
                     <div class="row">   
                         <div class="form-group col-5">
                             <label for="fname">First Name: </label>
-                            <input class="form-control name" type="text" name="fname" placeholder="First Name" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
+                            <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name" minlength="2" maxlength="20" type="text" name="fname" placeholder="First Name" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
                         </div>
                         <div class="form-group col-2">
-                            <label for="mi">M.I.: </label>
-                            <input class="form-control name" type="text" name="mi" placeholder="M.I."  <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
+                            <label for="mi" >M.I.: </label>
+                            <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name" maxlength="2" type="text" name="mi" placeholder="M.I."  <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
                         </div>
                         <div class="form-group col-5">
                             <label for="lname">Last Name: </label>
-                            <input class="form-control name" type="text" name="lname" placeholder="Last Name"  <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
+                            <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name"  minlength="2" maxlength="20" type="text" name="lname" placeholder="Last Name"  <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
-                        <p  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
+                        <p class="messageText">&zwnj;</p>
                     </div>
+
+                     <!--B-date | Contact Number-->
                     <div class="row">
                         <div class="col-6">
                             <label for="bdate">Birthdate</label>
-                            <input class="form-control" id="datefield" type="date" name="bdate" max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
+                            <input class="form-control" id="datefield" type="date" name="bdate"  min='1899-01-01' max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
                         </div>
                         <div class="col-6">
                             <label class="col-12" for="contact">Contact No. (+63): </label>
@@ -34,22 +36,24 @@
                                 <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
                             -->
                             <input id="number" type="text" data-masked="" name="contact"  data-inputmask="'mask': '(+63) 999 - 999 - 9999'" placeholder="(+63) xxx - xxx - xxxx" class="form-control  col-10" required>
-                            <p id="contactError"  class="text-danger" style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
+                            <p id="contactError"  class="text-danger  messageText"  >&zwnj;</p>
                         </div>
                         
                     </div>
+
+                    <!--Email-->
                     <div class="row my-0 ">
                         <div class="col-6" style="padding-bottom: none !important;">
                             <label for="email">Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
-                            <p class="text-danger"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;" id="emailError"></p>
+                            <p class="text-danger messageText" id="emailError">&zwnj;</p>
                         </div>
                         <div class="col-6 ">
                             <label for="code" class="col-12">Email verification code: </label>
                             <div class="col-12 d-flex flex-row">
                                 <div class="col-8">
                                     <input class="form-control" type="number" name="code" id="code" required>
-                                    <p id="codeError"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;">&zwnj;</p>
+                                    <p id="codeError" class="messageText">&zwnj;</p>
                                 </div>
                                 <div class="col-4 mx-end ps-2">
                                     <input type='button' id="getCode" class="btn form-control" value="Get Code"/>
@@ -57,6 +61,8 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!--Address-->
                     <div class="row">
                         <div class="col-6">
                             <label for="region">Region: </label>
@@ -69,7 +75,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mt-3">
+
+                    <div class="row mt-4">
                         <div class="col-6">
                             <label for="city">City: </label>
                             <select class="form-control" id="selectCity" required>
@@ -82,17 +89,17 @@
                         </div>
                     </div>
                     
-
-                    <div class="row mt-3">
+                    <!--Password-->
+                    <div class="row mt-4">
                         <div class="col-6">
                             <label for="pass">Password</label>
                             <input class="form-control" id="pass" type="password" name="pass" minlength="8" required>
+                            <p id="passError"  class="text-danger  messageText" >&zwnj;</p>
                         </div>
                         <div class="col-6">
                             <label for="cpass">Confirm Password</label>
                             <input class="form-control" id="cpass" type="password" name="cpass" minlength="8" required>
                         </div>
-                        <p id="message"  style=" color: red !important; font-size:11px; padding: 0px; margin: 0px;"></p>
                     </div>
                     
                     <button type="submit" class="btn col-12 reg-btn mt-5">Register</button>
@@ -138,9 +145,9 @@
                 listItems+= "<option data-region='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].reg_code + "'>" + jsonList.Table[i].name + "</option>";
             }
                 $("#selectRegion").html(listItems);
-                $("#selectProvince").html("");
-                $("#selectCity").html("");
-                $("#selectBarangay").html("");
+                $("#selectProvince").html("<option  value='' >loading...</option>");
+                $("#selectCity").html("<option  value='' >loading...</option>");
+                $("#selectBarangay").html("<option  value='' >loading...</option>");
         });
     }
    
@@ -158,8 +165,8 @@
                 listItems+= "<option data-province='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].prov_code + "'>" + jsonList.Table[i].name + "</option>";
             }
             $("#selectProvince").html(listItems);
-            $("#selectCity").html("");
-            $("#selectBarangay").html("");
+            $("#selectCity").html("<option  value='' >loading...</option>");
+            $("#selectBarangay").html("<option  value='' >loading...</option>");
         });  
     })
 
@@ -176,7 +183,7 @@
             listItems+= "<option data-city='" + jsonList.Table[i].name + "' value='" + jsonList.Table[i].mun_code + "'>" + jsonList.Table[i].name + "</option>";
         }
             $("#selectCity").html(listItems);
-            $("#selectBarangay").html("");
+            $("#selectBarangay").html("<option  value='' >loading...</option>");
         });  
     })
 
@@ -232,9 +239,10 @@
         const cpass = form.cpass.value;
         let code = form.code.value;
         
-        // Check if number is valid
+        // Check if contact number is valid
         var number = $("[name='contact']").val();
-        if (number.replace(/[^0-9]/g,'') != 12) {
+        var checkNum= number.replace(/[^0-9]/g,'');
+        if (checkNum.length != 12) {
             $('#number').val(null);
             $('#contactError').text("Please put valid contact number");
         }
@@ -273,11 +281,11 @@
                 }
             } else {
                 for(i in errors) {
-                    $("#message").append(`<p class="passError">${errors[i]}</p>`);
+                    $("#passError").text(errors[i]);
                 }
             }
         } else {
-            $("#message").append(`<p class="passError">Password didn't match.</p>`);
+            $("#passError").text("Password didn't match.");
         }
     });
     // Validate email
@@ -333,6 +341,7 @@
         mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("datefield").setAttribute("max", today);
+
 </script>
 
 <%- include("./partials/footer.ejs") %>

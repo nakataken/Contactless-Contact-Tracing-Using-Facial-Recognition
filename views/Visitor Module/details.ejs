@@ -78,15 +78,21 @@
                 <p class="m-0 pb-1"><%=visitor.bdate%></p>
             </div>
             <div class="py-2">
-                <div class="d-flex flex-row justify-content-between ">
-                    <h5 class="m-0 p-0">Change Password</h5>
-                    <input class="btn btn-outline-secondary btn-sm" type="button" id="change" value="Change">
+                <div class="d-flex flex-column ">
+                    <div class="d-flex flex-row justify-content-between ">
+                        <h5 class="m-0 p-0">Change Password</h5>
+                        <input class="btn btn-outline-secondary btn-sm" type="button" id="change" value="Change">
+                    </div>
+                    <div>
+                        <p class="text-success messageText" id="passwordChangeMessage">Password successfully changed.</p>
+                    </div>
+
                 </div>
                 <div id="oldPassword" class="row">
                     <label >Enter old password: </label>
                     <form  class="col-10">
                         <input  class="form-control" type="password" id="oldPass">
-                        <p class="text-danger" id="oldPassError"></p>
+                        <p class="text-danger messageText" id="oldPassError"></p>
                     </form>
                     <div class="col-2 ">
                         <input class="btn btn-outline-secondary col-12" type="button" id="check" value="Submit">
@@ -100,7 +106,7 @@
                     <form class="col-6">
                         <label>Confirm new password: </label>
                         <input class="form-control" type="password" id="confPass">
-                        <p class="text-danger" id="newPassError"></p>
+                        <p class="text-danger messageText" id="newPassError"></p>
                     </form>
                     
                     <div class="col-12 d-flex justify-content-end">
@@ -173,6 +179,7 @@
                             if(response.redirected) {
                                 window.location.href = response.url;
                             }
+                            $("#passwordChangeMessage").text("Password successfully changed.")
                         });
                     } else {
                         for(i in errors) {

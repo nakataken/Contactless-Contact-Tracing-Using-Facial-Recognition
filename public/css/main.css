@@ -389,7 +389,7 @@ nav {
   font-size: 0.9rem !important;
 }
 
-.register .register-subcon .c-div input {
+.register .register-subcon .c-div input, .register .register-subcon .c-div select {
   border: 0;
   border-radius: 0px;
   outline: 0;
@@ -399,7 +399,7 @@ nav {
   border: 1px solid rgba(141, 137, 137, 0.5);
 }
 
-.register .register-subcon .c-div input.name {
+.register .register-subcon .c-div input.name, .register .register-subcon .c-div select.name {
   text-transform: uppercase !important;
 }
 
@@ -747,5 +747,11 @@ nav {
 
 ._1 {
   background-color: pink !important;
+}
+
+.messageText {
+  font-size: 11px !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 /*# sourceMappingURL=main.css.map */

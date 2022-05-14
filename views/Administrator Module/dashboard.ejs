@@ -1,6 +1,6 @@
 <%- include("./partials/header.ejs", {title:"Dashboard"}) %>
     <div id="app" >
-        <div v-if="admin" class="home_adm container-fluid p-0">   
+        <div  v-if="admin" class="home_adm container-fluid p-0">   
             <%- include("./partials/navbar.ejs"); %>
             <div class="app-wrapper">
 
@@ -19,14 +19,14 @@
                                     <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
                                         <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED CLIENTS</p>
                                         <p class="count m-0"><%=visitorsCount%></P>
-                                        <a href="/admin/visitors/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
+                                        <a href="/admin/visitors"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
                                         <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED ESTABLISHMENTS</p>
                                         <p class="count m-0"><%=establishmentsCount%></P>
-                                        <a href="/admin/establishments/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
+                                        <a  href="/admin/establishments/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                                     </div>
                                 </div>
                                 <!-- <div class="col">
