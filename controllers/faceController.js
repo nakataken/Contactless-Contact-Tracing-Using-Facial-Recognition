@@ -130,7 +130,7 @@ const verification_post = async (req, res) => {
         const token = req.cookies.jwtEstablishment;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            let visitors = await Visitor.find();
+            let visitors = await Visitor.find({ descriptions: { $ne: null }});
 
             if(visitors) {
                 for (i = 0; i < visitors.length; i++) {

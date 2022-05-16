@@ -29,7 +29,7 @@
                         <p  class="text-start" id="codeError"></p>
                     </div>
                 </div>
-                <button id="submit" class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
+                <button id="submitCode" class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
 
             </div>
             <div id="newPassword">
@@ -42,7 +42,7 @@
                     <input class="form-control" type="password" id="confPass">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="button" id="confirm" value="Submit">
+                    <button id="confirm" class="btn btn-grad col-12 mt-5" type="submit">Confirm</button>
                     <div id="newPassError"></div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
         }
     })
 
-    document.querySelector('#confirm').addEventListener('click', async (e) => {
+    document.querySelector('#confirm').addEventListener('click', (e) => {
         let newPass = $("#newPass").val();
         let confPass = $("#confPass").val();
         if(newPass!="" && confPass!="") {
@@ -121,7 +121,7 @@
                 }
 
                 if(!errors.length) {
-                    await fetch('/visitor/forgot', {
+                    fetch('/visitor/forgot', {
                         method: 'PUT',
                         headers: {
                             'Accept': 'application/json',
