@@ -277,9 +277,9 @@ const qr_post = (req, res) => {
                 if(visitor.isVaccinated) {
                     const record = new Record({visitor_id, establishment_id});
                     await record.save();
-                    res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
+                    res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}, you are not vaccinated.`});
                 } else {
-                    res.json({success:false, message: "You are not vaccinated."});
+                    res.json({success:false, message: `${visitor.name.fname} ${visitor.name.lname}`});
                 }
             } else {
                 const record = new Record({visitor_id, establishment_id});

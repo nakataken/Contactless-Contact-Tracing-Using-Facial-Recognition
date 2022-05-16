@@ -173,7 +173,7 @@ const verification_post = async (req, res) => {
                         
                         if(establishment.limitVaccinated) {
                             if(!visitor.isVaccinated) {
-                                res.json({success:false, message: "You are not vaccinated."});
+                                res.json({success:false, message:`${visitor.name.fname} ${visitor.name.lname}, you are not vaccinated.`});
                             } else {
                                 record.save((error, data) => {
                                     if(error) return;  
