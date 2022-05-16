@@ -1,20 +1,20 @@
 <%- include("./partials/header.ejs", {title:"Forgot"}) %>
 
 <div class="login container-fluid d-flex flex-row align-items-center justify-content-center p-0">
+   
+ 
     <div class="login-subcon col-xl-8 col-lg-10 col-md-11 col-10 row">
+        
         <div class="c-div col-xl-5 col-lg-7 col-md-7 col-sm-10 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
             <div class="col-12 d-flex justify-items-center mt-3">
                 <a href="/" class="col-4 mx-auto"><img src="../assets/images/logo.png" alt="" class="col-12"></a>
             </div>
-
             <div class="mt-5">
-                <!--email-->
                 <div>
                     <label for="email">Email: </label>
                     <input class="form-control" id="email" type="email" name="email" required>
                     <p class="text-start" id="emailError"></p>
                 </div>
-                 <!--code-->
                 <div>
                     <div class="form-group">
                         <label for="code">Email verification code: </label>
@@ -29,12 +29,9 @@
                         <p  class="text-start" id="codeError"></p>
                     </div>
                 </div>
-                <button id="submit" class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
-                <div class="col-12 d-flex justify-items-center mt-2">
-                    <a href="/visitor/login" class="text-center mx-auto">Back to Login</a>
-                </div>
-            </div>
+                <button id="submitCode" class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
 
+            </div>
             <div id="newPassword">
                 <div class="form-group">
                     <label>Enter new password: </label>
@@ -45,7 +42,7 @@
                     <input class="form-control" type="password" id="confPass">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="button" id="confirm" value="Submit">
+                    <button id="confirm" class="btn btn-grad col-12 mt-5" type="submit">Confirm</button>
                     <div id="newPassError"></div>
                 </div>
             </div>
@@ -106,7 +103,7 @@
         }
     })
 
-    document.querySelector('#confirm').addEventListener('click', async (e) => {
+    document.querySelector('#confirm').addEventListener('click', (e) => {
         let newPass = $("#newPass").val();
         let confPass = $("#confPass").val();
         if(newPass!="" && confPass!="") {
@@ -124,7 +121,7 @@
                 }
 
                 if(!errors.length) {
-                    await fetch('/visitor/forgot', {
+                    fetch('/visitor/forgot', {
                         method: 'PUT',
                         headers: {
                             'Accept': 'application/json',

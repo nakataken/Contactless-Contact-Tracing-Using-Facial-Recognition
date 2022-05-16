@@ -130,7 +130,7 @@ const verification_post = async (req, res) => {
         const token = req.cookies.jwtEstablishment;
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
-            let visitors = await Visitor.find();
+            let visitors = await Visitor.find({ descriptions: { $ne: null }});
 
             if(visitors) {
                 for (i = 0; i < visitors.length; i++) {
@@ -173,7 +173,7 @@ const verification_post = async (req, res) => {
                         
                         if(establishment.limitVaccinated) {
                             if(!visitor.isVaccinated) {
-                                res.json({success:false, message: "You are not vaccinated."});
+                                res.json({success:false, message:`${visitor.name.fname} ${visitor.name.lname}, you are not vaccinated.`});
                             } else {
                                 record.save((error, data) => {
                                     if(error) return;  

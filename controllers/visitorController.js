@@ -48,7 +48,7 @@ const login_register = (req, res, url) => {
             } else {
                 Visitor.findOne({_id:decodedToken.id}, (error, visitor) => {
                     if(error) return;
-                    if(visitor.descriptions.length < 5 || !visitor.descriptions.length) {
+                    if(!visitor.descriptions.length || visitor.descriptions.length < 5) {
                         res.redirect('/visitor/detect/instruction');
                     } else {
                         res.redirect('/visitor/profile');
