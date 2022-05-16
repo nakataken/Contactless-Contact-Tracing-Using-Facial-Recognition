@@ -89,7 +89,12 @@ nav{
 
 .navbar{
     .nav-link{
-        @include text-white(normal,reg); 
+        @include text-white(bold,reg); 
+        border-bottom: 2px solid transparent;
+        padding: 2px;
+        &.active{
+            border-bottom: 2px solid white;
+        }
     } 
     button{
         @include btn-white(normal,btn);
@@ -474,8 +479,8 @@ nav{
 
 
 .btn-sm {
-    padding: 0.125rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem !important;
+    font-size: 0.75rem !important;
 }
 
 .truncate {
@@ -609,4 +614,14 @@ background-color: rgba(0, 0, 0, .5);
     font-size:11px !important; 
     padding: 0 !important; 
     margin: 0 !important;
+}
+.btn-outline-secondary{
+    background-color: white !important;
+    color: #5d6778 !important;
+    border: 1px solid #5d6778   !important;
+}
+.btn-outline-secondary:hover{
+    background-color: white !important;
+    color: $color-primary !important;
+    border: 1px solid $color-primary   !important;
 }

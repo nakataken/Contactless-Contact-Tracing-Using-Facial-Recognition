@@ -15,9 +15,10 @@
         
         <div  id="r-form-parent" class="c-div col-lg-6 col-md-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
             <div id="r-form" class="col-12 px-0 ">
-                <h1 class="mt-3">Establishment</h1>
-    
-                <p>Request account creation here. ==Insert meaningful message==.</p>
+                <div class="col-12 d-flex justify-items-center mt-3">
+                    <a href="/" class="col-4 mx-auto"><img src="../assets/images/logo.png" alt="" class="col-12"></a>
+                </div>
+                <p class="mt-4">Request account creation here. ==Insert meaningful message==.</p>
                 
                 <form class="column mt-md-4 mt-2"  onsubmit="return submitForm(event)" action="/establishment/request" method="POST" enctype="multipart/form-data">
                     <div class="form-group mt-2 ">
