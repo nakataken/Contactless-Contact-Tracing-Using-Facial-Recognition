@@ -9,15 +9,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="../css/main.css">
     <script src="/js/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #reader__dashboard_section_csr{
+            padding: 20px !important;
+        }
+        #reader__camera_selection{
+            width: 100% !important;
+        }
+        #reader__dashboard_section_swaplink{
+            display: none !important;
+        }
+
+        #reader__dashboard_section_csr span button{
+           margin-top: 10px !important;
+        }
+
+
+    </style>
 </head>
-<body >
-    <div class="vh-100 d-flex align-items-center">
-        <div class="mx-auto my-auto p-5" style="width: 500px" id="reader"></div>
-        <div>
-            <h1 id="person"></h1>
+<body class="cam_module d-flex flex-column _1">
+    <div class="container d-flex flex-column justify-content-start align-items-start" >
+        <a href="/establishment/dashboard"  class="mx-start" style="color: #0FB3A8;"><img src="https://img.icons8.com/material-outlined/20/0FB3A8/long-arrow-left.png"/> Go back to dashboard</a>
+        <div style="border:1px solid #bcc1cb; border-radius: 0.2rem;" class="d-flex flex-row col-12 mt-2 py-2 px-4 ">
+            <h6 >Result:</h6>
+            <h6 id="person" style="color: #11171F; font-weight: 400;" class="ms-2"></h6>
         </div>
     </div>
-  
+    <div class="container d-flex align-items-center mt-4" style="">
+        <div class="mx-auto my-auto col-12" style="width:500px; background-color: white; " id="reader"></div>
+    </div>
 
     <script>
         var fetched = false;
