@@ -131,7 +131,6 @@ const verification_post = async (req, res) => {
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             let visitors = await Visitor.find({ descriptions: { $ne: null }});
-
             if(visitors) {
                 for (i = 0; i < visitors.length; i++) {
                     // Change the face data descriptors from Objects to Float32Array type

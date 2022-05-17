@@ -24,6 +24,7 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+    $('#loading').hide();
     var url_string = window.location.href;
     var url = new URL(url_string);
     const process = url.pathname.charAt(url.pathname.length - 1);
