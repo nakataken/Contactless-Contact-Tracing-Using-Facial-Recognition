@@ -49,7 +49,6 @@
                     <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1 ">
                         <ul class="app-menu list-unstyled accordion" id="menu-accordion">
                             <li class="nav-item">
-                              
                                 <a class="nav-link active" href="/establishment/dashboard">
                                     <span class="nav-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
@@ -117,18 +116,16 @@
                 <div class="container-xl">
                     <div class="head container d-flex flex-column px-5 px-sm-2 app-content">
                         <h3 class="fw-b c-p mt-5">Dashboard</h3>
-                       
                         <div class="dashboard-card col-12 border-left-decoration mx-auto px-5 py-4 mt-3">
                             <h3 class="fw-b">{{establishment.name}}</h3>
                             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore quod maiores, vel nemo itaque sapiente asperiores, quam blanditiis at, ipsum quos temporibus voluptate pariatur vitae ipsa. Voluptatibus consectetur soluta recusandae?</p>
                         </div>
                         <div class="col mt-3">
                             <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
-                                <p class="fw-b c-dis p-0 m-0">TOTAL LOGGED IN THIS ESTABLISHMENTS</p>
+                                <p class="fw-b c-dis p-0 m-0">TOTAL LOGS</p>
                                 <p class="count m-0">{{recordsCount}}</p>
                             </div>
                         </div>
-                     
                         <div class="mt-4">
                             <input class="form-control" type="search" v-model="search" placeholder="Search for the visitor name...">
                         </div>
@@ -142,17 +139,15 @@
                                     </tr>
                                     
                                 </thead>
-                               
                                 <tr v-for="(log,index) in filteredLogs.slice(pageFirstIndex,pageLastIndex)" :key="log._id">
                                     <td class="cell">{{index + pageFirstIndex +1}}</td>
                                     <td class="cell">{{log.name}}</td>
                                     <td class="cell">{{log.date}}</td>
                                 </tr>
-                       
                             </table>
                         </div>
-                         <!-- Pagination -->
-                         <div class="mt-5 d-flex flex-row justify-content-center">
+                        <!-- Pagination -->
+                        <div class="mt-5 d-flex flex-row justify-content-center">
                             <nav aria-label="Page navigation example mt-5 mx-auto">
                                 <ul class="pagination">
                                     <li class="page-item"  @click="getPrevPageIndex()"><a class="page-link" href="#">Previous</a></li>
