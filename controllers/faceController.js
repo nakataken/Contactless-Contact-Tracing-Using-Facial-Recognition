@@ -141,7 +141,7 @@ const verification_post = async (req, res) => {
                     visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
                 }   
                 // Load face matcher to find the matching face
-                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.99);
+                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
 
                 // Read the image using canvas or other method
                 const img = await canvas.loadImage(req.file.path);
@@ -162,8 +162,8 @@ const verification_post = async (req, res) => {
                     }
                 })
                 
-                // const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
-                const results = await resizedDetections.map((d) => faceMatcher.matchDescriptor(d.descriptor));
+                const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+                
                 if(results) {
                     try {
                         const establishment = await Establishment.findById(decodedToken.id);

@@ -301,8 +301,6 @@
                             $("#emailError").text("Email already exists.");
                         } else {
                             emailVerify = data;
-                            // Remove after testing
-                            console.log(emailVerify);
                             $("#codeError").text("");
                             setTimeout(function(){
                                 e.target.disabled = false
