@@ -18,7 +18,7 @@
                 <div class="col-12 d-flex justify-items-center mt-3">
                     <a href="/" class="col-4 mx-auto"><img src="../assets/images/logo.png" alt="" class="col-12"></a>
                 </div>
-                <p class="mt-4">Request account creation here. ==Insert meaningful message==.</p>
+                <p class="mt-4">Request account creation here.</p>
                 
                 <form class="column mt-md-4 mt-2"  onsubmit="return submitForm(event)" action="/establishment/request" method="POST" enctype="multipart/form-data">
                     <div class="form-group mt-2 ">
@@ -32,14 +32,14 @@
                     <div class="form-group mt-2 ">
                         <label for="email">Email: </label>
                         <input class="form-control" id="email" type="email" name="email" required>
-                        <p id="emailError" class="text text-danger"></p>
+                        <p id="emailError text-danger messageText" class="text text-danger"></p>
                     </div>
                     <div class="form-group col-12 p-0">
                         <label for="code">Email verification code: </label>
                         <div class="col-12 row p-0">
                             <div class="col-8">
                                 <input class="form-control" type="number" name="code" id="code" required>
-                                <p id="codeError" class="text-danger"></p>
+                                <p id="codeError" class="text-danger messageText"></p>
                             </div>
                             <div class="col-4 p-0">
                                 <input type='button' id="getCode" class="btn col-12 " value="Get Code"/>

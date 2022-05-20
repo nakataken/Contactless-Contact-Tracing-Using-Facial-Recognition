@@ -11,7 +11,7 @@
             </div>
             
             
-            <p class="mt-4">Login with the data you entered during the registration.</p>
+            <p class="mt-4 ">Login with the data you entered during the registration.</p>
             <form class="column mt-md-4 mt-2" action="/visitor/login" method="POST">
                 <div class="form-group">
                     <label for="email">Email: </label>
@@ -22,7 +22,7 @@
                     <input class="form-control" id="pass" type="password" name="pass" required>
                 </div>
                 <% if(typeof(error) != "undefined") {%>
-                    <p class="text-danger"><%=error%></p>
+                    <p class="text-danger messageText"><%=error%></p>
                 <% } %>
                 
                 
