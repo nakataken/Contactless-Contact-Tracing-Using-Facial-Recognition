@@ -14,22 +14,22 @@
                             <table  class="table app-table-hover mb-0">
                                 
                                 <thead>
-                                    <th class="cell">Name</th>
-                                    <th class="cell">Owner</th>
-                                    <th class="cell">Address</th>
-                                    <th class="cell">Email</th>
-                                    <th class="cell">Contact</th>
-                                    <th class="cell">Limited for vaccinated person</th>
+                                    <th class="cell text-center">Name</th>
+                                    <th class="cell text-center">Owner</th>
+                                    <th class="cell text-center">Address</th>
+                                    <th class="cell text-center">Email</th>
+                                    <th class="cell text-center">Contact</th>
+                                    <th class="cell text-center">Limited for vaccinated person</th>
                                 </thead>
                 
                                 <tr  v-for="establishment in establishments.slice(pageFirstIndex,pageLastIndex)" :key="establishment._id">
-                                    <td class="cell">{{establishment.name}}</td>
-                                    <td class="cell">{{establishment.owner}}</td>
-                                    <td class="cell">{{establishment.address}}</td>
-                                    <td class="cell">{{establishment.email}}</td>
-                                    <td class="cell">{{establishment.contact}}</td>
-                                    <td class="cell" v-if="establishment.limitVacinated">Yes</td>
-                                    <td class="cell" v-else>No</td>
+                                    <td class="cell text-center">{{establishment.name}}</td>
+                                    <td class="cell text-center">{{establishment.owner}}</td>
+                                    <td class="cell text-center">{{establishment.address}}</td>
+                                    <td class="cell text-center">{{establishment.email}}</td>
+                                    <td class="cell text-center">{{establishment.contact}}</td>
+                                    <td class="cell text-center" v-if="establishment.limitVacinated">✓</td>
+                                    <td class="cell text-center" v-else>☓</td>
                                 </tr>
                             </table>
                             <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
