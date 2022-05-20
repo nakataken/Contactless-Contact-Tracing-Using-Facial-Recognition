@@ -12,7 +12,7 @@
                 <div>
                     <label for="email">Email: </label>
                     <input class="form-control" id="email" type="email" name="email" required>
-                    <p class="text-start" id="emailError"></p>
+                    <p class="text-start messageText" id="emailError"></p>
                 </div>
                  <!--code-->
                 <div>
@@ -26,7 +26,7 @@
                                 <input class="form-control border" type='button' id="getCode" value="Get Code"/>
                             </div>
                         </div>
-                        <p  class="text-start" id="codeError"></p>
+                        <p  class="text-start messageText" id="codeError"></p>
                     </div>
                 </div>
                 <button id="submitCode" class="btn btn-grad col-12 mt-5" type="submit">Submit</button>
@@ -139,7 +139,7 @@
                     });
                 } else {
                     for(i in errors) {
-                        $("#newPassError").append(`<p class="errorMsg">${errors[i]}</p>`);
+                        $("#newPassError").append(`<p class="errorMsg text-danger messageText">${errors[i]}</p>`);
                     }
                 } 
             } else {

@@ -38,7 +38,7 @@
                                     <h5 class="m-0 p-0">Vaccination Status</h5>
                                     <div class="badge not-vaccinated">Not-vaccinated</div>
                                 </div>
-                                <p class=" m-0 mt-2">Vaccine card is being verified, please wait for 1-3 days.</p>
+                                <p class="messageText m-0 mt-2 ">Vaccine card is being verified, please wait for 1-3 days.</p>
                             </div>
                         <% } else { %>
                             <div>
@@ -46,7 +46,7 @@
                                     <h5 class="m-0 p-0">Vaccination Status</h5>
                                     <div class="badge not-vaccinated">Not-vaccinated</div>
                                 </div>
-                                <p class="mt-2">Upload your vaccination card</p>
+                                <p class="mt-2 messageText">Upload your vaccination card</p>
                                 <form class="d-flex flex-row justify-content-between" action="/visitor/details/upload" method="POST" enctype="multipart/form-data">
                                         <input class="btn btn-sm p-0" class="" type="file" id="vacCard" name="vacCard" accept="image/png, image/jpeg" required>
                                         <button class="btn btn-outline-secondary btn-sm" type="submit">Submit</button>

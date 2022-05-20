@@ -2,22 +2,65 @@
 
     <div class="register container-fluid d-flex flex-row align-items-center justify-content-center p-0" >
         <div class="register-subcon col-xl-8 col-lg-10 col-md-11 col-10 row"> 
-            <div class="c-div col-lg-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
-                <div  id="data-privacy" >
+            <div style="max-height:90vh; overflow-y: scroll ;" class="c-div col-lg-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
+                <div  id="data-notice" >
                     <h1>DATA PRIVACY NOTICE</h1>
-                    <p class="mt-3">In accordance with the <span>Data Privacy Act (DPA) of 2012</span> and its Implementing Rules and Regulations (IRR), which became effective on September 9, 2016.</p>
-                    <p><span>I HEREBY DECLARE</span> that the information I will provide in this system is complete, accurate, true and correct to the best of my knowledge. <span>FURTHER, I HEREBY ACKNOWLEDGE</span> that I have read and understood the Data Privacy Notice and agree thereto as well. I authorize and give my consent to the students of Technological University of the Philippines - Manila to collect, use and process my personal information for the purpose of commencing their thesis entitled the “Development of a Web-Based Contactless Contact Tracing Using Facial Recognition”. I understand that my consent does not preclude the existence of other criteria for lawful processing of personal data, and does not waive any of my rights under the Data Privacy Act of 2012 and other applicable laws.</p>
-                    <p class="mt-5 text-center"> By clicking <span>continue</span> it means that you agree with the <span>Privacy Notice</span> .</p>
-                    <button id="submit" class="btn btn-grad col-12" type="submit">
-                        <a href="/visitor/register">Continue</a>
+                    <p class="mt-3">This Privacy Notice explains what information we collect, process, and share; why we do so; and your rights with regard to your information. </p>
+                    <p><span>PERSONAL INFORMATION</span></p>
+                    <p>We collect the following personal information from you when you sign up or create an account in relation to the Contactless Contact Tracing System.</p>
+                   
+                    <div class="col-10 mx-auto">
+                        <p><span>Individual Registrants: </span></p>
+                        <ul>
+                            <li>Full name (First Name, Middle Name, Last Name, Suffix)</li>
+                            <li>Birthdate</li>
+                            <li>Age</li>
+                            <li>Gender</li>
+                            <li>Complete Address (House No., Street, Barangay, Province, City)</li>
+                            <li>Contact Number</li>
+                            <li>E-mail Address</li>
+                            <li>Password </li>
+                            <li>Face ID</li>
+                            <li>Vaccine Card (if applicable)</li>
+                        </ul>
+                    </div>
+                    <p><span>USE AND CLARIFICATION: </span></p>
+                    <p>We adhere to the Data Privacy Act of 2012, the researchers commit to ensuring that all personal information obtained will be secured and remain confidential. And all collected personal data given will be used and utilized solely for academic purposes ONLY. The following information enables us to properly process the online registration for the system. The personal information shall not be shared or disclosed with other parties without consent unless the disclosure is required by, or in compliance with applicable laws and regulations. All information from the user will be automatically deleted after 30 days. </p>
+                    <button id="initialSubmit" class="btn btn-grad col-12" type="submit">
+                      Continue
                     </button>
                     <div class="col-12 d-flex justify-content-center" >
                         <a href="/" class="mx-auto mt-4">Go back to home page</a>
                     </div>
                 </div>
+                <div  id="data-privacy" style="display: none;">
+                    <h1>DATA PRIVACY NOTICE</h1>
+                    <p class="mt-3">In accordance with the <span>Data Privacy Act (DPA) of 2012</span> and its Implementing Rules and Regulations (IRR), which became effective on September 9, 2016.</p>
+                    <p><span>I HEREBY DECLARE</span> that the information I will provide in this system is complete, accurate, true and correct to the best of my knowledge. <span>FURTHER, I HEREBY ACKNOWLEDGE</span> that I have read and understood the Data Privacy Notice and agree thereto as well. I authorize and give my consent to the students of Technological University of the Philippines - Manila to collect, use and process my personal information for the purpose of commencing their thesis entitled the “Development of a Web-Based Contactless Contact Tracing Using Facial Recognition”. I understand that my consent does not preclude the existence of other criteria for lawful processing of personal data, and does not waive any of my rights under the Data Privacy Act of 2012 and other applicable laws.</p>
+                    <p class="mt-5 text-center"> By clicking <span>continue</span> it means that you agree with the <span>Privacy Notice</span> .</p>
+                    <button id="submit" class="btn btn-grad col-12" type="submit">
+                        <a style="color:white; "href="/visitor/register">Continue</a>
+                    </button>
+                    <div class="col-12 d-flex justify-content-center" >
+                        <a id="backPage"class="mx-auto mt-4">Go back to Data Privacy Notice</a>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
 
+
+    <script>
+        $("#initialSubmit").click(function() {
+            $("#data-notice").hide();
+            $("#data-privacy").show();
+        });
+        $("#backPage").click(function() {
+            $("#data-privacy").hide();
+            $("#data-notice").show();
+        });
+    </script>
 <%- include("./partials/footer.ejs") %>
 
