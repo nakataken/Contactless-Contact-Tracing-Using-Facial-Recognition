@@ -64,7 +64,6 @@
                 pageFirstIndex:0,
                 pageLastIndex:10,
 
-
                 reloadContent: async () => {
                     const response = await fetch("/admin/establishments");
                     const result = await response.json();
@@ -104,13 +103,7 @@
 
             this.max = today;
             this.reloadContent();
-        },
-        computed: {
-        
-        },
-        watch:{
-            
-        }
+        } 
     });
 
     app.mount('#app');
