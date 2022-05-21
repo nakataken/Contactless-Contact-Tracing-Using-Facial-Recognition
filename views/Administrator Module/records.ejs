@@ -22,12 +22,12 @@
                                 
                                     <div class="d-flex flex-row py-2">
                                         <div class="col-6 ">
-                                            <input class="form-check-input" v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
-                                            <label class="ms-3 form-check-label">Date - Date</label>
+                                            <input  v-model="option" type="radio" name="option" value="byDate" checked :disabled="disableFields">
+                                            <label class="ms-3 ">Date - Date</label>
                                         </div>
                                         <div class="col-6 ">
-                                            <input class="form-check-input" v-model="option" type="radio" name="option" value="byTime" :disabled="disableFields">
-                                            <label class="ms-3 form-check-label">Time - Time</label>
+                                            <input  v-model="option" type="radio" name="option" value="byTime" :disabled="disableFields">
+                                            <label class="ms-3">Time - Time</label>
                                         </div>
                                     </div>
                                     <!-- First Option -->
@@ -69,7 +69,8 @@
                                 </form>
 
                                 <div class="container mt-3">
-                                    <div  class="col-6"> 
+                                    <div  class="col-6">
+                                        <label for="">Sort By:</label>
                                         <select class="btn border dropdown-toggle col-12" @change="sortChange" >
                                             <option>Latest</option>
                                             <option>Older</option>
@@ -141,6 +142,7 @@
 
                                 <div  class="container mt-3">
                                     <div  class="col-6">
+                                        <label for="">Sort By:</label>
                                         <select  class="btn border dropdown-toggle col-12" @change="sortChange">
                                             <option>Latest</option>
                                             <option>Older</option>
@@ -156,17 +158,22 @@
                             <div class="table-responsive col-12 mx-auto p-0 mt-5">
                                 <table  class="table app-table-hover mb-0 text-center">
                                 <thead>
+                                    <th class="cell">#</th>
                                     <th class="cell">Name</th>
                                     <th class="cell">Date & Time</th>
                                     <th class="cell">Establishment</th>
                                     <th class="cell"></th>
                                 </thead>
                                 
-                                <tr v-for="log in filteredLogs.slice(pageFirstIndex,pageLastIndex)" :key="log.id">
+                                <tr v-for="(log, index) in filteredLogs.slice(pageFirstIndex,pageLastIndex)" :key="log.id">
+                                    <th class="cell">{{index + pageFirstIndex + 1}}</th>
                                     <td class="cell">{{log.name.fname}} {{log.name.lname}}</td>
                                     <td class="cell">{{log.date}}</td>
                                     <td class="cell">{{log.establishment}}</td>
-                                    <td class="cell"><span class="btn-sm app-btn-secondary" @click="traceCloseContacts(log.id)">clickable option</span></td>
+                                    <td class="cell">
+                                        
+                                        <a class="btn-sm app-btn-secondary" @click="traceCloseContacts(log)"href="#closeContacts">trace</a>
+                                    </td>
                                 </tr>
                                 </table>
                                 <div v-if="loaded  == false" class="load-div col-12 d-flex justify-content-center align-items-center">
@@ -184,6 +191,20 @@
                                 </nav>
                             </div>
                             <!-- Table 2 -->
+                            <div id="orders-table-tab" class="mt-5 orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                                <a class="flex-sm-fill text-left nav-link active" >Close Contacts of:</a>
+                                <table  class="table app-table-hover mb-0 text-center">
+                                    <tr> 
+                                        <td class="cell">{{tagedName}}</td>
+                                        <td class="cell">{{tagedDate}}</td>
+                                        <td class="cell"> {{tagedEst}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="mt-2 orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                                
+                            </div>
+                            
                             <div id="closeContacts" class="table-responsive col-12 mx-auto p-0 mt-5">
                                 <table  class="table app-table-hover mb-0 text-center">
                                 <thead>
@@ -198,11 +219,14 @@
                                     <td class="cell"><span class="btn-sm app-btn-secondary" @click="removeCloseContact(contact.id)">Remove</span></td>
                                 </tr>
                                 </table>
-                                <div v-if="!loaded" class="load-div col-12 d-flex justify-content-center align-items-center">
+                                <div v-if="!loadedTableLabel" class="load-div col-12 d-flex justify-content-center align-items-center">
+                                    <p class="my-auto" id="loadingTrace">Trace to load close contact/s.</p>
+                                </div>
+                                <div v-if="!loadedTableIcon" class="load-div col-12 d-flex justify-content-center align-items-center">
                                     <div class="my-auto" id="loading"></div>
                                 </div>
                             </div>
-                            <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="col-12 mt-3 d-flex justify-content-end mb-5">
                                 <button class="btn btn-primary  mx-end"  :disabled="!isTraced" @click="generateReport">Generate Report</button>
                             </div>
                         </div>
@@ -224,6 +248,8 @@
                 // General
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
                 loaded: false,
+                loadedTableLabel: false,
+                loadedTableIcon: true,
                 tab: 1,
                 logs: [],
                 sortOrder: "Latest",
@@ -235,12 +261,15 @@
                 errorMessage: "",
                 pageCurrent:1,
                 pageFirstIndex:0,
-                pageLastIndex:10,
+                pageLastIndex:20,
+                tagedName:"",
+                tagedDate:"",
+                tagedEst:"",
                 reloadContent: async () => {
                     const response = await fetch("/admin/records/logs");
                     const result = await response.json();
                     this.logs = await result.logs;
-                    this.loaded = true;            
+                    this.loaded = true;    
                 },
                 // For Tab 1
                 searchTab1: "",
@@ -273,7 +302,7 @@
             // General
             toggleTab(toggle) {
                 this.pageFirstIndex = 0
-                this.pageLastIndex= 10
+                this.pageLastIndex= 20
                 this.tab = toggle;
             },
             sortChange(event) {
@@ -390,24 +419,31 @@
             getNextPageIndex(){
                 if(this.pageLastIndex < this.filteredLogs.length){
                     this.pageFirstIndex =  this.pageLastIndex;
-                    this.pageLastIndex = this.pageFirstIndex  + 10;
+                    this.pageLastIndex = this.pageFirstIndex  + 20;
                     if(this.pageLastIndex > this.filteredLogs.length){
-                        this.pageLastIndex = (this.pageLastIndex-10) + (this.filteredLogs.length % 10)
+                        this.pageLastIndex = (this.pageLastIndex-20) + (this.filteredLogs.length % 20)
                     }
                 }
             },
             getPrevPageIndex(){
                 if(this.pageFirstIndex > 0){
                     this.pageLastIndex = this.pageFirstIndex;
-                    this.pageFirstIndex =   this.pageFirstIndex-10;
+                    this.pageFirstIndex =   this.pageFirstIndex-20;
                 }
             },
             // For table 2
-            async traceCloseContacts(id) {
-                await fetch('/admin/records/trace/'+id).then((response)=> {
+            async traceCloseContacts(log) {
+                this.closeContacts = [];
+                this.loadedTableLabel =true;
+                this.loadedTableIcon =false;
+                await fetch('/admin/records/trace/'+log.id).then((response)=> {
                     response.json().then((data) => {
+                        this.tagedName = log.name.fname + " "+ log.name.lname ;
+                        this.tagedDate = log.date;
+                        this.tagedEst = log.establishment;
                         this.closeContacts = data.logs;
                         this.isTraced = true;
+                        this.loadedTableIcon =true;
                     });
                 });
             },
