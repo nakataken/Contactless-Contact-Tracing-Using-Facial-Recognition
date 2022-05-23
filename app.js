@@ -32,7 +32,7 @@ mongoose.connect(dbURI,
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         https.createServer(httpsOptions, app).listen(process.env.PORT || 3000, '0.0.0.0', () => {
-            console.log('\x1b[36m Server started... \x1b[0m');
+            console.log('\x1b[36m Server started on https://localhost:3000 ... \x1b[0m');
             console.log('\x1b[36m Connected to the database... \x1b[0m');
         })
         // app.listen(process.env.PORT || 3000, () => {

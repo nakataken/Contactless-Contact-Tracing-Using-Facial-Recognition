@@ -19,11 +19,20 @@ const logout_get = (req, res) => {
 }
 
 const dashboard_get = async (req, res) => {
-    let visitorsCount = await Visitor.count();
-    let establishmentsCount = await Establishment.count();
-
-    res.render('./Administrator Module/dashboard', {visitorsCount, establishmentsCount});
+    res.render('./Administrator Module/dashboard');
 }
+
+const dashboard_data_get = async (req, res) => {
+    let visitors = await Visitor.count();
+    let establishments = await Establishment.count();
+    let vaccinated = await Visitor.countDocuments({isVaccinated: true});
+    let limited = await Establishment.countDocuments({limitVaccinated: true});
+    
+    let records = await Record.find();
+
+    res.json({visitors, establishments, vaccinated, limited});
+}
+
 
 const create_log = async (records, visitors) => {
     let logs = [];
@@ -254,6 +263,7 @@ module.exports = {
     index_get,
     logout_get,
     dashboard_get,
+    dashboard_data_get,
     // Records
     records_get,
     records_log_get,

@@ -1,14 +1,12 @@
 <%- include("./partials/header.ejs", {title:"Dashboard"}) %>
-    <div id="app" >
-        <div  v-if="admin" class="home_adm container-fluid p-0">   
+    <% if(typeof(admin) != "undefined") { %>
+        <div class="home_adm container-fluid p-0">   
             <%- include("./partials/navbar.ejs"); %>
             <div class="app-wrapper">
-
                 <div class="app-content pt-3 p-md-3 p-lg-4">
                     <div class="container-xl">
                         <div class="head container d-flex flex-column px-5 px-sm-2 app-content">
                             <h3 class="fw-b c-p mt-5">Dashboard</h3>
-            
                             <div class="dashboard-card col-12 border-left-decoration mx-auto px-5 py-4 mt-3">
                                 <h3 class="fw-b">Welcome, Admin!</h3>
                                 <p>Welcome to the Admin Section! This section lets you monitor logs and records of our Clients and Establishments.
@@ -19,51 +17,125 @@
                                 <div class="col">
                                     <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
                                         <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED CLIENTS</p>
-                                        <p class="count m-0"><%=visitorsCount%></P>
+                                        <p class="count m-0" id="visitorsCount"> </P>
                                         <a href="/admin/visitors"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
                                         <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED ESTABLISHMENTS</p>
-                                        <p class="count m-0"><%=establishmentsCount%></P>
+                                        <p class="count m-0" id="establishmentsCount"> </P>
                                         <a  href="/admin/establishments/list"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                                     </div>
                                 </div>
-                                <!-- <div class="col">
-                                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
-                                        <p class="fw-b c-dis p-0 m-0">TOTAL LIST OF POSITIVE LAST 14 DAYS</p>
-                                        <p class="count m-0">0</P>
-                                        <a href=""><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
-                                    </div>
-                                </div> -->
+                            </div>
+                            
+                            <div>
+                                <canvas id="chart1"></canvas>
+                            </div>
+
+                            <div>
+                                <canvas id="chart2"></canvas>
                             </div>
                         </div>
                     </div>
-                </div><!--//app-content-->
-                
-            </div><!--//app-wrapper-->    	
+                </div>
+            </div>
         </div>
-    </div>
-    
-<script>
-    const app = Vue.createApp({
-        data() {
-            return {
-                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
-            }
-        },
-        methods: {
-            
-        },
-        computed: {
+    <% } %>
 
-        },
-        mounted() {
-            
-        }
-    });
-    app.mount('#app');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const fetchResult = async () => {
+    let response = await fetch('/admin/dashboard-data');
+    let result = await response.json();
+    return result;
+}
+
+const response = fetchResult();
+
+response.then((count) => {
+    $("#visitorsCount").text(count.visitors);
+    $("#establishmentsCount").text(count.establishments);
+
+    // Chart 1 - Vaccinated Visitors
+    const data1 = {
+        labels: [
+            'Vaccinated',
+            'Unvaccinated'
+        ],
+        datasets: [{
+            label: 'No. of vaccinated visitor',
+            data: [count.vaccinated, count.visitors - count.vaccinated],
+            backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    const config1 = {
+        type: 'doughnut',
+        data: data1,
+    };
+
+    const chart1 = new Chart(
+        document.getElementById('chart1'),
+        config1
+    );
+
+    // Chart 1 - Vaccinated Visitors
+    const data2 = {
+        labels: [
+            'Limited',
+            'Open for all'
+        ],
+        datasets: [{
+            label: 'No. of limited establishment',
+            data: [count.limited, count.establishments - count.limited],
+            backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    const config2 = {
+        type: 'doughnut',
+        data: data2,
+    };
+
+    const chart2 = new Chart(
+        document.getElementById('chart2'),
+        config2
+    );
+
+    // const labels = [];
+
+    // const data = {
+    //     labels: labels,
+    //     datasets: [{
+    //         label: 'My First dataset',
+    //         backgroundColor: 'rgb(255, 99, 132)',
+    //         borderColor: 'rgb(255, 99, 132)',
+    //         data: [0, 10, 5, 2, 20, 30, 45],
+    //     }]
+    // };
+
+    // const config = {
+    //     type: 'line',
+    //     data: data,
+    //     options: {}
+    // };
+
+    // const lineChart = new Chart(
+    //     document.getElementById('lineChart'),
+    //     config
+    // );
+})
 </script>
 
 <%- include("./partials/footer.ejs"); %>

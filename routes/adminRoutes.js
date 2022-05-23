@@ -7,6 +7,7 @@ const router = Router();
 router.get('/', adminController.index_get);
 router.get('/logout', adminController.logout_get);
 router.get('/dashboard', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.dashboard_get);
+router.get('/dashboard-data', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.dashboard_data_get);
 
 // RECORDS
 router.get('/records', visitorAuth.adminAuth, visitorAuth.checkAdmin, adminController.records_get);

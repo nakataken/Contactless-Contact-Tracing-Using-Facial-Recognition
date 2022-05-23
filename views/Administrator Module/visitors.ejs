@@ -55,10 +55,8 @@
                                 <div class="border px-5 d-flex align-items-center"><p class="my-auto">{{pageFirstIndex+1}}-{{pageLastIndex}}</p></div>
                                 <li class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></li>
                             </ul>
-                          </nav>
+                        </nav>
                     </div>
-               
-              
                 </div><!--//app-card-body-->	
             </div><!--//container-fluid-->
         </div><!--//app-content-->
@@ -107,7 +105,7 @@
                 picurl: "",
                 admin: JSON.parse('<%- JSON.stringify(admin) %>'),
                 visitors: [],
-   
+                
                 reloadContent: async () => {
                     const response = await fetch("/admin/visitors/list");
                     const result = await response.json();
