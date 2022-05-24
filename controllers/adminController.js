@@ -28,9 +28,30 @@ const dashboard_data_get = async (req, res) => {
     let vaccinated = await Visitor.countDocuments({isVaccinated: true});
     let limited = await Establishment.countDocuments({limitVaccinated: true});
     
-    let records = await Record.find();
+    // Line Chart
+    let labels = [];
+    let logs = [];
 
-    res.json({visitors, establishments, vaccinated, limited});
+    for(let i=29; i>0;i--) {
+        let date = new Date();
+        date.setDate(date.getDate() -i);
+        let dateString = date.toLocaleDateString("en-US");
+        labels.push(dateString);
+    }
+
+    let today = new Date();
+    let dateString = today.toLocaleDateString("en-US");
+    labels.push(dateString);
+    
+
+    for(let i=0; i<labels.length; i++) {
+        let query1 = labels[i] + ' 00:00';
+        let query2 = labels[i] + ' 23:59';
+        let count = await Record.count({createdAt: { $gte: query1, $lt: query2}});
+        logs.push(count);
+    }
+
+    res.json({visitors, establishments, vaccinated, limited, logs, labels});
 }
 
 
