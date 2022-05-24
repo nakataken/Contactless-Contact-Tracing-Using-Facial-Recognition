@@ -43,6 +43,11 @@
                     <div>
                         <canvas id="chart3"></canvas>
                     </div>
+
+                    <div id="selectedDateChart">
+                        <select id="selectedDate"></select>
+                        <canvas id="chart4"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,8 +80,8 @@
                 label: 'No. of vaccinated visitor',
                 data: [count.vaccinated, count.visitors - count.vaccinated],
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
                     'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'
                 ],
                 hoverOffset: 4
             }]
@@ -95,15 +100,15 @@
         // Chart 2 - Limited Establishments
         const data2 = {
             labels: [
-                'Limited',
-                'Open for all'
+                'Open for all',
+                'Limited'
             ],
             datasets: [{
                 label: 'No. of limited establishment',
-                data: [count.limited, count.establishments - count.limited],
+                data: [count.establishments - count.limited, count.limited],
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
                     'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'
                 ],
                 hoverOffset: 4
             }]
@@ -141,7 +146,50 @@
             document.getElementById('chart3'),
             config3
         );
+
+        // Chart 4 - selected date line 
+        setChart4(count.selectedDateLabels, count.selectedDateLogs);
+
+        // Populate options for chart 4
+        let dates = count.labels.reverse();
+        let select = document.querySelector('select');
+        let options = dates.map(date => `<option value=${date}>${date}</option>`).join('\n');
+        select.innerHTML = options;
     })
+
+    $('#selectedDate').on('change', function (e) {
+        fetch("/admin/dashboard-data/date/?date="+$(this).find(":selected").val())
+            .then((response) => {
+                response.json().then((data) => {
+                    $("#chart4").remove();
+                    $("#selectedDateChart").append('<canvas id="chart4"></canvas>');
+                    setChart4(data.selectedDateLabels, data.selectedDateLogs);
+                });
+            });
+    })
+
+    const setChart4 = (labels, data) => {
+        const data4 = {
+            labels: labels,
+            datasets: [{
+                label: 'No. of logs in selected date',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: data,
+            }]
+        };
+
+        const config4 = {
+            type: 'line',
+            data: data4,
+            options: {}
+        };
+
+        const chart4 = new Chart(
+            document.getElementById('chart4'),
+            config4
+        );
+    }
 </script>
 
 <%- include("./partials/footer.ejs"); %>

@@ -43,7 +43,6 @@ const dashboard_data_get = async (req, res) => {
     let dateString = today.toLocaleDateString("en-US");
     labels.push(dateString);
     
-
     for(let i=0; i<labels.length; i++) {
         let query1 = labels[i] + ' 00:00';
         let query2 = labels[i] + ' 23:59';
@@ -51,7 +50,36 @@ const dashboard_data_get = async (req, res) => {
         logs.push(count);
     }
 
-    res.json({visitors, establishments, vaccinated, limited, logs, labels});
+    let {selectedDateLabels, selectedDateLogs} = await log_date(dateString);
+
+    res.json({visitors, establishments, vaccinated, limited, logs, labels, selectedDateLogs, selectedDateLabels});
+}
+
+const log_date = async (date, req, res) => {
+    let selectedDateLogs = []; 
+    const selectedDateLabels = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
+
+    for(let i=0; i<23; i++) {
+        let query1 = '';
+        let query2 = '';
+        if(i<10) {
+            query1 = `${date} 0${i}:00`;
+            query2 = `${date} 0${i}:59`;
+        } else {
+            query1 = `${date} ${i}:00`;
+            query2 = `${date} ${i}:59`;
+        }
+        let count = await Record.count({createdAt: { $gte: query1, $lt: query2}});
+        selectedDateLogs.push(count);
+    }
+
+    return {selectedDateLabels, selectedDateLogs};
+}
+
+const log_date_get = async (req, res) => {
+    let date = req.query.date;
+    let {selectedDateLabels, selectedDateLogs} = await log_date(date);
+    res.json({selectedDateLabels, selectedDateLogs});
 }
 
 
@@ -285,6 +313,7 @@ module.exports = {
     logout_get,
     dashboard_get,
     dashboard_data_get,
+    log_date_get,
     // Records
     records_get,
     records_log_get,
