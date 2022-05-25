@@ -30,6 +30,7 @@ label{
     background-repeat: no-repeat;
     background-size: cover; 
     background-position: right bottom;
+   
 }
 
 .home_adm{
@@ -95,10 +96,11 @@ nav{
         &.active{
             border-bottom: 2px solid white;
         }
+        &.btn{
+            @include btn-white(normal,btn);
+            color: $color-secondary !important;
+        }
     } 
-    button{
-        @include btn-white(normal,btn);
-    }
     @media screen and (min-width: 1124px){
         .navbar-brand{
             .navbar-logo{
@@ -166,21 +168,21 @@ nav{
         }
         
         @media screen and (min-width: 991px){
-            button{
+            .reg-btn{
                 @include btn-primary(normal,btn);
                 color: white !important;
             }
-            button:hover{
+            .reg-btn:hover{
                 background-position: right center;
-                color: #fff;
+                color: #fff !important;
                 text-decoration: none;
             }
-            button:active{
+            .reg-btn:active{
                 background-color: $color-secondary !important;
             }
         }
         @media screen and (min-width: 0px){
-            button{
+            .reg-btn{
                 @include btn-white(normal,btn);
             }
         }
@@ -629,4 +631,8 @@ background-color: rgba(0, 0, 0, .5);
 
 .footer-style{
     background-color: $color-primary;
+}
+
+a{
+    color: $color-secondary !important;
 }

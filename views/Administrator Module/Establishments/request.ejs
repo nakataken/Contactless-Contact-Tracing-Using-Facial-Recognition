@@ -85,19 +85,19 @@
                                             <button class="btn-sm app-btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                               Action
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <form class="p-2" :action="actionURL(request._id)" method="POST">
                                                     <div class="form-check">
-                                                        <label class="form-check-label" for="approve">Approve</label>
+                                                        <label class="form-check-label">Approve</label>
                                                         <input class="form-check-input" type="radio" name="status" value="approve" required>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="status" value="reject">
-                                                        <label class="form-check-label" for="reject">Reject</label>
+                                                        <label class="form-check-label" >Reject</label>
                                                     </div> 
                                                     <button class="btn btn-sm btn-outline-secondary col-12" type="submit">Submit</button>
                                                 </form>
-                                            </ul>
+                                            </div>
                                           </div>
                                     </td>
                                     

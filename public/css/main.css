@@ -115,7 +115,7 @@ nav {
   border-bottom: 2px solid white;
 }
 
-.navbar button {
+.navbar .nav-link.btn {
   color: #0FB3A8;
   background-color: #ffffff;
   font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
@@ -124,6 +124,7 @@ nav {
   border-radius: 5px;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
+  color: #0FB3A8 !important;
 }
 
 @media screen and (min-width: 1124px) {
@@ -199,7 +200,7 @@ nav {
 }
 
 @media screen and (min-width: 991px) {
-  .head .l-div button {
+  .head .l-div .reg-btn {
     color: #ffffff;
     background-image: -webkit-gradient(linear, left top, right top, color-stop(-4%, #65DF95), color-stop(51%, #0FB3A8), color-stop(99%, #65DF95));
     background-image: linear-gradient(to right, #65DF95 -4%, #0FB3A8 51%, #65DF95 99%);
@@ -219,18 +220,18 @@ nav {
             box-shadow: none !important;
     color: white !important;
   }
-  .head .l-div button:hover {
+  .head .l-div .reg-btn:hover {
     background-position: right center;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
   }
-  .head .l-div button:active {
+  .head .l-div .reg-btn:active {
     background-color: #0FB3A8 !important;
   }
 }
 
 @media screen and (min-width: 0px) {
-  .head .l-div button {
+  .head .l-div .reg-btn {
     color: #0FB3A8;
     background-color: #ffffff;
     font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
@@ -775,5 +776,9 @@ nav {
 
 .footer-style {
   background-color: #65DF95;
+}
+
+a {
+  color: #0FB3A8 !important;
 }
 /*# sourceMappingURL=main.css.map */

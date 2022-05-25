@@ -9,16 +9,16 @@
         
                 <form class="mt-5">
                     <div class="row">   
-                        <div class="form-group col-5">
-                            <label for="fname">First Name: </label>
+                        <div class="form-group col-12 col-md-5">
+                            <label>First Name: </label>
                             <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name" minlength="2" maxlength="20" type="text" name="fname" placeholder="First Name" <% if(typeof(fname) != "undefined") { %> value="<%=fname%>" <% } %> required>
                         </div>
-                        <div class="form-group col-2">
-                            <label for="mi" >M.I.: </label>
+                        <div class="mt-3 mt-md-0 form-group  col-12 col-md-2">
+                            <label  >M.I.: </label>
                             <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name" maxlength="2" type="text" name="mi" placeholder="M.I."  <% if(typeof(mi) != "undefined") { %> value="<%=mi%>" <% } %>>
                         </div>
-                        <div class="form-group col-5">
-                            <label for="lname">Last Name: </label>
+                        <div class="mt-3 mt-md-0 form-group  col-12 col-md-5">
+                            <label >Last Name: </label>
                             <input onkeydown="return /[a-z '.]/i.test(event.key)" class="form-control name"  minlength="2" maxlength="20" type="text" name="lname" placeholder="Last Name"  <% if(typeof(lname) != "undefined") { %> value="<%=lname%>" <% } %> required>
                         </div>
                         <p class="messageText">&zwnj;</p>
@@ -26,12 +26,12 @@
 
                      <!--B-date | Contact Number-->
                     <div class="row">
-                        <div class="col-6">
-                            <label for="bdate">Birthdate</label>
+                        <div class=" col-12 col-md-6">
+                            <label >Birthdate</label>
                             <input class="form-control" id="datefield" type="date" name="bdate"  min='1899-01-01' max="" <% if(typeof(bdate) != "undefined") { %> value="<%=bdate%>" <% } %> required>
                         </div>
-                        <div class="col-6">
-                            <label class="col-12" for="contact">Contact No. (+63): </label>
+                        <div class="mt-3 mt-md-0 col-12 col-md-6">
+                            <label class="col-12" >Contact No. (+63): </label>
                             <!--
                                 <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
                             -->
@@ -43,13 +43,13 @@
 
                     <!--Email-->
                     <div class="row my-0 ">
-                        <div class="col-6" style="padding-bottom: none !important;">
-                            <label for="email">Email: </label>
+                        <div class=" col-12 col-md-6">
+                            <label >Email: </label>
                             <input class="form-control" id="email" type="email" name="email" <% if(typeof(email) != "undefined") { %> value="<%=email%>" <% } %> required>
                             <p class="text-danger messageText" id="emailError">&zwnj;</p>
                         </div>
-                        <div class="col-6 ">
-                            <label for="code" class="col-12">Email verification code: </label>
+                        <div class=" col-12 col-md-6 ">
+                            <label class="col-12">Email verification code: </label>
                             <div class="col-12 d-flex flex-row">
                                 <div class="col-8">
                                     <input class="form-control" type="number" name="code" id="code" required>
@@ -64,40 +64,40 @@
                     
                     <!--Address-->
                     <div class="row">
-                        <div class="col-6">
-                            <label for="region">Region: </label>
+                        <div class=" col-12 col-md-6">
+                            <label >Region: </label>
                             <select class="form-control" id="selectRegion" required>
                             </select>
                         </div>
-                        <div  class="col-6">
-                            <label for="province">Province: </label>
+                        <div  class="mt-3 mt-md-0 col-12 col-md-6">
+                            <label>Province: </label>
                             <select class="form-control" id="selectProvince" required>
                             </select>
                         </div>
                     </div>
 
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <label for="city">City: </label>
+                    <div class="row mt-md-4">
+                        <div class="mt-3 mt-md-0 col-12 col-md-6">
+                            <label >City: </label>
                             <select class="form-control" id="selectCity" required>
                             </select>
                         </div>
-                        <div class="col-6">
-                            <label for="barangay">Barangay: </label>
+                        <div class="mt-3 mt-md-0 col-12 col-md-6">
+                            <label >Barangay: </label>
                             <select class="form-control" id="selectBarangay" required>
                             </select>
                         </div>
                     </div>
                     
                     <!--Password-->
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <label for="pass">Password</label>
+                    <div class="row mt-md-4">
+                        <div class="mt-3 mt-md-0 col-12 col-md-6">
+                            <label >Password</label>
                             <input class="form-control" id="pass" type="password" name="pass" minlength="8" required>
                             <p id="passError"  class="text-danger messageText" >&zwnj;</p>
                         </div>
-                        <div class="col-6">
-                            <label for="cpass">Confirm Password</label>
+                        <div class="col-12 col-md-6">
+                            <label>Confirm Password</label>
                             <input class="form-control" id="cpass" type="password" name="cpass" minlength="8" required>
                         </div>
                     </div>
