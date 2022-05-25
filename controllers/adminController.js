@@ -19,11 +19,69 @@ const logout_get = (req, res) => {
 }
 
 const dashboard_get = async (req, res) => {
-    let visitorsCount = await Visitor.count();
-    let establishmentsCount = await Establishment.count();
-
-    res.render('./Administrator Module/dashboard', {visitorsCount, establishmentsCount});
+    res.render('./Administrator Module/dashboard');
 }
+
+const dashboard_data_get = async (req, res) => {
+    let visitors = await Visitor.count();
+    let establishments = await Establishment.count();
+    let vaccinated = await Visitor.countDocuments({isVaccinated: true});
+    let limited = await Establishment.countDocuments({limitVaccinated: true});
+    
+    // Line Chart
+    let labels = [];
+    let logs = [];
+
+    for(let i=29; i>0;i--) {
+        let date = new Date();
+        date.setDate(date.getDate() -i);
+        let dateString = date.toLocaleDateString("en-US");
+        labels.push(dateString);
+    }
+
+    let today = new Date();
+    let dateString = today.toLocaleDateString("en-US");
+    labels.push(dateString);
+    
+    for(let i=0; i<labels.length; i++) {
+        let query1 = labels[i] + ' 00:00';
+        let query2 = labels[i] + ' 23:59';
+        let count = await Record.count({createdAt: { $gte: query1, $lt: query2}});
+        logs.push(count);
+    }
+
+    let {selectedDateLabels, selectedDateLogs} = await log_date(dateString);
+
+    res.json({visitors, establishments, vaccinated, limited, logs, labels, selectedDateLogs, selectedDateLabels});
+}
+
+const log_date = async (date, req, res) => {
+    let selectedDateLogs = []; 
+    const selectedDateLabels = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
+
+    for(let i=0; i<23; i++) {
+        let query1 = '';
+        let query2 = '';
+        if(i<10) {
+            query1 = `${date} 0${i}:00`;
+            query2 = `${date} 0${i}:59`;
+        } else {
+            query1 = `${date} ${i}:00`;
+            query2 = `${date} ${i}:59`;
+        }
+        let count = await Record.count({createdAt: { $gte: query1, $lt: query2}});
+        selectedDateLogs.push(count);
+    }
+
+    return {selectedDateLabels, selectedDateLogs};
+}
+
+const log_date_get = async (req, res) => {
+    let date = req.query.date;
+    let {selectedDateLabels, selectedDateLogs} = await log_date(date);
+    res.json({selectedDateLabels, selectedDateLogs});
+}
+
 
 const create_log = async (records, visitors) => {
     let logs = [];
@@ -254,6 +312,8 @@ module.exports = {
     index_get,
     logout_get,
     dashboard_get,
+    dashboard_data_get,
+    log_date_get,
     // Records
     records_get,
     records_log_get,

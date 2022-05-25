@@ -1,18 +1,25 @@
 <%- include("./partials/header.ejs", {title:"Dashboard"}) %>
-    <div id="app" >
-        <div  v-if="admin" class="home_adm container-fluid p-0">   
-            <%- include("./partials/navbar.ejs"); %>
-            <div class="app-wrapper">
+<% if(typeof(admin) != "undefined") { %>
+<div class="home_adm container-fluid p-0">
+    <%- include("./partials/navbar.ejs"); %>
+    <div class="app-wrapper">
+        <div class="app-content pt-3 p-md-3 p-lg-4">
+            <div class="container-xl">
+                <div class="head container d-flex flex-column px-5 px-sm-2 app-content">
+                    <h3 class="fw-b c-p mt-5">Dashboard</h3>
+                    <div class="dashboard-card col-12 border-left-decoration mx-auto px-5 py-4 mt-3">
+                        <h3 class="fw-b">Welcome, Admin!</h3>
+                        <p>Welcome to the Admin Section! This section lets you monitor logs and records of our Clients
+                            and Establishments.
+                        </p>
+                    </div>
 
-                <div class="app-content pt-3 p-md-3 p-lg-4">
-                    <div class="container-xl">
-                        <div class="head container d-flex flex-column px-5 px-sm-2 app-content">
-                            <h3 class="fw-b c-p mt-5">Dashboard</h3>
-            
-                            <div class="dashboard-card col-12 border-left-decoration mx-auto px-5 py-4 mt-3">
-                                <h3 class="fw-b">Welcome, Admin!</h3>
-                                <p>Welcome to the Admin Section! This section lets you monitor logs and records of our Clients and Establishments.
-                                </p>
+                    <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3 mt-5">
+                        <div class="col">
+                            <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
+                                <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED CLIENTS</p>
+                                <p class="count m-0" id="visitorsCount"> </P>
+                                <a href="/admin/visitors"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                             </div>
             
                             <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3 mt-5">
@@ -40,30 +47,165 @@
                             </div>
                         </div>
                     </div>
-                </div><!--//app-content-->
-                
-            </div><!--//app-wrapper-->    	
+
+                    <div>
+                        <canvas id="chart1"></canvas>
+                    </div>
+
+                    <div>
+                        <canvas id="chart2"></canvas>
+                    </div>
+
+                    <div>
+                        <canvas id="chart3"></canvas>
+                    </div>
+
+                    <div id="selectedDateChart">
+                        <select id="selectedDate"></select>
+                        <canvas id="chart4"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-<script>
-    const app = Vue.createApp({
-        data() {
-            return {
-                admin: JSON.parse('<%- JSON.stringify(admin) %>'),
-            }
-        },
-        methods: {
-            
-        },
-        computed: {
+</div>
+<% } %>
 
-        },
-        mounted() {
-            
-        }
-    });
-    app.mount('#app');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const fetchResult = async () => {
+        let response = await fetch('/admin/dashboard-data');
+        let result = await response.json();
+        return result;
+    }
+
+    const response = fetchResult();
+
+    response.then((count) => {
+        $("#visitorsCount").text(count.visitors);
+        $("#establishmentsCount").text(count.establishments);
+
+        // Chart 1 - Vaccinated Visitors
+        const data1 = {
+            labels: [
+                'Vaccinated',
+                'Unvaccinated'
+            ],
+            datasets: [{
+                label: 'No. of vaccinated visitor',
+                data: [count.vaccinated, count.visitors - count.vaccinated],
+                backgroundColor: [
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const config1 = {
+            type: 'doughnut',
+            data: data1,
+        };
+
+        const chart1 = new Chart(
+            document.getElementById('chart1'),
+            config1
+        );
+
+        // Chart 2 - Limited Establishments
+        const data2 = {
+            labels: [
+                'Open for all',
+                'Limited'
+            ],
+            datasets: [{
+                label: 'No. of limited establishment',
+                data: [count.establishments - count.limited, count.limited],
+                backgroundColor: [
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const config2 = {
+            type: 'doughnut',
+            data: data2,
+        };
+
+        const chart2 = new Chart(
+            document.getElementById('chart2'),
+            config2
+        );
+
+
+        // Chart 3 - 30 days line chart
+        const data3 = {
+            labels: count.labels,
+            datasets: [{
+                label: 'No. of logs within 30 days',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: count.logs,
+            }]
+        };
+
+        const config3 = {
+            type: 'line',
+            data: data3,
+            options: {}
+        };
+
+        const chart3 = new Chart(
+            document.getElementById('chart3'),
+            config3
+        );
+
+        // Chart 4 - selected date line 
+        setChart4(count.selectedDateLabels, count.selectedDateLogs);
+
+        // Populate options for chart 4
+        let dates = count.labels.reverse();
+        let select = document.querySelector('select');
+        let options = dates.map(date => `<option value=${date}>${date}</option>`).join('\n');
+        select.innerHTML = options;
+    })
+
+    $('#selectedDate').on('change', function (e) {
+        fetch("/admin/dashboard-data/date/?date="+$(this).find(":selected").val())
+            .then((response) => {
+                response.json().then((data) => {
+                    $("#chart4").remove();
+                    $("#selectedDateChart").append('<canvas id="chart4"></canvas>');
+                    setChart4(data.selectedDateLabels, data.selectedDateLogs);
+                });
+            });
+    })
+
+    const setChart4 = (labels, data) => {
+        const data4 = {
+            labels: labels,
+            datasets: [{
+                label: 'No. of logs in selected date',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: data,
+            }]
+        };
+
+        const config4 = {
+            type: 'line',
+            data: data4,
+            options: {}
+        };
+
+        const chart4 = new Chart(
+            document.getElementById('chart4'),
+            config4
+        );
+    }
 </script>
 
 <%- include("./partials/footer.ejs"); %>

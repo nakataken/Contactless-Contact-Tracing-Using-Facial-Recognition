@@ -8,10 +8,14 @@ const recordSchema = new mongoose.Schema({
     establishment_id: {
         type: String, 
         required: true
+    },
+    expireAt: {
+        type: Date,
+        default: Date.now,
+        index: { expires: '30d' },
     }
 }, { 
     timestamps: true
-    // expireAfterSeconds: 60
 });
 
 const Record = mongoose.model("Record", recordSchema);
