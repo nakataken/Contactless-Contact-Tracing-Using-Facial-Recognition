@@ -141,6 +141,28 @@ nav {
   }
 }
 
+.app-utility-item .reg-btn {
+  color: #ffffff;
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(-4%, #65DF95), color-stop(51%, #0FB3A8), color-stop(99%, #65DF95));
+  background-image: linear-gradient(to right, #65DF95 -4%, #0FB3A8 51%, #65DF95 99%);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  -webkit-box-shadow: 0 0 20px #eee;
+          box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  font-family: "Ubuntu", sans-serif, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 5px;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
 #navbar-green {
   background-color: #0FB3A8 !important;
 }

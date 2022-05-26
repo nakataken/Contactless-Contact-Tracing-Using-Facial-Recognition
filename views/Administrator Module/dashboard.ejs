@@ -21,48 +21,61 @@
                                 <p class="count m-0" id="visitorsCount"> </P>
                                 <a href="/admin/visitors"><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
                             </div>
-            
-                            <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3 mt-5">
-                                <div class="col">
-                                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
-                                        <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED CLIENTS</p>
-                                        <p class="count m-0"><%=visitorsCount%></P>
-                                        <a class="btn btn-sm btn-prim" style="color:white !important" href="/admin/visitors">SHOW LIST</a>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
-                                        <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED ESTABLISHMENTS</p>
-                                        <p class="count m-0"><%=establishmentsCount%></P>
-                                        <a  class="btn btn-sm btn-prim" style="color:white !important" href="/admin/establishments/list">SHOW LIST</a>
-                                    </div>
-                                </div>
-                                <!-- <div class="col">
-                                    <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
-                                        <p class="fw-b c-dis p-0 m-0">TOTAL LIST OF POSITIVE LAST 14 DAYS</p>
-                                        <p class="count m-0">0</P>
-                                        <a href=""><button class="btn btn-sm btn-prim">SHOW LIST</button></a>
-                                    </div>
-                                </div> -->
+                        </div>
+                        <div class="col">
+                            <div class="dashboard-card border-left-decoration d-flex flex-column p-4 text-center">
+                                <p class="fw-b c-dis p-0 m-0">TOTAL REGISTERED ESTABLISHMENTS</p>
+                                <p class="count m-0" id="establishmentsCount"> </P>
+                                <a href="/admin/establishments/list"><button class="btn btn-sm btn-prim">SHOW
+                                        LIST</button></a>
                             </div>
                         </div>
                     </div>
-
-                    <div>
-                        <canvas id="chart1"></canvas>
-                    </div>
-
-                    <div>
-                        <canvas id="chart2"></canvas>
-                    </div>
-
-                    <div>
-                        <canvas id="chart3"></canvas>
-                    </div>
-
-                    <div id="selectedDateChart">
-                        <select id="selectedDate"></select>
-                        <canvas id="chart4"></canvas>
+                    <div class="row row-cols-1 row-cols-lg-2 g-2 g-lg-3 mt-5">
+                        <div class="col">
+                            <div class="dashboard-card py-5">
+                                <div class="px-5">
+                                    <p class="fw-b c-dis m-0">Visitors Vaccination Status</p>
+                                </div>
+                                <div class="col-6 mx-auto"> 
+                                    <canvas id="chart1"></canvas>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="dashboard-card py-5">
+                                <div class="px-5">
+                                    <p class="fw-b c-dis m-0">Establishment Acceptance Status</p>
+                                </div>
+                                <div class="col-6 mx-auto"> 
+                                    <canvas id="chart2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="dashboard-card py-5">
+                                <div class="px-5">
+                                    <p class="fw-b c-dis m-0">Visitors 30 Days Log</p>
+                                </div>
+                                <div class="col-12 mx-auto  px-5"> 
+                                    <canvas id="chart3"></canvas>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col">
+                           
+                            <div class="dashboard-card py-5">
+                                <div class="px-5">
+                                    <p class="fw-b c-dis m-0">Visitors Daily Log</p>
+                                </div>
+                                <div  id="selectedDateChart" class="col-12 mx-auto px-5"> 
+                                    <select  class="form-select " id="selectedDate"></select>
+                                    <canvas id="chart4"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,6 +87,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+    
     const fetchResult = async () => {
         let response = await fetch('/admin/dashboard-data');
         let result = await response.json();
@@ -96,8 +110,8 @@
                 label: 'No. of vaccinated visitor',
                 data: [count.vaccinated, count.visitors - count.vaccinated],
                 backgroundColor: [
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 99, 132)'
+                    'rgb(15, 179, 168)',
+                    'rgb(101, 223, 149)'
                 ],
                 hoverOffset: 4
             }]
@@ -123,8 +137,8 @@
                 label: 'No. of limited establishment',
                 data: [count.establishments - count.limited, count.limited],
                 backgroundColor: [
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 99, 132)'
+                    'rgb(15, 179, 168)',
+                    'rgb(101, 223, 149)'
                 ],
                 hoverOffset: 4
             }]
@@ -146,8 +160,8 @@
             labels: count.labels,
             datasets: [{
                 label: 'No. of logs within 30 days',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(101, 223, 149)',
+                borderColor: 'rgb(101, 223, 149)',
                 data: count.logs,
             }]
         };
@@ -189,8 +203,8 @@
             labels: labels,
             datasets: [{
                 label: 'No. of logs in selected date',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(101, 223, 149)',
+                borderColor: 'rgb(101, 223, 149)',
                 data: data,
             }]
         };

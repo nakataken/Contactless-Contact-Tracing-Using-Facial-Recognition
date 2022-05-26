@@ -119,9 +119,16 @@ nav{
             
         }
     }
+  
     
 }
-
+.app-utility-item{
+    .reg-btn{
+        @include btn-primary(normal,btn);
+        color: white !important;
+        font-weight: 600 !important;
+    }
+}
 #navbar-green{
 
     background-color: $color-secondary !important;
