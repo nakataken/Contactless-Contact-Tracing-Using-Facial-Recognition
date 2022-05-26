@@ -170,7 +170,7 @@ const login_post = (req, res) => {
                             const token = createToken(visitor._id);
                             console.log(visitor._id);
                             res.cookie('jwtVisitor', token, {httpOnly: true, maxAge: maxAge * 1000});
-                            res.redirect('/visitor/detect/1');
+                            res.redirect('/visitor/detect/instruction');
                         }
                     });
                 }
