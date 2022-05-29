@@ -30,10 +30,8 @@
         }
 
         #reader__dashboard_section_csr span button{
-           margin-top: 10px !important;
+            margin-top: 10px !important;
         }
-
-
     </style>
 </head>
 <body class="cam_module d-flex flex-column _1">
@@ -49,28 +47,22 @@
     </div>
 
     <script>
-        var fetched = false;
         const onScanSuccess = async (decodedText, decodedResult) => {
-            
-            if(!fetched) {
-                fetched = true;
-                await fetch('/establishment/qr', { 
-                    method: 'POST', 
-                    headers: {
-                        "content-type": "application/json"
-                    }, 
-                    body:  JSON.stringify({ decodedText }) 
+            await fetch('/establishment/qr', { 
+                method: 'POST', 
+                headers: {
+                    "content-type": "application/json"
+                }, 
+                body:  JSON.stringify({ decodedText }) 
+            })
+            .then((response)=> {
+                response.json().then((data) => {
+                    $('#person').text(`${data.message}`); 
+                    setTimeout(() => {
+                        $('#person').text(""); 
+                    }, 3000);
                 })
-                .then((response)=> {
-                    response.json().then((data) => {
-                        fetched = false;
-                        $('#person').text(`${data.message}`); 
-                        setTimeout(() => {
-                            $('#person').text(""); 
-                        }, 5000);
-                    })
-                });
-            }
+            });
         }
 
         var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }); 

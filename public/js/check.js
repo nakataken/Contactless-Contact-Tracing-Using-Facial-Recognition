@@ -18,6 +18,7 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+    $('#loading').hide();
     let fetched = false;
     const canvas = faceapi.createCanvasFromMedia(video)
     document.body.append(canvas)
@@ -54,17 +55,16 @@ video.addEventListener('play', () => {
                     })
                     .then((response)=> {
                         response.json().then((data) => {
-                            console.log()
                             if(data.success) {
+                                $('#result').text("No face found. Redirecting to registration..."); 
                                 setTimeout(() => {
-                                    $('#result').text("No face found. Redirecting to detect 1..."); 
-                                    window.location.href = "/visitor/detect/1";
-                                }, 5000);
+                                    window.location.href = "/visitor/data-privacy";
+                                }, 3000);
                             } else {
+                                $('#result').text("Face already existing. Redirecting to login..."); 
                                 setTimeout(() => {
-                                    $('#result').text("Face already existing. Redirecting to login..."); 
                                     window.location.href = "/visitor/login";
-                                }, 5000);
+                                }, 3000);
                             }
                         })
                     });

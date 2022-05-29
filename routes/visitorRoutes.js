@@ -16,9 +16,9 @@ router.route('/register')
 
 router.get('/register/code/:email', visitorController.register_code_get);
 
-// router.route('/check')
-    // .get(visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.check_get)
-    // .post(visitorAuth.visitorAuth, visitorAuth.checkVisitor, upload.single('check'), faceController.check_post);
+router.route('/check')
+    .get(faceController.check_get)
+    .post(upload.single('check'), faceController.check_post);
 
 router.get('/detect/instruction', visitorAuth.visitorAuth, visitorAuth.checkVisitor, faceController.instruction_get )
 router.route('/detect/process/:process')

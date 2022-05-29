@@ -57,9 +57,9 @@ const detect_post = async (req, res) => {
     }
 }
 
-// const check_get = (req, res) => {
-//     res.render('./Visitor Module/check');
-// }
+const check_get = (req, res) => {
+    res.render('./Visitor Module/check');
+}
 
 // const check_post = async (req, res) => {
 //     try {
@@ -120,6 +120,72 @@ const detect_post = async (req, res) => {
 //         console.log(error);
 //     }
 // }
+
+const check_post = async (req, res) => {
+    try {
+        const token = req.cookies.jwtEstablishment;
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            let visitors = await Visitor.find({ descriptions: { $ne: null }});
+
+            if(visitors) {
+                for (i = 0; i < visitors.length; i++) {
+                    for (j = 0; j < visitors[i].descriptions.length; j++) {
+                        visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
+                    }
+                    visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
+                }
+                
+                const img = await canvas.loadImage(req.file.path);
+                let temp = faceapi.createCanvasFromMedia(img);
+                const displaySize = { width: img.width, height: img.height };
+                faceapi.matchDimensions(temp, displaySize);
+                const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
+
+                fs.unlink(req.file.path, (error) => {
+                    if (error) {
+                        console.error(error)
+                        return
+                    }
+                })
+
+                if (!detections) {
+                    console.log("No face detected.");
+                    res.json({success:true});
+                }
+
+                // Find matching faces
+                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
+                const maxDescriptorDistance = 0.8;
+                const faceMatcher = new faceapi.FaceMatcher(visitors, maxDescriptorDistance);
+                const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
+                
+                if(!results) {
+                    console.log("No face matched.");
+                    res.json({success:true});
+                }
+
+                try {
+                    let result = results[0]._distance;
+
+                    if(result < 0.35)  {
+                        res.json({success:false});
+                        // res.json({success:false, message:`${visitor.name.fname} ${visitor.name.lname}, you are already registered!`});
+                    }  else {
+                        console.log("No face matched.");
+                        res.json({success:true});
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                    res.json({success:true});
+                }
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.redirect('/');
+    }
+}
 
 const verification_get = (req, res) => {
     res.render('./Establishment Module/verify');
@@ -215,6 +281,6 @@ module.exports = {
     detect_post,
     verification_get,
     verification_post,
-    // check_get,
-    // check_post
+    check_get,
+    check_post
 }
