@@ -131,29 +131,20 @@ const verification_post = async (req, res) => {
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             let visitors = await Visitor.find({ descriptions: { $ne: null }});
+
             if(visitors) {
                 for (i = 0; i < visitors.length; i++) {
-                    // Change the face data descriptors from Objects to Float32Array type
                     for (j = 0; j < visitors[i].descriptions.length; j++) {
                         visitors[i].descriptions[j] = new Float32Array(Object.values(visitors[i].descriptions[j]));
                     }
-                    // Turn the DB face docs to
                     visitors[i] = new faceapi.LabeledFaceDescriptors(visitors[i]._id.toString(), visitors[i].descriptions);
-                }   
-                // Load face matcher to find the matching face
-                const faceMatcher = new faceapi.FaceMatcher(visitors, 0.9);
-
-                // Read the image using canvas or other method
+                }
+                
                 const img = await canvas.loadImage(req.file.path);
                 let temp = faceapi.createCanvasFromMedia(img);
-
-                // Process the image for the model
                 const displaySize = { width: img.width, height: img.height };
                 faceapi.matchDimensions(temp, displaySize);
-
-                // Find matching faces
                 const detections = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors();
-                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
 
                 fs.unlink(req.file.path, (error) => {
                     if (error) {
@@ -161,11 +152,27 @@ const verification_post = async (req, res) => {
                         return
                     }
                 })
-                
+
+                if (!detections) {
+                    console.log("No face detected.");
+                    res.json({success:false, message: "No face matched!"});
+                }
+
+                // Find matching faces
+                const resizedDetections = await faceapi.resizeResults(detections, displaySize);
+                const maxDescriptorDistance = 0.8;
+                const faceMatcher = new faceapi.FaceMatcher(visitors, maxDescriptorDistance);
                 const results = await resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
                 
-                if(results) {
-                    try {
+                if(!results) {
+                    console.log("No face matched.");
+                    res.json({success:false, message: "No face matched!"});
+                }
+
+                try {
+                    let result = results[0]._distance;
+
+                    if(result < 0.35)  {
                         const establishment = await Establishment.findById(decodedToken.id);
                         const visitor = await Visitor.findById(results[0]._label);
                         const record = new Record({visitor_id: results[0]._label, establishment_id: decodedToken.id});
@@ -184,15 +191,16 @@ const verification_post = async (req, res) => {
                                 if(error) return;  
                                 res.json({success:true, message:`${visitor.name.fname} ${visitor.name.lname}`});
                             }) 
-                        } 
-                    } catch (error) {
-                        console.log(error.message);
+                        }
+                    }  else {
+                        console.log("No face matched.");
                         res.json({success:false, message: "No face matched!"});
                     }
-                } else {
-                    console.log("No face matched.");
+                } catch (error) {
+                    console.log(error.message);
                     res.json({success:false, message: "No face matched!"});
                 }
+
             }
         });
     } catch (error) {
