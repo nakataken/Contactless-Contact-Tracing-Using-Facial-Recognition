@@ -23,9 +23,15 @@
             justify-content: center;
             align-items: center;
         }
-
-        canvas {
+       
+        video {
+            position: relative;
+        }
+        canvas{
             position: absolute;
+        }
+        .div-canvas{
+            margin-top: 60px;
         }
     </style>
 </head>
@@ -38,15 +44,17 @@
             <h6 id="person" style="color: #11171F; font-weight: 400;" class="ms-2"></h6>
         </div>
     </div>
-    <div class="container container-fluid d-flex justify-content-center mt-2">
-        <video class="mx-auto my-auto " id="video" width="720" height="560" autoplay muted></video>
+   
+    <div class="container container-fluid d-flex justify-content-center mt-2" >
+        <video id="video" width="720" height="560" autoplay muted></video>
         <div id="loading"></div>
     </div> 
-    <div>
-        <canvas id="canvas" width="720" height="560" style="display: none;"></canvas>
+    <div class="div-canvas">
+        <canvas class="mx-auto my-auto " id="canvas" width="720" height="560" style=" display: none;"></canvas>
         <img id="face" src="" alt="">
     </div>
-    
+
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>

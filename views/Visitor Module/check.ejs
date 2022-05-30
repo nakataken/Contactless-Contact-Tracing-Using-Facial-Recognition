@@ -27,18 +27,25 @@
         canvas {
             position: absolute;
         }
+        .div-canvas{
+            margin-top: 60px;
+        }
     </style>
 </head>
 <body class="cam_module d-flex flex-column">
+    <div class="container d-flex flex-column justify-content-start align-items-start" >
+        <a href="/visitor/login"  class="mx-start" style="color: #0FB3A8;"><img src="https://img.icons8.com/material-outlined/20/0FB3A8/long-arrow-left.png"/> Go back to login</a>
+        <div style="border:1px solid #bcc1cb; border-radius: 0.2rem;" class="d-flex flex-row col-12 mt-2 py-2 px-4 ">
+            <h6 >Result:</h6>
+            <h6 id="result" style="color: #11171F; font-weight: 400;" class="ms-2"></h6>
+        </div>
+    </div>
     <div class="container container-fluid d-flex justify-content-center mt-2">
         <video class="mx-auto my-auto " id="video" width="720" height="560" autoplay muted></video>
         <div id="loading"></div>
     </div> 
-    <div style="border:1px solid #bcc1cb; border-radius: 0.2rem;" class="d-flex flex-row col-12 mt-2 py-2 px-4 ">
-        <h6 >Result:</h6>
-        <h6 id="result" style="color: #11171F; font-weight: 400;" class="ms-2"></h6>
-    </div>
-    <div>
+    
+    <div class="div-canvas">
         <canvas id="canvas" width="720" height="560" style="display: none;"></canvas>
         <img id="face" src="" alt="">
     </div>
