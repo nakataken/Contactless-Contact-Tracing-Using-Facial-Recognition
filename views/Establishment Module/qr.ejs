@@ -48,6 +48,7 @@
 
     <script>
         const onScanSuccess = async (decodedText, decodedResult) => {
+            html5QrcodeScanner.clear();
             await fetch('/establishment/qr', { 
                 method: 'POST', 
                 headers: {
@@ -60,6 +61,7 @@
                     $('#person').text(`${data.message}`); 
                     setTimeout(() => {
                         $('#person').text(""); 
+                        html5QrcodeScanner.render(onScanSuccess);
                     }, 3000);
                 })
             });
