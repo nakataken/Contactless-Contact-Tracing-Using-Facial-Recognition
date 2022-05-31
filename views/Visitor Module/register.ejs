@@ -32,9 +32,6 @@
                         </div>
                         <div class="mt-3 mt-md-0 col-12 col-md-6">
                             <label class="col-12" >Contact No. (+63): </label>
-                            <!--
-                                <input class="form-control col-10" type="number" name="contact" maxlength="10" <% if(typeof(contact) != "undefined") { %> value="<%=contact%>" <% } %> oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" required>
-                            -->
                             <input id="number" type="text" data-masked="" name="contact"  data-inputmask="'mask': '(+63) 999 - 999 - 9999'" placeholder="(+63) xxx - xxx - xxxx" class="form-control  col-10" required>
                             <p id="contactError"  class="text-danger  messageText"  >&zwnj;</p>
                         </div>

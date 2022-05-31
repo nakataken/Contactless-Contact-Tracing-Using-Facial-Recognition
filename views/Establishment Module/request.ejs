@@ -13,7 +13,7 @@
 <div class="login container-fluid d-flex flex-row align-items-center justify-content-center p-0">
     <div  class="login-subcon col-xl-8 col-lg-10 col-md-11 col-10 row">
         
-        <div  id="r-form-parent" class="c-div col-lg-6 col-md-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
+        <div  id="r-form-parent" class="c-div col-xxl-6 col-md-8 col-12 d-flex flex-column justify-content-center border p-lg-5 p-md-4 p-sm-5 p-4 mx-auto">
             <div id="r-form" class="col-12 px-0 ">
                 <div class="col-12 d-flex justify-items-center mt-3">
                     <a href="/" class="col-4 mx-auto"><img src="../assets/images/logo.png" alt="" class="col-12"></a>
@@ -32,21 +32,19 @@
                     <div class="form-group mt-2 ">
                         <label for="email">Email: </label>
                         <input class="form-control" id="email" type="email" name="email" required>
-                        <p id="emailError text-danger messageText" class="text text-danger"></p>
+                        <p id="emailError text-danger messageText" style="color:red !important; text-align:left;"  class="text text-danger"></p>
                     </div>
                     <div class="form-group col-12 p-0">
                         <label for="code">Email verification code: </label>
                         <div class="col-12 row p-0">
                             <div class="col-8">
                                 <input class="form-control" type="number" name="code" id="code" required>
-                                <p id="codeError" class="text-danger messageText"></p>
+                                <p id="codeError" class="text-danger messageText" style="color:red !important; text-align:left;" ></p>
                             </div>
                             <div class="col-4 p-0">
                                 <input type='button' id="getCode" class="btn col-12 " value="Get Code"/>
                             </div>
                         </div>
-                        
-                        
                     </div>
                     <div class="form-group mt-2 ">
                         <label for="address">Address: </label>
@@ -78,6 +76,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <script>
     var emailVerify = 0;
