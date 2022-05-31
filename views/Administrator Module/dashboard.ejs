@@ -38,7 +38,10 @@
                                     <p class="fw-b c-dis m-0">Visitors Vaccination Status</p>
                                 </div>
                                 <div class="col-6 mx-auto"> 
-                                    <canvas id="chart1"></canvas>
+                                    <canvas class="chart" id="chart1" style="display:none;"></canvas>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <div class="mx-auto loading my-5"></div>
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -49,7 +52,10 @@
                                     <p class="fw-b c-dis m-0">Establishment Acceptance Status</p>
                                 </div>
                                 <div class="col-6 mx-auto"> 
-                                    <canvas id="chart2"></canvas>
+                                    <canvas class="chart" id="chart2" style="display:none;"></canvas>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <div class="mx-auto loading my-5"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -58,8 +64,11 @@
                                 <div class="px-5">
                                     <p class="fw-b c-dis m-0">Visitors 30 Days Log</p>
                                 </div>
-                                <div class="col-12 mx-auto  px-5"> 
-                                    <canvas id="chart3"></canvas>
+                                <div class="col-12 mx-auto px-5"> 
+                                    <canvas class="chart" id="chart3" style="display:none;"></canvas>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <div class="mx-auto loading my-5"></div>
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -72,7 +81,10 @@
                                 </div>
                                 <div  id="selectedDateChart" class="col-12 mx-auto px-5"> 
                                     <select  class="form-select " id="selectedDate"></select>
-                                    <canvas id="chart4"></canvas>
+                                    <canvas class="chart" id="chart4" style="display:none;"></canvas>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <div class="mx-auto loading my-5"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -91,6 +103,9 @@
     const fetchResult = async () => {
         let response = await fetch('/admin/dashboard-data');
         let result = await response.json();
+        $('.chart').show();
+        $('.loading').hide();
+        $('.loading-container').hide();
         return result;
     }
 

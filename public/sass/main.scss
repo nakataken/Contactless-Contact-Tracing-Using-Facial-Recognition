@@ -355,6 +355,15 @@ nav{
     color: red !important;
 }
 
+.loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    content: url('../assets/images/spinner.svg');
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
+
 #loading {
     display: inline-block;
     width: 50px;
@@ -400,6 +409,7 @@ nav{
             bottom:45%;
             z-index: 1;
         }
+
     }
 }
 
