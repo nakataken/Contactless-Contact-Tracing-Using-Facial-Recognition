@@ -149,11 +149,11 @@
                         <!-- Pagination -->
                         <div class="mt-5 d-flex flex-row justify-content-center">
                             <nav aria-label="Page navigation example mt-5 mx-auto">
-                                <ul class="pagination">
-                                    <li class="page-item"  @click="getPrevPageIndex()"><a class="page-link" href="#">Previous</a></li>
+                                <div class="pagination">
+                                    <div class="page-item"  @click="getPrevPageIndex()"><a class="page-link" href="#">Previous</a></div>
                                     <div class="border px-5 d-flex align-items-center"><p class="my-auto">{{pageFirstIndex+1}}-{{pageLastIndex}}</p></div>
-                                    <li class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></li>
-                                </ul>
+                                    <div class="page-item" @click="getNextPageIndex()"><a class="page-link" href="#">Next</a></div>
+                                </div>
                             </nav>
                         </div>
                     </div>

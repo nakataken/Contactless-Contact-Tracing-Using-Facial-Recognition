@@ -813,4 +813,12 @@ nav {
 a {
   color: #0FB3A8 !important;
 }
+
+a.btn {
+  border-radius: 5px;
+  padding: 3px;
+  text-decoration: none;
+  color: white !important;
+  font-weight: 600 !important;
+}
 /*# sourceMappingURL=main.css.map */

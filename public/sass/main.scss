@@ -654,3 +654,13 @@ background-color: rgba(0, 0, 0, .5);
 a{
     color: $color-secondary !important;
 }
+
+a.btn {
+-webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+   padding: 3px;
+  text-decoration: none;
+  color: white !important;
+  font-weight: 600 !important;
+}
