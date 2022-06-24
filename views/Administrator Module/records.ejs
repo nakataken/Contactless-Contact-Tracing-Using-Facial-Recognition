@@ -453,16 +453,24 @@
                 })
             },
             generateReport() {
+                var doc = new jsPDF('p', 'pt');
                 let pdfName = 'REPORT_' + Date.now(); 
+                let establishment = this.closeContacts[0].establishment;
                 let pdf = new jsPDF();
-                var col = ["Name","Date", "Establishment"];
+                
+                var col = ["Name","Date", "Age"];
                 var rows = [];
 
                 this.closeContacts.forEach(record => {
-                    let temp = [`${record.name.fname} ${record.name.lname}`, record.date, record.establishment];
+                    let temp = [`${record.name.fname} ${record.name.lname}`, record.date, record.age];
                     rows.push(temp);
                 })
 
+                pdf.setProperties({
+                    title: establishment,
+                })
+
+                pdf.text(20, 20, establishment);
                 pdf.autoTable(col, rows, { startY: 10 });
                 pdf.save(pdfName + '.pdf');
             }
