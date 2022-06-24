@@ -6,9 +6,9 @@
                 <div class="app-content pt-3 p-md-3 p-lg-4">
                     <div class="container-xl">
                         <div class="head container" >
-                            <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-                                <a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab" data-bs-toggle="tab" href="" @click="toggleTab(1)" role="tab" aria-controls="orders-all" aria-selected="true">Visitors</a>
-                                <a class="flex-sm-fill text-sm-center nav-link"  id="orders-paid-tab" data-bs-toggle="tab" href="" @click="toggleTab(2)" role="tab" aria-controls="orders-paid" aria-selected="false">Establishment</a>
+                            <nav id="orders-table-tab" role="tablist"  class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                                <a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab" data-bs-toggle="tab" href="" @click="toggleTab(1)" role="tab"  aria-selected="true">Visitors</a>
+                                <a class="flex-sm-fill text-sm-center nav-link"  id="orders-paid-tab" data-bs-toggle="tab" href="" @click="toggleTab(2)" role="tab"  aria-selected="false">Establishment</a>
                             </nav>
                             <!-- Trace by Visitors -->
                             <div v-if="tab == 1">
@@ -191,7 +191,7 @@
                                 </nav>
                             </div>
                             <!-- Table 2 -->
-                            <div id="orders-table-tab" class="mt-5 orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+                            <div class="mt-5 orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
                                 <a class="flex-sm-fill text-left nav-link active" >Close Contacts of:</a>
                                 <table  class="table app-table-hover mb-0 text-center">
                                     <tr> 
